@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
+#include "EngineConfig.h"
 
 struct SDLState
 {
@@ -9,14 +10,12 @@ struct SDLState
 	SDL_Renderer* renderer = nullptr;
 	int width = 1600;
 	int height = 900;
-	int logicalWidth = 640;
-	int logicalHeight = 320;
 };
 
 class SparticleEngine 
 {
 public:
-	SparticleEngine();
+	SparticleEngine(const EngineConfig& config);
 	~SparticleEngine();
 
 	void run();
@@ -27,7 +26,7 @@ private:
 
 	SDL_Texture* m_TEMP_spriteSheet;
 
-	void initSDL();
+	void initSDL( const EngineConfig& config );
 	void shutdownSDL();
 
 	void loadAssets();

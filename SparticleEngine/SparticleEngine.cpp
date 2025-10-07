@@ -1,9 +1,9 @@
 ﻿#include "SparticleEngine.h"
 #include <iostream>
 
-SparticleEngine::SparticleEngine()
+SparticleEngine::SparticleEngine(const EngineConfig& config)
 {
-	initSDL();
+	initSDL( config );
 }
 
 SparticleEngine::~SparticleEngine() 
@@ -11,7 +11,7 @@ SparticleEngine::~SparticleEngine()
 	shutdownSDL();
 }
 
-void SparticleEngine::initSDL()
+void SparticleEngine::initSDL( const EngineConfig& config )
 {
 	if ( !SDL_Init( SDL_INIT_VIDEO ) )
 	{
@@ -20,7 +20,16 @@ void SparticleEngine::initSDL()
 	}
 
 	// Create the window
-	m_sdlState.window = SDL_CreateWindow( "Sparticle Engine", m_sdlState.width, m_sdlState.height, SDL_WINDOW_RESIZABLE );
+	m_sdlState.width = config.width;
+	m_sdlState.height = config.height;
+	Uint32 windowFlags = config.resizable ? SDL_WINDOW_RESIZABLE : 0;
+
+	m_sdlState.window = SDL_CreateWindow( 
+		config.windowTitle.c_str(), 
+		m_sdlState.width,
+		m_sdlState.width,
+		windowFlags 
+	);
 
 	if ( !m_sdlState.window )
 	{
@@ -42,8 +51,8 @@ void SparticleEngine::initSDL()
 
 	SDL_SetRenderLogicalPresentation(
 		m_sdlState.renderer,
-		m_sdlState.logicalWidth,
-		m_sdlState.logicalHeight,
+		m_sdlState.width,
+		m_sdlState.width,
 		SDL_LOGICAL_PRESENTATION_LETTERBOX
 	);
 

@@ -1,8 +1,10 @@
 #include "SparticleEngine.h"
+#include "EngineConfig.h"
 
 int main( int argc, char* argv[] )
 {
-	SparticleEngine engine;
+	EngineConfig config;
+	SparticleEngine engine( config );
 	engine.run();
 	return 0;
 }
