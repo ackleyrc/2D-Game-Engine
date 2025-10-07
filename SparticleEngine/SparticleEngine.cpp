@@ -20,9 +20,7 @@ void SparticleEngine::initSDL()
 	}
 
 	// Create the window
-	int width = 800;
-	int height = 600;
-	m_sdlState.window = SDL_CreateWindow( "Sparticle Engine", width, height, 0 );
+	m_sdlState.window = SDL_CreateWindow( "Sparticle Engine", m_sdlState.width, m_sdlState.height, SDL_WINDOW_RESIZABLE );
 
 	if ( !m_sdlState.window )
 	{
@@ -41,6 +39,13 @@ void SparticleEngine::initSDL()
 		SDL_Quit();
 		std::exit(1);
 	}
+
+	SDL_SetRenderLogicalPresentation(
+		m_sdlState.renderer,
+		m_sdlState.logicalWidth,
+		m_sdlState.logicalHeight,
+		SDL_LOGICAL_PRESENTATION_LETTERBOX
+	);
 
 	m_isRunning = true;
 }
@@ -62,14 +67,29 @@ void SparticleEngine::shutdownSDL()
 	SDL_Quit();
 }
 
+void SparticleEngine::loadAssets()
+{
+	m_TEMP_spriteSheet = IMG_LoadTexture( m_sdlState.renderer, "assets/textures/spritesheet.png" );
+	SDL_SetTextureScaleMode( m_TEMP_spriteSheet, SDL_SCALEMODE_NEAREST );
+}
+
+void SparticleEngine::unloadAssets()
+{
+	SDL_DestroyTexture( m_TEMP_spriteSheet );
+}
+
 void SparticleEngine::run()
 {
+	loadAssets();
+
 	while ( m_isRunning )
 	{
 		this->processEvents();
 		this->update();
 		this->render();
 	}
+
+	unloadAssets();
 }
 
 void SparticleEngine::processEvents()
@@ -84,6 +104,12 @@ void SparticleEngine::processEvents()
 				m_isRunning = false;
 				break;
 			}
+			case SDL_EVENT_WINDOW_RESIZED:
+			{
+				m_sdlState.width = event.window.data1;
+				m_sdlState.height = event.window.data2;
+				break;
+			}
 		}
 	}
 }
@@ -95,7 +121,24 @@ void SparticleEngine::update()
 
 void SparticleEngine::render()
 {
-	SDL_SetRenderDrawColor( m_sdlState.renderer, 255, 255, 255, 255 );
+	SDL_SetRenderDrawColor( m_sdlState.renderer, 16, 16, 32, 255 );
 	SDL_RenderClear( m_sdlState.renderer );
+
+	SDL_FRect src{
+		.x = 0,
+		.y = 0,
+		.w = 32,
+		.h = 32
+	};
+
+	SDL_FRect dst{
+		.x = 0,
+		.y = 0,
+		.w = 32,
+		.h = 32
+	};
+
+	SDL_RenderTexture( m_sdlState.renderer, m_TEMP_spriteSheet, &src, &dst );
+
 	SDL_RenderPresent( m_sdlState.renderer );
 }
