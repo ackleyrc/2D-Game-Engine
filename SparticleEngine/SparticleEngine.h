@@ -3,6 +3,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include "EngineConfig.h"
+#include "InputManager.h"
 
 struct SDLState
 {
@@ -19,12 +20,15 @@ public:
 	~SparticleEngine();
 
 	void run();
+	InputManager& getInput() { return m_input; }
 
 private:
 	SDLState m_sdlState;
+	InputManager m_input;
 	bool m_isRunning = false;
 
 	float m_TEMP_playerX = 0;
+	float m_TEMP_playerY = 0;
 	SDL_Texture* m_TEMP_spriteSheet;
 
 	void initSDL( const EngineConfig& config );

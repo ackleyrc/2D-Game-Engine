@@ -128,12 +128,20 @@ void SparticleEngine::processEvents()
 			}
 		}
 	}
+
+	m_input.update();
 }
 
 void SparticleEngine::update( double deltaTime )
 {
 	// game logic
-	m_TEMP_playerX += ( 100.0f * deltaTime );
+	const float playerSpeed = 100.0f;
+
+	float horizontalAxis = m_input.getAxisHorizontal();
+	float verticalAxis = m_input.getAxisVertical();
+	
+	m_TEMP_playerX += ( horizontalAxis * playerSpeed * deltaTime );
+	m_TEMP_playerY += ( verticalAxis * playerSpeed * deltaTime );
 }
 
 void SparticleEngine::render()
@@ -151,7 +159,7 @@ void SparticleEngine::render()
 
 	SDL_FRect dst{
 		.x = m_TEMP_playerX,
-		.y = 0,
+		.y = -m_TEMP_playerY,
 		.w = 32,
 		.h = 32
 	};
