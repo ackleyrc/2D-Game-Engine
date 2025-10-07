@@ -24,6 +24,7 @@ private:
 	SDLState m_sdlState;
 	bool m_isRunning = false;
 
+	float m_TEMP_playerX = 0;
 	SDL_Texture* m_TEMP_spriteSheet;
 
 	void initSDL( const EngineConfig& config );
@@ -33,6 +34,6 @@ private:
 	void unloadAssets();
 
 	void processEvents();
-	void update();
+	void update( double deltaTime );
 	void render();
 };

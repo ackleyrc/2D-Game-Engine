@@ -91,10 +91,17 @@ void SparticleEngine::run()
 {
 	this->loadAssets();
 
+	Uint64 previousCounter = SDL_GetPerformanceCounter();
+	Uint64 frequency = SDL_GetPerformanceFrequency();
+
 	while ( m_isRunning )
 	{
+		Uint64 currentCounter = SDL_GetPerformanceCounter();
+		double deltaTime = static_cast<double>( currentCounter - previousCounter ) / frequency;
+		previousCounter = currentCounter;
+
 		this->processEvents();
-		this->update();
+		this->update( deltaTime );
 		this->render();
 	}
 
@@ -123,9 +130,10 @@ void SparticleEngine::processEvents()
 	}
 }
 
-void SparticleEngine::update()
+void SparticleEngine::update( double deltaTime )
 {
 	// game logic
+	m_TEMP_playerX += ( 100.0f * deltaTime );
 }
 
 void SparticleEngine::render()
@@ -133,6 +141,7 @@ void SparticleEngine::render()
 	SDL_SetRenderDrawColor( m_sdlState.renderer, 16, 16, 32, 255 );
 	SDL_RenderClear( m_sdlState.renderer );
 
+	// TEMP
 	SDL_FRect src{
 		.x = 0,
 		.y = 0,
@@ -141,7 +150,7 @@ void SparticleEngine::render()
 	};
 
 	SDL_FRect dst{
-		.x = 0,
+		.x = m_TEMP_playerX,
 		.y = 0,
 		.w = 32,
 		.h = 32
