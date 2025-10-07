@@ -3,12 +3,12 @@
 
 SparticleEngine::SparticleEngine(const EngineConfig& config)
 {
-	initSDL( config );
+	this->initSDL( config );
 }
 
 SparticleEngine::~SparticleEngine() 
 {
-	shutdownSDL();
+	this->shutdownSDL();
 }
 
 void SparticleEngine::initSDL( const EngineConfig& config )
@@ -89,7 +89,7 @@ void SparticleEngine::unloadAssets()
 
 void SparticleEngine::run()
 {
-	loadAssets();
+	this->loadAssets();
 
 	while ( m_isRunning )
 	{
@@ -98,7 +98,7 @@ void SparticleEngine::run()
 		this->render();
 	}
 
-	unloadAssets();
+	this->unloadAssets();
 }
 
 void SparticleEngine::processEvents()
