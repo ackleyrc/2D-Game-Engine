@@ -4,6 +4,9 @@
 SparticleEngine::SparticleEngine(const EngineConfig& config)
 {
 	this->initSDL( config );
+
+	// TEMP
+	m_TEMP_player = this->createObject<GameObject>();
 }
 
 SparticleEngine::~SparticleEngine() 
@@ -134,14 +137,10 @@ void SparticleEngine::processEvents()
 
 void SparticleEngine::update( double deltaTime )
 {
-	// game logic
-	const float playerSpeed = 100.0f;
-
-	float horizontalAxis = m_input.getAxisHorizontal();
-	float verticalAxis = m_input.getAxisVertical();
-	
-	m_TEMP_playerX += ( horizontalAxis * playerSpeed * deltaTime );
-	m_TEMP_playerY += ( verticalAxis * playerSpeed * deltaTime );
+	for ( auto& obj : m_objects )
+	{
+		obj->onUpdate( deltaTime );
+	}
 }
 
 void SparticleEngine::render()
@@ -149,22 +148,21 @@ void SparticleEngine::render()
 	SDL_SetRenderDrawColor( m_sdlState.renderer, 16, 16, 32, 255 );
 	SDL_RenderClear( m_sdlState.renderer );
 
-	// TEMP
-	SDL_FRect src{
-		.x = 0,
-		.y = 0,
-		.w = 32,
-		.h = 32
-	};
+	for ( auto& obj : m_objects )
+	{
+		// TODO: Get texture per game object
 
-	SDL_FRect dst{
-		.x = m_TEMP_playerX,
-		.y = -m_TEMP_playerY,
-		.w = 32,
-		.h = 32
-	};
+		if ( !m_TEMP_spriteSheet )
+		{
+			continue;
+		}
 
-	SDL_RenderTexture( m_sdlState.renderer, m_TEMP_spriteSheet, &src, &dst );
+		// TEMP
+		SDL_FRect src{ .x = 0, .y = 0, .w = 32, .h = 32 };
+		SDL_FRect dst{ .x = obj->x, .y = -obj->y, .w = 32, .h = 32 };
+
+		SDL_RenderTexture( m_sdlState.renderer, m_TEMP_spriteSheet, &src, &dst );
+	}
 
 	SDL_RenderPresent( m_sdlState.renderer );
 }

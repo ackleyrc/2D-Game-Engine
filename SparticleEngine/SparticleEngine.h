@@ -1,9 +1,12 @@
 ﻿#pragma once
 
+#include <vector>
+#include <memory>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include "EngineConfig.h"
 #include "InputManager.h"
+#include "GameObject.h"
 
 struct SDLState
 {
@@ -22,13 +25,24 @@ public:
 	void run();
 	InputManager& getInput() { return m_input; }
 
+	// GameObject management
+	template<typename T, typename... Args>
+	T* createObject( Args&&... args )
+	{
+		auto obj = std::make_unique<T>( this, std::forward<Args>( args )... );
+		T* ptr = obj.get();
+		m_objects.push_back( std::move( obj ) );
+		return ptr;
+	}
+
 private:
 	SDLState m_sdlState;
 	InputManager m_input;
 	bool m_isRunning = false;
 
-	float m_TEMP_playerX = 0;
-	float m_TEMP_playerY = 0;
+	std::vector<std::unique_ptr<GameObject>> m_objects;
+
+	GameObject* m_TEMP_player = nullptr;
 	SDL_Texture* m_TEMP_spriteSheet;
 
 	void initSDL( const EngineConfig& config );
