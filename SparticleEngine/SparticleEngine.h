@@ -6,6 +6,7 @@
 #include <SDL3_image/SDL_image.h>
 #include "EngineConfig.h"
 #include "InputManager.h"
+#include "ResourceManager.h"
 #include "GameObject.h"
 
 struct SDLState
@@ -24,6 +25,7 @@ public:
 
 	void run();
 	InputManager& getInput() { return m_input; }
+	ResourceManager& getResources() { return m_resources; }
 
 	// GameObject management
 	template<typename T, typename... Args>
@@ -38,18 +40,15 @@ public:
 private:
 	SDLState m_sdlState;
 	InputManager m_input;
+	ResourceManager m_resources;
 	bool m_isRunning = false;
 
 	std::vector<std::unique_ptr<GameObject>> m_objects;
 
 	GameObject* m_TEMP_player = nullptr;
-	SDL_Texture* m_TEMP_spriteSheet;
 
 	void initSDL( const EngineConfig& config );
 	void shutdownSDL();
-
-	void loadAssets();
-	void unloadAssets();
 
 	void processEvents();
 	void update( double deltaTime );

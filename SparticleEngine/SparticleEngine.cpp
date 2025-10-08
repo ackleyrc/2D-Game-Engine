@@ -4,9 +4,6 @@
 SparticleEngine::SparticleEngine(const EngineConfig& config)
 {
 	this->initSDL( config );
-
-	// TEMP
-	m_TEMP_player = this->createObject<GameObject>();
 }
 
 SparticleEngine::~SparticleEngine() 
@@ -59,6 +56,8 @@ void SparticleEngine::initSDL( const EngineConfig& config )
 		SDL_LOGICAL_PRESENTATION_LETTERBOX
 	);
 
+	m_resources.setRenderer( m_sdlState.renderer );
+
 	m_isRunning = true;
 }
 
@@ -79,20 +78,11 @@ void SparticleEngine::shutdownSDL()
 	SDL_Quit();
 }
 
-void SparticleEngine::loadAssets()
-{
-	m_TEMP_spriteSheet = IMG_LoadTexture( m_sdlState.renderer, "assets/textures/spritesheet.png" );
-	SDL_SetTextureScaleMode( m_TEMP_spriteSheet, SDL_SCALEMODE_NEAREST );
-}
-
-void SparticleEngine::unloadAssets()
-{
-	SDL_DestroyTexture( m_TEMP_spriteSheet );
-}
-
 void SparticleEngine::run()
 {
-	this->loadAssets();
+	// TEMP
+	m_TEMP_player = this->createObject<GameObject>();
+	m_resources.loadTexture( "spritesheet", "assets/textures/spritesheet.png" );
 
 	Uint64 previousCounter = SDL_GetPerformanceCounter();
 	Uint64 frequency = SDL_GetPerformanceFrequency();
@@ -108,7 +98,7 @@ void SparticleEngine::run()
 		this->render();
 	}
 
-	this->unloadAssets();
+	m_resources.unloadAssets();
 }
 
 void SparticleEngine::processEvents()
@@ -151,8 +141,9 @@ void SparticleEngine::render()
 	for ( auto& obj : m_objects )
 	{
 		// TODO: Get texture per game object
+		SDL_Texture* texture = m_resources.getTexture( "spritesheet" );
 
-		if ( !m_TEMP_spriteSheet )
+		if ( !texture )
 		{
 			continue;
 		}
@@ -161,7 +152,7 @@ void SparticleEngine::render()
 		SDL_FRect src{ .x = 0, .y = 0, .w = 32, .h = 32 };
 		SDL_FRect dst{ .x = obj->x, .y = -obj->y, .w = 32, .h = 32 };
 
-		SDL_RenderTexture( m_sdlState.renderer, m_TEMP_spriteSheet, &src, &dst );
+		SDL_RenderTexture( m_sdlState.renderer, texture, &src, &dst );
 	}
 
 	SDL_RenderPresent( m_sdlState.renderer );
