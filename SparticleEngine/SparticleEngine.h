@@ -7,7 +7,9 @@
 #include "EngineConfig.h"
 #include "InputManager.h"
 #include "ResourceManager.h"
+#include "ResourceManagerTypes.h"
 #include "GameObject.h"
+#include "Sprite.h"
 
 struct SDLState
 {
@@ -17,10 +19,10 @@ struct SDLState
 	int height = 900;
 };
 
-class SparticleEngine 
+class SparticleEngine
 {
 public:
-	SparticleEngine(const EngineConfig& config);
+	SparticleEngine( const EngineConfig& config );
 	~SparticleEngine();
 
 	void run();
@@ -46,9 +48,6 @@ private:
 	std::vector<std::unique_ptr<GameObject>> m_objects;
 
 	GameObject* m_TEMP_player = nullptr;
-
-	void initSDL( const EngineConfig& config );
-	void shutdownSDL();
 
 	void processEvents();
 	void update( double deltaTime );

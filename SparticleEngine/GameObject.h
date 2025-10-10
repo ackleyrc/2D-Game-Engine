@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <memory>
+#include "Sprite.h"
 
-// forward declaration
 class SparticleEngine;
 
 class GameObject
@@ -15,11 +15,12 @@ public:
 	float x = 0.0f;
 	float y = 0.0f;
 
-	//std::string spriteID;
+	void setSprite( const Sprite& sprite ) { m_sprite = sprite; }
 
 	virtual void onUpdate( float deltaTime );
 
-private:
+protected:
 	friend class SparticleEngine;
 	SparticleEngine* m_engine = nullptr;
+	Sprite m_sprite;
 };

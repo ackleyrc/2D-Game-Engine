@@ -1,41 +1,83 @@
+#include <format>
 #include "ResourceManager.h"
+#include "ResourceManagerTypes.h"
 
-void ResourceManager::loadTexture( const std::string& id, const std::string& path )
+void ResourceManager::loadSprite( const std::string& spriteResourceId, const std::string& imagePath )
 {
-	if ( m_textures.contains( id ) )
+	if ( m_spriteResources.contains( spriteResourceId ) )
 	{
+		std::string message = std::format( "A sprite resource with the ID {} already exists. All sprite resource IDs must be unique.", spriteResourceId );
+		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr);
 		return;
 	}
 
-	SDL_Texture* texture = IMG_LoadTexture( m_renderer, path.c_str() );
+	SDL_Texture* texture = IMG_LoadTexture( m_renderer, imagePath.c_str() );
 
 	if ( !texture )
 	{
-		SDL_Log( "Failed to load texture '%s': %s", path.c_str(), SDL_GetError() );
+		SDL_Log( "Failed to load texture '%s': %s", imagePath.c_str(), SDL_GetError() );
 		return;
 	}
 
 	SDL_SetTextureScaleMode( texture, SDL_SCALEMODE_NEAREST );
 
-	m_textures[id] = { texture , SDLTextureDeleter{} };
+	auto resource = std::make_unique<SpriteResource>();
+	resource->texture.reset( texture );
+
+	// Default frame = full texture
+	float w, h;
+	SDL_GetTextureSize( texture, &w, &h );
+	resource->frames["default"] = { SDL_FRect{ 0, 0, w, h } };
+
+	m_spriteResources[spriteResourceId] = std::move( resource );
 }
 
-void ResourceManager::unloadTexture( const std::string& id )
+void ResourceManager::loadSpriteSheet( const std::string& spriteResourceId, const std::string& imagePath, const std::string& atlasPath )
 {
-	auto it = m_textures.find( id );
-	if ( it != m_textures.end() )
+	if ( m_spriteResources.contains( spriteResourceId ) )
 	{
-		m_textures.erase( it );
+		std::string message = std::format( "A sprite resource with the ID {} already exists. All sprite resource IDs must be unique.", spriteResourceId );
+		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
+		return;
+	}
+
+	SDL_Texture* texture = IMG_LoadTexture( m_renderer, imagePath.c_str() );
+
+	if ( !texture )
+	{
+		SDL_Log( "Failed to load texture '%s': %s", imagePath.c_str(), SDL_GetError() );
+		return;
+	}
+
+	SDL_SetTextureScaleMode( texture, SDL_SCALEMODE_NEAREST );
+
+	auto resource = std::make_unique<SpriteResource>();
+	resource->texture.reset( texture );
+
+	// TODO: read in source rects from sprite atlas
+	//float w, h;
+	//SDL_GetTextureSize( texture, &w, &h );
+	resource->frames["default"] = { SDL_FRect{ 0, 0, 32, 32 } };
+
+	m_spriteResources[spriteResourceId] = std::move( resource );
+}
+
+void ResourceManager::unloadSpriteResource( const std::string& spriteResourceId )
+{
+	auto it = m_spriteResources.find( spriteResourceId );
+	if ( it != m_spriteResources.end() )
+	{
+		m_spriteResources.erase( it );
 	}
 }
 
-SDL_Texture* ResourceManager::getTexture( const std::string& id )
+const SpriteResource* ResourceManager::getSpriteResource( const Sprite& sprite ) const
 {
-	auto it = m_textures.find( id );
-	return ( it != m_textures.end() ) ? it->second.get() : nullptr;
+	auto it = m_spriteResources.find( sprite.resourceId );
+	return ( it != m_spriteResources.end() ) ? it->second.get() : nullptr;
 }
 
 void ResourceManager::unloadAssets()
 {
-	m_textures.clear();
+	m_spriteResources.clear();
 }

@@ -1,17 +1,8 @@
-﻿#include "SparticleEngine.h"
+﻿#include <format>
 #include <iostream>
+#include "SparticleEngine.h"
 
 SparticleEngine::SparticleEngine(const EngineConfig& config)
-{
-	this->initSDL( config );
-}
-
-SparticleEngine::~SparticleEngine() 
-{
-	this->shutdownSDL();
-}
-
-void SparticleEngine::initSDL( const EngineConfig& config )
 {
 	if ( !SDL_Init( SDL_INIT_VIDEO ) )
 	{
@@ -61,7 +52,7 @@ void SparticleEngine::initSDL( const EngineConfig& config )
 	m_isRunning = true;
 }
 
-void SparticleEngine::shutdownSDL()
+SparticleEngine::~SparticleEngine()
 {
 	if ( m_sdlState.renderer )
 	{
@@ -80,9 +71,17 @@ void SparticleEngine::shutdownSDL()
 
 void SparticleEngine::run()
 {
-	// TEMP
+	// TEMP - to be handled by game code
+	m_resources.loadSpriteSheet( 
+		"spritesheet", 
+		"assets/textures/spritesheet.png", 
+		"assets/textures/spritesheet.atlas"
+	);
+	Sprite playerSprite = { "spritesheet", "default" }; //"player_left_1" };
+
 	m_TEMP_player = this->createObject<GameObject>();
-	m_resources.loadTexture( "spritesheet", "assets/textures/spritesheet.png" );
+	m_TEMP_player->setSprite( playerSprite );
+
 
 	Uint64 previousCounter = SDL_GetPerformanceCounter();
 	Uint64 frequency = SDL_GetPerformanceFrequency();
@@ -135,25 +134,37 @@ void SparticleEngine::update( double deltaTime )
 
 void SparticleEngine::render()
 {
-	SDL_SetRenderDrawColor( m_sdlState.renderer, 16, 16, 32, 255 );
-	SDL_RenderClear( m_sdlState.renderer );
+	SDL_Renderer* renderer = m_sdlState.renderer;
+
+	SDL_SetRenderDrawColor( renderer, 16, 16, 32, 255 );
+	SDL_RenderClear( renderer );
 
 	for ( auto& obj : m_objects )
 	{
-		// TODO: Get texture per game object
-		SDL_Texture* texture = m_resources.getTexture( "spritesheet" );
+		const Sprite& sprite = obj->m_sprite;
+		const SpriteResource* resource = m_resources.getSpriteResource( sprite );
 
-		if ( !texture )
+		if ( !resource || !resource->texture )
 		{
+			std::string message = std::format( "Failed to find resource/texture for ID: {}", sprite.resourceId );
+			SDL_Log( message.c_str(), SDL_GetError() );
 			continue;
 		}
 
-		// TEMP
-		SDL_FRect src{ .x = 0, .y = 0, .w = 32, .h = 32 };
-		SDL_FRect dst{ .x = obj->x, .y = -obj->y, .w = 32, .h = 32 };
+		const SpriteFrame* frame = resource->getSpriteFrame( sprite.frameId );
 
-		SDL_RenderTexture( m_sdlState.renderer, texture, &src, &dst );
+		if ( !frame ) 
+		{ 
+			std::string message = std::format( "Failed to find sprite frame for ID: {}", sprite.frameId );
+			SDL_Log( message.c_str(), SDL_GetError() );
+			continue; 
+		}
+
+		SDL_FRect src = frame->rect;
+		SDL_FRect dst{ .x = obj->x, .y = -obj->y, .w = src.w, .h = src.h };
+
+		SDL_RenderTexture( renderer, resource->texture.get(), &src, &dst);
 	}
 
-	SDL_RenderPresent( m_sdlState.renderer );
+	SDL_RenderPresent( renderer );
 }
