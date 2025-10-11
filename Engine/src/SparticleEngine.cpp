@@ -77,8 +77,8 @@ void SparticleEngine::run()
 	// TEMP - to be handled by game code
 	m_resources.loadSpriteSheet( 
 		"spritesheet", 
-		"../../../../Game/assets/textures/spritesheet.png", 
-		"../../../../Game/assets/textures/spritesheet.atlas"
+		"assets/textures/spritesheet.png", 
+		"assets/textures/spritesheet.atlas"
 	);
 	Sprite playerSprite = { "spritesheet", "default" }; //"player_left_1" };
 
