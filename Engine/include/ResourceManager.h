@@ -2,13 +2,14 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include "EngineAPI.h"
 #include "Sprite.h"
 
 class SparticleEngine;
 struct SDL_Renderer;
 struct SpriteResource;
 
-class ResourceManager
+class SPARTICLE_API ResourceManager
 {
 public:
 	void loadSprite( const std::string& spriteResourceId, const std::string& imagePath );
@@ -18,10 +19,10 @@ public:
 
 private:
 	friend class SparticleEngine;
-	ResourceManager() = default;
-	~ResourceManager() { unloadAssets(); }
 
-	void setRenderer( SDL_Renderer* renderer ) { m_renderer = renderer; }
+	ResourceManager() = default;
+	~ResourceManager();
+
 	SDL_Renderer* m_renderer = nullptr;
 
 	const SpriteResource* getSpriteResource( const Sprite& sprite ) const;

@@ -1,25 +1,16 @@
 ﻿#pragma once
-
 #include <vector>
 #include <memory>
-#include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
+#include "EngineAPI.h"
 #include "EngineConfig.h"
 #include "InputManager.h"
 #include "ResourceManager.h"
-#include "ResourceManagerTypes.h"
 #include "GameObject.h"
 #include "Sprite.h"
 
-struct SDLState
-{
-	SDL_Window* window = nullptr;
-	SDL_Renderer* renderer = nullptr;
-	int width = 1600;
-	int height = 900;
-};
+struct SDLState;
 
-class SparticleEngine
+class SPARTICLE_API SparticleEngine
 {
 public:
 	SparticleEngine( const EngineConfig& config );
@@ -40,7 +31,7 @@ public:
 	}
 
 private:
-	SDLState m_sdlState;
+	std::unique_ptr<SDLState> m_sdlState;
 	InputManager m_input;
 	ResourceManager m_resources;
 	bool m_isRunning = false;

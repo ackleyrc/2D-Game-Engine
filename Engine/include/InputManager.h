@@ -1,8 +1,8 @@
 #pragma once
-#include <SDL3/SDL.h>
 #include <unordered_map>
+#include "EngineAPI.h"
 
-class InputManager
+class SPARTICLE_API InputManager
 {
 public:
 	void update();

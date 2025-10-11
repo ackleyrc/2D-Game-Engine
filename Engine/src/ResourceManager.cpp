@@ -2,6 +2,11 @@
 #include "ResourceManager.h"
 #include "ResourceManagerTypes.h"
 
+ResourceManager::~ResourceManager()
+{
+	unloadAssets();
+}
+
 void ResourceManager::loadSprite( const std::string& spriteResourceId, const std::string& imagePath )
 {
 	if ( m_spriteResources.contains( spriteResourceId ) )

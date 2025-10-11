@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
 #include <memory>
+#include "EngineAPI.h"
 #include "Sprite.h"
 
 class SparticleEngine;
 
-class GameObject
+class SPARTICLE_API GameObject
 {
 public:
 	GameObject( SparticleEngine* engine );

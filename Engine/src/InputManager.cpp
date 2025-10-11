@@ -1,4 +1,5 @@
 #include "InputManager.h"
+#include <SDL3/SDL.h>
 
 void InputManager::update()
 {

@@ -1,8 +1,11 @@
 ﻿#include <format>
 #include <iostream>
 #include "SparticleEngine.h"
+#include "SDLState.h"
+#include "ResourceManagerTypes.h"
 
 SparticleEngine::SparticleEngine(const EngineConfig& config)
+	: m_sdlState( std::make_unique<SDLState>())
 {
 	if ( !SDL_Init( SDL_INIT_VIDEO ) )
 	{
@@ -11,18 +14,18 @@ SparticleEngine::SparticleEngine(const EngineConfig& config)
 	}
 
 	// Create the window
-	m_sdlState.width = config.width;
-	m_sdlState.height = config.height;
+	m_sdlState->width = config.width;
+	m_sdlState->height = config.height;
 	Uint32 windowFlags = config.resizable ? SDL_WINDOW_RESIZABLE : 0;
 
-	m_sdlState.window = SDL_CreateWindow( 
+	m_sdlState->window = SDL_CreateWindow(
 		config.windowTitle.c_str(), 
-		m_sdlState.width,
-		m_sdlState.width,
+		m_sdlState->width,
+		m_sdlState->width,
 		windowFlags 
 	);
 
-	if ( !m_sdlState.window )
+	if ( !m_sdlState->window )
 	{
 		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", "Error creating window", nullptr );
 		SDL_Quit();
@@ -30,40 +33,40 @@ SparticleEngine::SparticleEngine(const EngineConfig& config)
 	}
 
 	// Create the renderer
-	m_sdlState.renderer = SDL_CreateRenderer( m_sdlState.window, nullptr );
+	m_sdlState->renderer = SDL_CreateRenderer( m_sdlState->window, nullptr );
 
-	if ( !m_sdlState.renderer )
+	if ( !m_sdlState->renderer )
 	{
 		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", "Error creating renderer", nullptr );
-		SDL_DestroyWindow( m_sdlState.window );
+		SDL_DestroyWindow( m_sdlState->window );
 		SDL_Quit();
 		std::exit(1);
 	}
 
 	SDL_SetRenderLogicalPresentation(
-		m_sdlState.renderer,
-		m_sdlState.width,
-		m_sdlState.width,
+		m_sdlState->renderer,
+		m_sdlState->width,
+		m_sdlState->width,
 		SDL_LOGICAL_PRESENTATION_LETTERBOX
 	);
 
-	m_resources.setRenderer( m_sdlState.renderer );
+	m_resources.m_renderer = m_sdlState->renderer;
 
 	m_isRunning = true;
 }
 
 SparticleEngine::~SparticleEngine()
 {
-	if ( m_sdlState.renderer )
+	if ( m_sdlState->renderer )
 	{
-		SDL_DestroyRenderer( m_sdlState.renderer );
-		m_sdlState.renderer = nullptr;
+		SDL_DestroyRenderer( m_sdlState->renderer );
+		m_sdlState->renderer = nullptr;
 	}
 
-	if ( m_sdlState.window )
+	if ( m_sdlState->window )
 	{
-		SDL_DestroyWindow( m_sdlState.window );
-		m_sdlState.window = nullptr;
+		SDL_DestroyWindow( m_sdlState->window );
+		m_sdlState->window = nullptr;
 	}
 
 	SDL_Quit();
@@ -74,8 +77,8 @@ void SparticleEngine::run()
 	// TEMP - to be handled by game code
 	m_resources.loadSpriteSheet( 
 		"spritesheet", 
-		"assets/textures/spritesheet.png", 
-		"assets/textures/spritesheet.atlas"
+		"../../../../Game/assets/textures/spritesheet.png", 
+		"../../../../Game/assets/textures/spritesheet.atlas"
 	);
 	Sprite playerSprite = { "spritesheet", "default" }; //"player_left_1" };
 
@@ -114,8 +117,8 @@ void SparticleEngine::processEvents()
 			}
 			case SDL_EVENT_WINDOW_RESIZED:
 			{
-				m_sdlState.width = event.window.data1;
-				m_sdlState.height = event.window.data2;
+				m_sdlState->width = event.window.data1;
+				m_sdlState->height = event.window.data2;
 				break;
 			}
 		}
@@ -134,7 +137,7 @@ void SparticleEngine::update( double deltaTime )
 
 void SparticleEngine::render()
 {
-	SDL_Renderer* renderer = m_sdlState.renderer;
+	SDL_Renderer* renderer = m_sdlState->renderer;
 
 	SDL_SetRenderDrawColor( renderer, 16, 16, 32, 255 );
 	SDL_RenderClear( renderer );
