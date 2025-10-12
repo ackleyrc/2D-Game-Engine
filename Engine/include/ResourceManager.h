@@ -7,6 +7,7 @@
 
 class SparticleEngine;
 struct SDL_Renderer;
+struct SDL_Texture;
 struct SpriteResource;
 
 class SPARTICLE_API ResourceManager
@@ -24,6 +25,8 @@ private:
 	~ResourceManager();
 
 	SDL_Renderer* m_renderer = nullptr;
+
+	SDL_Texture* loadTexture( const std::string& imagePath );
 
 	const SpriteResource* getSpriteResource( const Sprite& sprite ) const;
 	std::unordered_map<std::string, std::unique_ptr<SpriteResource>> m_spriteResources;
