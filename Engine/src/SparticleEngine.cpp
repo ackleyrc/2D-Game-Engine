@@ -80,7 +80,7 @@ void SparticleEngine::run()
 		"assets/textures/spritesheet.png", 
 		"assets/textures/spritesheet.atlas"
 	);
-	Sprite playerSprite = { "spritesheet", "default" }; //"player_left_1" };
+	Sprite playerSprite = { "spritesheet", "ghost_dead_blue" };
 
 	m_TEMP_player = this->createObject<GameObject>();
 	m_TEMP_player->setSprite( playerSprite );

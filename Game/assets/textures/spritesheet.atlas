@@ -138,7 +138,7 @@
     { "id": "level_c_thick_inner_corner",   "rect": [ 336 , 32  , 16 , 16 ] },
     { "id": "level_d_thick_inner_corner",   "rect": [ 336 , 48  , 16 , 16 ] },
     { "id": "level_e_thick_inner_corner",   "rect": [ 336 , 64  , 16 , 16 ] },
-    { "id": "level_e_thick_inner_corner",   "rect": [ 336 , 80  , 16 , 16 ] },
+    { "id": "level_e_thick_inner_corner",   "rect": [ 336 , 80  , 16 , 16 ] }
 
   ]
 }

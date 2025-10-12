@@ -1,6 +1,11 @@
 #include <format>
+#include <fstream>
+#include <iostream>
+#include <json.hpp>
 #include "ResourceManager.h"
 #include "ResourceManagerTypes.h"
+
+using json = nlohmann::json;
 
 ResourceManager::~ResourceManager()
 {
@@ -59,10 +64,30 @@ void ResourceManager::loadSpriteSheet( const std::string& spriteResourceId, cons
 	auto resource = std::make_unique<SpriteResource>();
 	resource->texture.reset( texture );
 
-	// TODO: read in source rects from sprite atlas
-	//float w, h;
-	//SDL_GetTextureSize( texture, &w, &h );
-	resource->frames["default"] = { SDL_FRect{ 0, 0, 32, 32 } };
+	std::ifstream atlasFile( atlasPath );
+
+	if ( !atlasFile.is_open() )
+	{
+		SDL_Log( "Failed to open sprite atlas file: %s", atlasPath.c_str() );
+		return;
+	}
+
+	try
+	{
+		json data = json::parse( atlasFile );
+
+		for ( const auto& sprite : data["sprites"] )
+		{
+			auto& id = sprite["id"];
+			auto& rect = sprite["rect"];
+			resource->frames[id] = { SDL_FRect{ rect[0], rect[1], rect[2], rect[3] } };
+		}
+	}
+	catch ( json::parse_error& exception )
+	{
+		std::string message = std::format( "Failed to parse sprite atlas file: {} \n{}", atlasPath, exception.what() );
+		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
+	}
 
 	m_spriteResources[spriteResourceId] = std::move( resource );
 }
