@@ -4,6 +4,8 @@ find_package(SDL3_image REQUIRED)
 add_executable (
     MazeEaterGame 
     "main.cpp"
+    "MazeEaterGame.h" 
+    "MazeEaterGame.cpp"
 )
 
 set_target_properties(

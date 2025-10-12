@@ -3,6 +3,7 @@
 #include <memory>
 #include "EngineAPI.h"
 #include "EngineConfig.h"
+#include "IGame.h"
 #include "InputManager.h"
 #include "ResourceManager.h"
 #include "GameObject.h"
@@ -13,7 +14,7 @@ struct SDLState;
 class SPARTICLE_API SparticleEngine
 {
 public:
-	SparticleEngine( const EngineConfig& config );
+	SparticleEngine( const EngineConfig& config, IGame* game );
 	~SparticleEngine();
 
 	void run();
@@ -31,14 +32,13 @@ public:
 	}
 
 private:
+	IGame* m_game;
 	std::unique_ptr<SDLState> m_sdlState;
 	InputManager m_input;
 	ResourceManager m_resources;
 	bool m_isRunning = false;
 
 	std::vector<std::unique_ptr<GameObject>> m_objects;
-
-	GameObject* m_TEMP_player = nullptr;
 
 	void processEvents();
 	void update( double deltaTime );

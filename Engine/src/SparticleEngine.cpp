@@ -4,8 +4,8 @@
 #include "SDLState.h"
 #include "ResourceManagerTypes.h"
 
-SparticleEngine::SparticleEngine(const EngineConfig& config)
-	: m_sdlState( std::make_unique<SDLState>())
+SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game )
+	: m_sdlState( std::make_unique<SDLState>()), m_game( game )
 {
 	if ( !SDL_Init( SDL_INIT_VIDEO ) )
 	{
@@ -52,11 +52,16 @@ SparticleEngine::SparticleEngine(const EngineConfig& config)
 
 	m_resources.m_renderer = m_sdlState->renderer;
 
+	m_game->setEngine( this );
+	m_game->onInit();
+
 	m_isRunning = true;
 }
 
 SparticleEngine::~SparticleEngine()
 {
+	m_game->onShutdown();
+
 	if ( m_sdlState->renderer )
 	{
 		SDL_DestroyRenderer( m_sdlState->renderer );
@@ -74,18 +79,6 @@ SparticleEngine::~SparticleEngine()
 
 void SparticleEngine::run()
 {
-	// TEMP - to be handled by game code
-	m_resources.loadSpriteSheet( 
-		"spritesheet", 
-		"assets/textures/spritesheet.png", 
-		"assets/textures/spritesheet.atlas"
-	);
-	Sprite playerSprite = { "spritesheet", "ghost_dead_blue" };
-
-	m_TEMP_player = this->createObject<GameObject>();
-	m_TEMP_player->setSprite( playerSprite );
-
-
 	Uint64 previousCounter = SDL_GetPerformanceCounter();
 	Uint64 frequency = SDL_GetPerformanceFrequency();
 
@@ -129,6 +122,8 @@ void SparticleEngine::processEvents()
 
 void SparticleEngine::update( double deltaTime )
 {
+	m_game->onUpdate( deltaTime );
+
 	for ( auto& obj : m_objects )
 	{
 		obj->onUpdate( deltaTime );
