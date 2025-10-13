@@ -5,7 +5,8 @@
 #include "ResourceManagerTypes.h"
 
 SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game )
-	: m_sdlState( std::make_unique<SDLState>()), m_game( game )
+	: m_sdlState( std::make_unique<SDLState>()),
+	m_game( game )
 {
 	if ( !SDL_Init( SDL_INIT_VIDEO ) )
 	{
@@ -54,8 +55,6 @@ SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game )
 
 	m_game->setEngine( this );
 	m_game->onInit();
-
-	m_isRunning = true;
 }
 
 SparticleEngine::~SparticleEngine()
@@ -79,6 +78,8 @@ SparticleEngine::~SparticleEngine()
 
 void SparticleEngine::run()
 {
+	m_isRunning = true;
+
 	Uint64 previousCounter = SDL_GetPerformanceCounter();
 	Uint64 frequency = SDL_GetPerformanceFrequency();
 

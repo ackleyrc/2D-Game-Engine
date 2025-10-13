@@ -1,17 +1,25 @@
 #include "GameObject.h"
 #include "SparticleEngine.h"
+#include "ResourceManager.h"
+#include "InputManager.h"
 
 GameObject::GameObject( SparticleEngine* engine ) : m_engine( engine ) 
 { }
 
 void GameObject::onUpdate( float deltaTime )
+{ }
+
+SparticleEngine& GameObject::engine() const
 {
-	// TEMP player logic
-	const float playerSpeed = 100.0f;
+	return *m_engine;
+}
 
-	float horizontalAxis = m_engine->getInput().getAxisHorizontal();
-	float verticalAxis = m_engine->getInput().getAxisVertical();
+ResourceManager& GameObject::resources() const
+{
+	return m_engine->resources();
+}
 
-	x += ( horizontalAxis * playerSpeed * deltaTime );
-	y += ( verticalAxis * playerSpeed * deltaTime );
+InputManager& GameObject::input() const
+{
+	return m_engine->input();
 }
