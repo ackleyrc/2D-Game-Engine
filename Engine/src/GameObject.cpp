@@ -2,12 +2,20 @@
 #include "SparticleEngine.h"
 #include "ResourceManager.h"
 #include "InputManager.h"
+#include "Component.h"
 
 GameObject::GameObject( SparticleEngine* engine ) : m_engine( engine ) 
 { }
 
+GameObject::~GameObject() = default;
+
 void GameObject::onUpdate( float deltaTime )
-{ }
+{
+	for ( auto& component : m_components )
+	{
+		component->onUpdate( deltaTime );
+	}
+}
 
 SparticleEngine& GameObject::engine() const
 {

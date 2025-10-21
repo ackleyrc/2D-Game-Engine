@@ -9,6 +9,7 @@ if (SPARTICLE_BUILD_SHARED)
         "src/ResourceManagerTypes.h"
         "src/SDLState.h"
         "src/SparticleEngine.cpp"
+        "src/Component.cpp"
     )
 else()
     add_library (SparticleEngineLib STATIC
@@ -18,6 +19,7 @@ else()
         "src/ResourceManagerTypes.h"
         "src/SDLState.h"
         "src/SparticleEngine.cpp"
+        "src/Component.cpp"
     )
 endif()
 
