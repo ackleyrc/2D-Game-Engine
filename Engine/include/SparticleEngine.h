@@ -19,8 +19,8 @@ public:
 
 	void run();
 
-	InputManager& getInput() { return m_input; }
-	ResourceManager& getResources() { return m_resources; }
+	InputManager& input() { return m_input; }
+	ResourceManager& resources() { return m_resources; }
 
 	// GameObject management
 	template<typename T, typename... Args>
