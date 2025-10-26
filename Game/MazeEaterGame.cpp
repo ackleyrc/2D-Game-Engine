@@ -1,6 +1,6 @@
 #include <SparticleEngine.h>
 #include "MazeEaterGame.h"
-#include "Player.h"
+#include "PlayerController.h"
 
 void MazeEaterGame::onInit()
 {
@@ -12,7 +12,8 @@ void MazeEaterGame::onInit()
 
 	Sprite playerSprite = { "spritesheet", "ghost_dead_blue" };
 
-	m_player = m_engine->createObject<Player>();
+	m_player = m_engine->createObject<GameObject>();
+	m_player->addComponent<PlayerController>();
 	m_player->setSprite( playerSprite );
 }
 

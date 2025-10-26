@@ -52,8 +52,9 @@ public:
 		return nullptr;
 	}
 
-protected:
 	SparticleEngine& engine() const;
+
+protected:
 	ResourceManager& resources() const;
 	InputManager& input() const;
 

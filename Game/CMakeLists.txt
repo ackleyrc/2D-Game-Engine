@@ -6,8 +6,8 @@ add_executable (
     "main.cpp"
     "MazeEaterGame.h" 
     "MazeEaterGame.cpp"
-    "Player.h"
-    "Player.cpp" 
+    "PlayerController.h"
+    "PlayerController.cpp"
 )
 
 set_target_properties(
