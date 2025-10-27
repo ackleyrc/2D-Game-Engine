@@ -3,6 +3,7 @@
 #include "SparticleEngine.h"
 #include "SDLState.h"
 #include "ResourceManagerTypes.h"
+#include "SpriteComponent.h"
 
 SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game )
 	: m_sdlState( std::make_unique<SDLState>()),
@@ -140,7 +141,14 @@ void SparticleEngine::render()
 
 	for ( auto& obj : m_objects )
 	{
-		const Sprite& sprite = obj->m_sprite;
+		auto spriteComponent = obj->getComponent<SpriteComponent>();
+
+		if ( !spriteComponent )
+		{
+			continue;
+		}
+
+		const Sprite& sprite = spriteComponent->getSprite();
 		const SpriteResource* resource = m_resources.getSpriteResource( sprite );
 
 		if ( !resource || !resource->texture )

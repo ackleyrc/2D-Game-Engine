@@ -3,7 +3,6 @@
 #include <memory>
 #include <vector>
 #include "EngineAPI.h"
-#include "Sprite.h"
 
 class SparticleEngine;
 class ResourceManager;
@@ -23,19 +22,17 @@ public:
 	float x = 0.0f;
 	float y = 0.0f;
 
-	void setSprite( const Sprite& sprite ) { m_sprite = sprite; }
-
 	virtual void onUpdate( float deltaTime );
 
 	template<typename T, typename... Args>
-	T* addComponent( Args&&... args )
+	T& addComponent( Args&&... args )
 	{
 		static_assert( std::is_base_of_v<Component, T>, "T must derive from Component" );
 		auto component = std::make_unique<T>( std::forward<Args>( args )... );
 		component->m_gameObject = this;
-		T* ptr = component.get();
+		T& ref = *component;
 		m_components.push_back( std::move( component ) );
-		return ptr;
+		return ref;
 	}
 
 	template<typename T>
@@ -44,7 +41,7 @@ public:
 		static_assert( std::is_base_of_v<Component, T>, "T must derive from Component" );
 		for ( auto& component : m_components )
 		{
-			if ( auto* casted = dnamic_cast<T*>( component.get() ) )
+			if ( auto* casted = dynamic_cast<T*>( component.get() ) )
 			{
 				return casted;
 			}
@@ -61,6 +58,5 @@ protected:
 private:
 	friend class SparticleEngine;
 	SparticleEngine* m_engine = nullptr;
-	Sprite m_sprite;
 	std::vector<std::unique_ptr<Component>> m_components;
 };

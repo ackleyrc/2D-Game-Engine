@@ -1,4 +1,5 @@
 #include <SparticleEngine.h>
+#include <SpriteComponent.h>
 #include "MazeEaterGame.h"
 #include "PlayerController.h"
 
@@ -14,7 +15,9 @@ void MazeEaterGame::onInit()
 
 	m_player = m_engine->createObject<GameObject>();
 	m_player->addComponent<PlayerController>();
-	m_player->setSprite( playerSprite );
+
+	auto& spriteComponent = m_player->addComponent<SpriteComponent>();
+	spriteComponent.setSprite( playerSprite );
 }
 
 void MazeEaterGame::onUpdate( float deltaTime )
