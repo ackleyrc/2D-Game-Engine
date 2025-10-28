@@ -1,8 +1,9 @@
 #pragma once
 #include "Component.h"
+#include "EngineAPI.h"
 #include "Sprite.h"
 
-class SpriteComponent : public Component
+class SPARTICLE_API SpriteComponent : public Component
 {
 public:
 	SpriteComponent() { }

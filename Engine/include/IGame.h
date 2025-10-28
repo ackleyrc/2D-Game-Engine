@@ -1,8 +1,9 @@
 #pragma once
+#include "EngineAPI.h"
 
 class SparticleEngine;
 
-class IGame {
+class SPARTICLE_API IGame {
 public:
 	virtual ~IGame() = default;
 	virtual void onInit() = 0;

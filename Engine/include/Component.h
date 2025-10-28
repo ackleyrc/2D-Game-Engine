@@ -1,9 +1,10 @@
 #pragma once
+#include "EngineAPI.h"
 
 class SparticleEngine;
 class GameObject;
 
-class Component
+class SPARTICLE_API Component
 {
 public:
     virtual ~Component() = default;
