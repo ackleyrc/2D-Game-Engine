@@ -1,5 +1,5 @@
 #pragma once
-#include "IGame.h"
+#include <SparticleEngine.h>
 
 class MazeEaterGame : public IGame
 {

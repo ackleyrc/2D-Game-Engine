@@ -3,12 +3,12 @@
 #include <string>
 #include <unordered_map>
 #include "EngineAPI.h"
-#include "Sprite.h"
 
 class SparticleEngine;
 struct SDL_Renderer;
 struct SDL_Texture;
 struct SpriteResource;
+class Sprite;
 
 class SPARTICLE_API ResourceManager
 {

@@ -1,5 +1,3 @@
-#include <SparticleEngine.h>
-#include <SpriteComponent.h>
 #include "MazeEaterGame.h"
 #include "PlayerController.h"
 

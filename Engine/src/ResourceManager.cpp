@@ -4,6 +4,7 @@
 #include <json.hpp>
 #include "ResourceManager.h"
 #include "ResourceManagerTypes.h"
+#include "Sprite.h"
 
 using json = nlohmann::json;
 

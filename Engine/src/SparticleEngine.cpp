@@ -3,17 +3,17 @@
 #include "SparticleEngine.h"
 #include "SDLState.h"
 #include "ResourceManagerTypes.h"
-#include "SpriteComponent.h"
 
 SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game )
-	: m_sdlState( std::make_unique<SDLState>()),
-	m_game( game )
+	: m_game( game )
 {
 	if ( !SDL_Init( SDL_INIT_VIDEO ) )
 	{
 		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL3", nullptr );
 		std::exit( 1 );
 	}
+
+	m_sdlState = std::make_unique<SDLState>();
 
 	// Create the window
 	m_sdlState->width = config.width;

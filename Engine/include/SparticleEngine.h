@@ -3,10 +3,13 @@
 #include <memory>
 #include "EngineAPI.h"
 #include "EngineConfig.h"
+
+// Aggregated types
 #include "IGame.h"
 #include "InputManager.h"
 #include "ResourceManager.h"
 #include "GameObject.h"
+#include "SpriteComponent.h"
 #include "Sprite.h"
 
 struct SDLState;
