@@ -8,7 +8,8 @@ class SparticleEngine;
 struct SDL_Renderer;
 struct SDL_Texture;
 struct SpriteResource;
-class Sprite;
+struct Sprite;
+struct AnimationData;
 
 class SPARTICLE_API ResourceManager
 {
@@ -19,6 +20,15 @@ public:
 	void loadSpriteSheet( const std::string& spriteResourceId, const std::string& imagePath, const std::string& atlasPath );
 	void unloadSpriteResource( const std::string& spriteResourceId );
 	void unloadAssets();
+
+	const AnimationData* createAnimation(
+		const std::string& name,
+		const std::vector<Sprite>& frames,
+		float frameDuration,
+		bool loop = true
+	);
+
+	const AnimationData* getAnimation( const std::string& name ) const;
 
 private:
 	friend class SparticleEngine;
@@ -31,4 +41,6 @@ private:
 
 	const SpriteResource* getSpriteResource( const Sprite& sprite ) const;
 	std::unordered_map<std::string, std::unique_ptr<SpriteResource>> m_spriteResources;
+
+	std::unordered_map<std::string, std::unique_ptr<AnimationData>> m_animations;
 };

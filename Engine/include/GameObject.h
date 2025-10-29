@@ -13,7 +13,7 @@ class SPARTICLE_API GameObject
 {
 public:
 	GameObject( SparticleEngine* engine );
-	virtual ~GameObject();
+	~GameObject();
 
 	GameObject( const GameObject& ) = delete;
 	GameObject& operator=( const GameObject& ) = delete;
@@ -22,7 +22,7 @@ public:
 	float x = 0.0f;
 	float y = 0.0f;
 
-	virtual void onUpdate( float deltaTime );
+	void onUpdate( float deltaTime );
 
 	template<typename T, typename... Args>
 	T& addComponent( Args&&... args )

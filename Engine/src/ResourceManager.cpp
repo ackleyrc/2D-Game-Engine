@@ -5,6 +5,7 @@
 #include "ResourceManager.h"
 #include "ResourceManagerTypes.h"
 #include "Sprite.h"
+#include "AnimationData.h"
 
 using json = nlohmann::json;
 
@@ -113,7 +114,44 @@ const SpriteResource* ResourceManager::getSpriteResource( const Sprite& sprite )
 	return ( it != m_spriteResources.end() ) ? it->second.get() : nullptr;
 }
 
+const AnimationData* ResourceManager::createAnimation(
+	const std::string& name,
+	const std::vector<Sprite>& frames,
+	float frameDuration,
+	bool loop
+)
+{
+	auto it = m_animations.find( name );
+	if ( it != m_animations.end() )
+	{
+		return it->second.get();
+	}
+
+	auto animation = std::make_unique<AnimationData>();
+	animation->frames = frames;
+	animation->frameDuration = frameDuration;
+	animation->loop = loop;
+
+	auto ptr = animation.get();
+	m_animations[name] = std::move( animation );
+	return ptr;
+}
+
+const AnimationData* ResourceManager::getAnimation( const std::string& name ) const
+{
+	auto it = m_animations.find( name );
+	if ( it != m_animations.end() )
+	{
+		return it->second.get();
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
 void ResourceManager::unloadAssets()
 {
 	m_spriteResources.clear();
+	m_animations.clear();
 }

@@ -10,6 +10,7 @@ if (SPARTICLE_BUILD_SHARED)
         "src/SDLState.h"
         "src/SparticleEngine.cpp"
         "src/Component.cpp"
+        "src/AnimationComponent.cpp"
     )
 else()
     add_library (SparticleEngineLib STATIC
@@ -20,6 +21,7 @@ else()
         "src/SDLState.h"
         "src/SparticleEngine.cpp"
         "src/Component.cpp"
+        "src/AnimationComponent.cpp"
     )
 endif()
 

@@ -11,6 +11,8 @@
 #include "GameObject.h"
 #include "SpriteComponent.h"
 #include "Sprite.h"
+#include "AnimationData.h"
+#include "AnimationComponent.h"
 
 struct SDLState;
 
