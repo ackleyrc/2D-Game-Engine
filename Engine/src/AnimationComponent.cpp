@@ -16,6 +16,11 @@ void AnimationComponent::setAnimation( const AnimationData* data )
 	reset();
 }
 
+const AnimationData* AnimationComponent::getAnimation()
+{
+	return m_animationData;
+}
+
 void AnimationComponent::play()
 {
 	m_state = State::Playing;

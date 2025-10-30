@@ -12,6 +12,8 @@ public:
 	~AnimationComponent() { }
 
 	void setAnimation( const AnimationData* data );
+	const AnimationData* getAnimation();
+
 	void play();
 	void pause();
 	void stop();
