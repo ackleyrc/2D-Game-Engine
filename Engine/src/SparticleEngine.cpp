@@ -23,7 +23,7 @@ SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game )
 	m_sdlState->window = SDL_CreateWindow(
 		config.windowTitle.c_str(), 
 		m_sdlState->width,
-		m_sdlState->width,
+		m_sdlState->height,
 		windowFlags 
 	);
 
@@ -168,7 +168,7 @@ void SparticleEngine::render()
 		}
 
 		SDL_FRect src = frame->rect;
-		SDL_FRect dst{ .x = obj->x, .y = -obj->y, .w = src.w, .h = src.h };
+		SDL_FRect dst{ .x = obj->x, .y = obj->y, .w = src.w, .h = src.h };
 
 		SDL_RenderTexture( renderer, resource->texture.get(), &src, &dst);
 	}

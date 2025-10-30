@@ -4,6 +4,9 @@
 class MazeEaterGame : public IGame
 {
 public:
+	MazeEaterGame() { }
+	~MazeEaterGame() { }
+
 	void setEngine( SparticleEngine* engine ) override { m_engine = engine; }
 
 	void onInit() override;
