@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <map>
 #include <vector>
 #include <memory>
 #include "EngineAPI.h"
@@ -42,9 +43,14 @@ private:
 
 	bool m_isRunning = false;
 
-	std::vector<std::unique_ptr<GameObject>> m_objects;
-
 	void processEvents();
 	void update( double deltaTime );
 	void render();
+
+	friend class SpriteComponent;
+	void registerSpriteComponent( SpriteComponent* spriteComponent );
+	void unregisterSpriteComponent( SpriteComponent* spriteComponent );
+	std::map<int, std::vector<SpriteComponent*>> m_spriteLayers;
+
+	std::vector<std::unique_ptr<GameObject>> m_objects;
 };

@@ -31,6 +31,7 @@ public:
 		component->m_gameObject = this;
 		T& ref = *component;
 		m_components.push_back( std::move( component ) );
+		ref.onAdd();
 		return ref;
 	}
 

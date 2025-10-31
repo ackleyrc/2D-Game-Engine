@@ -9,6 +9,7 @@ class SPARTICLE_API Component
 public:
     virtual ~Component() = default;
     virtual void onUpdate( float deltaTime ) { }
+    virtual void onAdd() { }
 
 protected:
     SparticleEngine& engine() const;

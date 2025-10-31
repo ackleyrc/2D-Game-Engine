@@ -148,38 +148,41 @@ void SparticleEngine::render()
 
 	SDL_RenderClear( renderer );
 
-	for ( auto& obj : m_objects )
+	for ( auto& [layer, spriteVec] : m_spriteLayers )
 	{
-		auto spriteComponent = obj->getComponent<SpriteComponent>();
-
-		if ( !spriteComponent )
+		for ( auto* spriteComponent : spriteVec )
 		{
-			continue;
+			if ( !spriteComponent )
+			{
+				continue;
+			}
+
+			const Sprite& sprite = spriteComponent->getSprite();
+			const SpriteResource* resource = m_resources.getSpriteResource( sprite );
+
+			if ( !resource || !resource->texture )
+			{
+				std::string message = std::format( "Failed to find resource/texture for ID: {}", sprite.resourceId );
+				SDL_Log( message.c_str(), SDL_GetError() );
+				continue;
+			}
+
+			const SpriteFrame* frame = resource->getSpriteFrame( sprite.frameId );
+
+			if ( !frame )
+			{
+				std::string message = std::format( "Failed to find sprite frame for ID: {}", sprite.frameId );
+				SDL_Log( message.c_str(), SDL_GetError() );
+				continue;
+			}
+
+			auto obj = spriteComponent->m_gameObject;
+
+			SDL_FRect src = frame->rect;
+			SDL_FRect dst { .x = obj->x, .y = obj->y, .w = src.w, .h = src.h };
+
+			SDL_RenderTexture( renderer, resource->texture.get(), &src, &dst );
 		}
-
-		const Sprite& sprite = spriteComponent->getSprite();
-		const SpriteResource* resource = m_resources.getSpriteResource( sprite );
-
-		if ( !resource || !resource->texture )
-		{
-			std::string message = std::format( "Failed to find resource/texture for ID: {}", sprite.resourceId );
-			SDL_Log( message.c_str(), SDL_GetError() );
-			continue;
-		}
-
-		const SpriteFrame* frame = resource->getSpriteFrame( sprite.frameId );
-
-		if ( !frame ) 
-		{ 
-			std::string message = std::format( "Failed to find sprite frame for ID: {}", sprite.frameId );
-			SDL_Log( message.c_str(), SDL_GetError() );
-			continue; 
-		}
-
-		SDL_FRect src = frame->rect;
-		SDL_FRect dst{ .x = obj->x, .y = obj->y, .w = src.w, .h = src.h };
-
-		SDL_RenderTexture( renderer, resource->texture.get(), &src, &dst);
 	}
 
 	SDL_RenderPresent( renderer );
@@ -191,4 +194,43 @@ GameObject* SparticleEngine::createGameObject()
 	GameObject* ptr = obj.get();
 	m_objects.push_back( std::move( obj ) );
 	return ptr;
+}
+
+void SparticleEngine::registerSpriteComponent( SpriteComponent* spriteComponent )
+{
+	if ( !spriteComponent )
+	{
+		return;
+	}
+
+	int layer = spriteComponent->getLayer();
+	auto& vec = m_spriteLayers[layer];
+
+	if ( std::find( vec.begin(), vec.end(), spriteComponent ) == vec.end() )
+	{
+		vec.push_back( spriteComponent );
+	}
+}
+
+void SparticleEngine::unregisterSpriteComponent( SpriteComponent* spriteComponent )
+{
+	if ( !spriteComponent )
+	{
+		return;
+	}
+
+	int layer = spriteComponent->getLayer();
+	auto it = m_spriteLayers.find( layer );
+	if ( it == m_spriteLayers.end() )
+	{
+		return;
+	}
+
+	auto& vec = it->second;
+	vec.erase( std::remove( vec.begin(), vec.end(), spriteComponent ), vec.end() );
+
+	if ( vec.empty() )
+	{
+		m_spriteLayers.erase( it );
+	}
 }
