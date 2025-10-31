@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <SparticleEngine.h>
 #include "PlayerController.h"
+#include "GameConfig.h"
 
 PlayerController::PlayerController(
 	AnimationComponent& animationComponent,
@@ -29,7 +30,12 @@ void PlayerController::onUpdate( float deltaTime )
 	if ( abs(horizontalAxis) > 0.1f )
 	{
 		x += ( horizontalAxis * playerSpeed * deltaTime );
-		x = std::clamp( x, 0.0f, 448.0f - 32.0f );
+
+		x = std::clamp( 
+			x, 
+			GameConfig::TILE_WIDTH * 1.0f, 
+			GameConfig::SCREEN_WIDTH - GameConfig::TILE_WIDTH * 3.0f 
+		);
 
 		if ( m_gameObject->x != x )
 		{
@@ -60,7 +66,12 @@ void PlayerController::onUpdate( float deltaTime )
 	else if ( abs(verticalAxis) > 0.1f )
 	{
 		y -= ( verticalAxis * playerSpeed * deltaTime );
-		y = std::clamp( y, 0.0f, 512.0f - 32.0f * 3.0f );
+
+		y = std::clamp( 
+			y, 
+			GameConfig::TILE_HEIGHT * 4.0f,
+			GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 5.0f 
+		);
 
 		if ( m_gameObject->y != y )
 		{
