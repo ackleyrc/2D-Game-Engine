@@ -4,8 +4,9 @@
 #include "SDLState.h"
 #include "ResourceManagerTypes.h"
 
-SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game )
-	: m_game( game )
+SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game ) : 
+	m_engineConfig( config ),
+	m_game( game )
 {
 	if ( !SDL_Init( SDL_INIT_VIDEO ) )
 	{
@@ -136,7 +137,15 @@ void SparticleEngine::render()
 {
 	SDL_Renderer* renderer = m_sdlState->renderer;
 
-	SDL_SetRenderDrawColor( renderer, 16, 16, 32, 255 );
+	SDL_SetRenderDrawColor( 
+		renderer, 
+		static_cast<Uint8>( m_engineConfig.backgroundColor.r * 255.0f ), 
+		static_cast<Uint8>( m_engineConfig.backgroundColor.g * 255.0f ),
+		static_cast<Uint8>( m_engineConfig.backgroundColor.b * 255.0f ),
+		static_cast<Uint8>( m_engineConfig.backgroundColor.a * 255.0f )
+	);
+
+
 	SDL_RenderClear( renderer );
 
 	for ( auto& obj : m_objects )

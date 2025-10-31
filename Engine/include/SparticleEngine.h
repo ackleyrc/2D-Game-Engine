@@ -13,6 +13,7 @@
 #include "Sprite.h"
 #include "AnimationData.h"
 #include "AnimationComponent.h"
+#include "Color.h"
 
 struct SDLState;
 
@@ -39,6 +40,8 @@ public:
 	}
 
 private:
+	EngineConfig m_engineConfig;
+
 	IGame* m_game;
 
 	std::unique_ptr<SDLState> m_sdlState;
