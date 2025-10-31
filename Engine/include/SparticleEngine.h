@@ -25,19 +25,10 @@ public:
 
 	void run();
 
+	GameObject* createGameObject();
+
 	InputManager& input() { return m_input; }
 	ResourceManager& resources() { return m_resources; }
-
-	// GameObject management
-	template<typename T, typename... Args>
-	T* createObject( Args&&... args )
-	{
-		static_assert( std::is_base_of_v<GameObject, T>, "T must derive from GameObject" );
-		auto obj = std::make_unique<T>( this, std::forward<Args>( args )... );
-		T* ptr = obj.get();
-		m_objects.push_back( std::move( obj ) );
-		return ptr;
-	}
 
 private:
 	EngineConfig m_engineConfig;

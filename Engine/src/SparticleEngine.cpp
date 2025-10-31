@@ -184,3 +184,11 @@ void SparticleEngine::render()
 
 	SDL_RenderPresent( renderer );
 }
+
+GameObject* SparticleEngine::createGameObject()
+{
+	auto obj = std::unique_ptr<GameObject>( new GameObject( this ) );
+	GameObject* ptr = obj.get();
+	m_objects.push_back( std::move( obj ) );
+	return ptr;
+}

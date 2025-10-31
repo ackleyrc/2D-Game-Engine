@@ -12,8 +12,7 @@ class Component;
 class SPARTICLE_API GameObject
 {
 public:
-	GameObject( SparticleEngine* engine );
-	~GameObject();
+	virtual ~GameObject() = default;
 
 	GameObject( const GameObject& ) = delete;
 	GameObject& operator=( const GameObject& ) = delete;
@@ -57,6 +56,9 @@ protected:
 
 private:
 	friend class SparticleEngine;
+
+	GameObject( SparticleEngine* engine ) { m_engine = engine; }
+
 	SparticleEngine* m_engine = nullptr;
 	std::vector<std::unique_ptr<Component>> m_components;
 };

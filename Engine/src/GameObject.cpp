@@ -4,11 +4,6 @@
 #include "InputManager.h"
 #include "Component.h"
 
-GameObject::GameObject( SparticleEngine* engine ) : m_engine( engine ) 
-{ }
-
-GameObject::~GameObject() = default;
-
 void GameObject::onUpdate( float deltaTime )
 {
 	for ( auto& component : m_components )
