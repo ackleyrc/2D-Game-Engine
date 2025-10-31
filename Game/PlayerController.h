@@ -25,4 +25,7 @@ private:
 	const AnimationData* m_playerDown;
 	const AnimationData* m_playerLeft;
 	const AnimationData* m_playerRight;
+
+	enum class Direction { NONE, UP, LEFT, DOWN, RIGHT };
+	Direction m_currentDirection = Direction::NONE;
 };

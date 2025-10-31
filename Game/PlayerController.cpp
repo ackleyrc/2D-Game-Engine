@@ -24,83 +24,99 @@ void PlayerController::onUpdate( float deltaTime )
 	float horizontalAxis = engine().input().getAxisHorizontal();
 	float verticalAxis = engine().input().getAxisVertical();
 
+	Direction inputDirection = Direction::NONE;
+
+	if ( verticalAxis > 0.1f )
+	{
+		inputDirection = Direction::UP;
+	}
+	else if ( verticalAxis < -0.1f )
+	{
+		inputDirection = Direction::DOWN;
+	}
+	else if ( horizontalAxis > 0.1f )
+	{
+		inputDirection = Direction::RIGHT;
+	}
+	else if ( horizontalAxis < -0.1f )
+	{
+		inputDirection = Direction::LEFT;
+	}
+
+	if ( inputDirection != Direction::NONE )
+	{
+		m_currentDirection = inputDirection;
+	}
+
+
 	float x = m_gameObject->x;
 	float y = m_gameObject->y;
 
-	if ( abs(horizontalAxis) > 0.1f )
+	float travelDistance = playerSpeed * deltaTime;
+
+	switch ( m_currentDirection )
 	{
-		x += ( horizontalAxis * playerSpeed * deltaTime );
-
-		x = std::clamp( 
-			x, 
-			GameConfig::TILE_WIDTH * 1.0f, 
-			GameConfig::SCREEN_WIDTH - GameConfig::TILE_WIDTH * 3.0f 
-		);
-
-		if ( m_gameObject->x != x )
-		{
-			m_gameObject->x = x;
-
-			if ( horizontalAxis < 0.0f )
-			{
-				if ( m_animationComponent.getAnimation() != m_playerLeft )
-				{
-					m_animationComponent.setAnimation( m_playerLeft );
-				}
-			}
-			else
-			{
-				if ( m_animationComponent.getAnimation() != m_playerRight )
-				{
-					m_animationComponent.setAnimation( m_playerRight );
-				}
-			}
-
-			m_animationComponent.play();
-		}
-		else
-		{
-			m_animationComponent.pause();
-		}
+		case Direction::UP:
+			y -= travelDistance;
+			break;
+		case Direction::LEFT:
+			x -= travelDistance;
+			break;
+		case Direction::DOWN:
+			y += travelDistance;
+			break;
+		case Direction::RIGHT:
+			x += travelDistance;
+			break;
 	}
-	else if ( abs(verticalAxis) > 0.1f )
+
+	x = std::clamp(
+		x,
+		GameConfig::TILE_WIDTH * 1.0f,
+		GameConfig::SCREEN_WIDTH - GameConfig::TILE_WIDTH * 3.0f
+	);
+
+	y = std::clamp(
+		y,
+		GameConfig::TILE_HEIGHT * 4.0f,
+		GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 5.0f
+	);
+
+
+	if ( m_gameObject->x != x ||
+		m_gameObject->y != y )
 	{
-		y -= ( verticalAxis * playerSpeed * deltaTime );
+		m_gameObject->x = x;
+		m_gameObject->y = y;
 
-		y = std::clamp( 
-			y, 
-			GameConfig::TILE_HEIGHT * 4.0f,
-			GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 5.0f 
-		);
+		const AnimationData* animation = nullptr;
 
-		if ( m_gameObject->y != y )
+		switch ( m_currentDirection )
 		{
-			m_gameObject->y = y;
-
-			if ( verticalAxis > 0.0f )
-			{
-				if ( m_animationComponent.getAnimation() != m_playerUp )
-				{
-					m_animationComponent.setAnimation( m_playerUp );
-				}
-			}
-			else
-			{
-				if ( m_animationComponent.getAnimation() != m_playerDown )
-				{
-					m_animationComponent.setAnimation( m_playerDown );
-				}
-			}
-
-			m_animationComponent.play();
+			case Direction::UP:
+				animation = m_playerUp;
+				break;
+			case Direction::LEFT:
+				animation = m_playerLeft;
+				break;
+			case Direction::DOWN:
+				animation = m_playerDown;
+				break;
+			case Direction::RIGHT:
+				animation = m_playerRight;
+				break;
 		}
-		else
+
+		if ( animation && animation != m_animationComponent.getAnimation() )
 		{
-			m_animationComponent.pause();
+			m_animationComponent.setAnimation( animation );
 		}
+
+		m_animationComponent.play();
 	}
 	else
 	{
+		m_currentDirection = Direction::NONE;
 		m_animationComponent.pause();
 	}
 }
