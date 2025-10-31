@@ -64,7 +64,7 @@ void MazeEaterGame::onInit()
 		true
 	);
 
-	m_player = m_engine->createObject<GameObject>();
+	m_player = m_engine->createGameObject();
 	m_player->x = GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH;
 	m_player->y = GameConfig::TILE_HEIGHT * 4.0f;
 
