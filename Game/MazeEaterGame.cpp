@@ -1,5 +1,6 @@
 #include "MazeEaterGame.h"
 #include "PlayerController.h"
+#include "GameConfig.h"
 
 void MazeEaterGame::onInit()
 {
@@ -64,6 +65,8 @@ void MazeEaterGame::onInit()
 	);
 
 	m_player = m_engine->createObject<GameObject>();
+	m_player->x = GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH;
+	m_player->y = GameConfig::TILE_HEIGHT * 4.0f;
 
 	auto& spriteComponent = m_player->addComponent<SpriteComponent>();
 	spriteComponent.setSprite( ghostBlueSprite );
