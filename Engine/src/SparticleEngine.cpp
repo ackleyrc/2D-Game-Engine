@@ -49,7 +49,7 @@ SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game ) :
 	SDL_SetRenderLogicalPresentation(
 		m_sdlState->renderer,
 		m_sdlState->width,
-		m_sdlState->width,
+		m_sdlState->height,
 		SDL_LOGICAL_PRESENTATION_LETTERBOX
 	);
 
