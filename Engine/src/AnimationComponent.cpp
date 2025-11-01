@@ -23,24 +23,24 @@ const AnimationData* AnimationComponent::getAnimation()
 
 void AnimationComponent::play()
 {
-	m_state = State::Playing;
+	m_state = EState::Playing;
 }
 
 void AnimationComponent::pause()
 {
-	m_state = State::Paused;
+	m_state = EState::Paused;
 }
 
 void AnimationComponent::stop()
 {
-	m_state = State::Stopped;
+	m_state = EState::Stopped;
 
 	reset();
 }
 
 void AnimationComponent::onUpdate( float deltaTime )
 {
-	if ( m_state != State::Playing || !m_animationData )
+	if ( m_state != EState::Playing || !m_animationData )
 	{
 		return;
 	}
@@ -63,7 +63,7 @@ void AnimationComponent::onUpdate( float deltaTime )
 			else
 			{
 				frameIndex = m_animationData->frames.size() - 1;
-				m_state = State::Stopped;
+				m_state = EState::Stopped;
 			}
 		}
 	}

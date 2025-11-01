@@ -24,8 +24,8 @@ private:
 	SpriteComponent& m_spriteComponent;
 	const AnimationData* m_animationData = nullptr;
 
-	enum class State { Playing, Paused, Stopped };
-	State m_state = State::Stopped;
+	enum class EState { Playing, Paused, Stopped };
+	EState m_state = EState::Stopped;
 
 	float m_elapsedTime = 0.0f;
 	size_t m_currentFrame = 0;
