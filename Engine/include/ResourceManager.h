@@ -19,7 +19,9 @@ public:
 	void loadSprite( const std::string& spriteResourceId, const std::string& imagePath );
 	void loadSpriteSheet( const std::string& spriteResourceId, const std::string& imagePath, const std::string& atlasPath );
 	void unloadSpriteResource( const std::string& spriteResourceId );
-	void unloadAssets();
+
+	std::string loadTextFile( const std::string& path );
+	std::vector<std::string> loadTextLines( const std::string& path );
 
 	const AnimationData* createAnimation(
 		const std::string& name,
@@ -29,6 +31,8 @@ public:
 	);
 
 	const AnimationData* getAnimation( const std::string& name ) const;
+
+	void unloadAssets();
 
 private:
 	friend class SparticleEngine;

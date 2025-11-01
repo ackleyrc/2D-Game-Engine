@@ -20,7 +20,9 @@ SDL_Texture* ResourceManager::loadTexture( const std::string& imagePath )
 
 	if ( !texture )
 	{
-		SDL_Log( "Failed to load texture '%s': %s", imagePath.c_str(), SDL_GetError() );
+		std::string message = std::format( "Failed to load texture '{}': {}", imagePath, SDL_GetError() );
+		SDL_Log( message.c_str() );
+		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
 		return nullptr;
 	}
 
@@ -34,6 +36,7 @@ void ResourceManager::loadSprite( const std::string& spriteResourceId, const std
 	if ( m_spriteResources.contains( spriteResourceId ) )
 	{
 		std::string message = std::format( "A sprite resource with the ID {} already exists. All sprite resource IDs must be unique.", spriteResourceId );
+		SDL_Log( message.c_str() );
 		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr);
 		return;
 	}
@@ -59,6 +62,7 @@ void ResourceManager::loadSpriteSheet( const std::string& spriteResourceId, cons
 	if ( m_spriteResources.contains( spriteResourceId ) )
 	{
 		std::string message = std::format( "A sprite resource with the ID {} already exists. All sprite resource IDs must be unique.", spriteResourceId );
+		SDL_Log( message.c_str() );
 		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
 		return;
 	}
@@ -74,7 +78,9 @@ void ResourceManager::loadSpriteSheet( const std::string& spriteResourceId, cons
 
 		if ( !atlasFile.is_open() )
 		{
-			SDL_Log( "Failed to open sprite atlas file: %s", atlasPath.c_str() );
+			std::string message = std::format( "Failed to open sprite atlas file: {}", atlasPath );
+			SDL_Log( message.c_str() );
+			SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
 			return;
 		}
 
@@ -92,6 +98,7 @@ void ResourceManager::loadSpriteSheet( const std::string& spriteResourceId, cons
 		catch ( json::parse_error& exception )
 		{
 			std::string message = std::format( "Failed to parse sprite atlas file: {} \n{}", atlasPath, exception.what() );
+			SDL_Log( message.c_str() );
 			SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
 		}
 
@@ -148,6 +155,51 @@ const AnimationData* ResourceManager::getAnimation( const std::string& name ) co
 	{
 		return nullptr;
 	}
+}
+
+std::string ResourceManager::loadTextFile( const std::string& path )
+{
+	std::ifstream textFile( path );
+
+	if ( !textFile.is_open() )
+	{
+		std::string message = std::format( "Failed to open text file: {}", path );
+		SDL_Log( message.c_str() );
+		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
+		return std::string();
+	}
+
+	std::ostringstream contents;
+	contents << textFile.rdbuf();
+	return contents.str();
+}
+
+std::vector<std::string> ResourceManager::loadTextLines( const std::string& path )
+{
+	std::ifstream textFile( path );
+
+	if ( !textFile.is_open() )
+	{
+		std::string message = std::format( "Failed to open text file: {}", path );
+		SDL_Log( message.c_str() );
+		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
+		return {};
+	}
+
+	std::vector<std::string> lines;
+	std::string line;
+
+	while ( std::getline( textFile, line ) )
+	{
+		if ( !line.empty() && line.back() == '\r' )
+		{
+			line.pop_back();
+		}
+
+		lines.push_back( line );
+	}
+
+	return lines;
 }
 
 void ResourceManager::unloadAssets()

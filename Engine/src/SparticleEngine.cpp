@@ -10,7 +10,9 @@ SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game ) :
 {
 	if ( !SDL_Init( SDL_INIT_VIDEO ) )
 	{
-		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL3", nullptr );
+		std::string message = "Error initializing SDL3";
+		SDL_Log( message.c_str() );
+		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr);
 		std::exit( 1 );
 	}
 
@@ -30,7 +32,9 @@ SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game ) :
 
 	if ( !m_sdlState->window )
 	{
-		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", "Error creating window", nullptr );
+		std::string message = "Error creating window";
+		SDL_Log( message.c_str() );
+		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
 		SDL_Quit();
 		std:exit(1);
 	}
@@ -40,7 +44,9 @@ SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game ) :
 
 	if ( !m_sdlState->renderer )
 	{
-		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", "Error creating renderer", nullptr );
+		std::string message = "Error creating renderer";
+		SDL_Log( message.c_str() );
+		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
 		SDL_DestroyWindow( m_sdlState->window );
 		SDL_Quit();
 		std::exit(1);
