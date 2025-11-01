@@ -1,9 +1,14 @@
 #include "MazeEaterGame.h"
 #include "PlayerController.h"
 #include "GameConfig.h"
+#include "TileMap.h"
 
 void MazeEaterGame::onInit()
 {
+	TileMap tileMap( m_engine->resources() );
+	tileMap.loadFromFile( "assets/map-data/maze1.txt" );
+	// TODO: Create sprites to render maze walls, etc
+
 	m_engine->resources().loadSpriteSheet(
 		"spritesheet",
 		"assets/textures/spritesheet.png",

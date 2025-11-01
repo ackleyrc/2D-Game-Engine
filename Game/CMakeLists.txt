@@ -8,7 +8,10 @@ add_executable (
     "MazeEaterGame.cpp"
     "PlayerController.h"
     "PlayerController.cpp"
-    "GameConfig.h")
+    "GameConfig.h"
+    "TileMap.h"
+    "TileMap.cpp"
+)
 
 set_target_properties(
     MazeEaterGame PROPERTIES
