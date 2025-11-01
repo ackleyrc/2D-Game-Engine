@@ -24,26 +24,26 @@ void PlayerController::onUpdate( float deltaTime )
 	float horizontalAxis = engine().input().getAxisHorizontal();
 	float verticalAxis = engine().input().getAxisVertical();
 
-	Direction inputDirection = Direction::NONE;
+	EDirection inputDirection = EDirection::NONE;
 
 	if ( verticalAxis > 0.1f )
 	{
-		inputDirection = Direction::UP;
+		inputDirection = EDirection::UP;
 	}
 	else if ( verticalAxis < -0.1f )
 	{
-		inputDirection = Direction::DOWN;
+		inputDirection = EDirection::DOWN;
 	}
 	else if ( horizontalAxis > 0.1f )
 	{
-		inputDirection = Direction::RIGHT;
+		inputDirection = EDirection::RIGHT;
 	}
 	else if ( horizontalAxis < -0.1f )
 	{
-		inputDirection = Direction::LEFT;
+		inputDirection = EDirection::LEFT;
 	}
 
-	if ( inputDirection != Direction::NONE )
+	if ( inputDirection != EDirection::NONE )
 	{
 		m_currentDirection = inputDirection;
 	}
@@ -56,16 +56,16 @@ void PlayerController::onUpdate( float deltaTime )
 
 	switch ( m_currentDirection )
 	{
-		case Direction::UP:
+		case EDirection::UP:
 			y -= travelDistance;
 			break;
-		case Direction::LEFT:
+		case EDirection::LEFT:
 			x -= travelDistance;
 			break;
-		case Direction::DOWN:
+		case EDirection::DOWN:
 			y += travelDistance;
 			break;
-		case Direction::RIGHT:
+		case EDirection::RIGHT:
 			x += travelDistance;
 			break;
 	}
@@ -93,16 +93,16 @@ void PlayerController::onUpdate( float deltaTime )
 
 		switch ( m_currentDirection )
 		{
-			case Direction::UP:
+			case EDirection::UP:
 				animation = m_playerUp;
 				break;
-			case Direction::LEFT:
+			case EDirection::LEFT:
 				animation = m_playerLeft;
 				break;
-			case Direction::DOWN:
+			case EDirection::DOWN:
 				animation = m_playerDown;
 				break;
-			case Direction::RIGHT:
+			case EDirection::RIGHT:
 				animation = m_playerRight;
 				break;
 		}
@@ -116,7 +116,7 @@ void PlayerController::onUpdate( float deltaTime )
 	}
 	else
 	{
-		m_currentDirection = Direction::NONE;
+		m_currentDirection = EDirection::NONE;
 		m_animationComponent.pause();
 	}
 }

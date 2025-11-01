@@ -26,6 +26,6 @@ private:
 	const AnimationData* m_playerLeft;
 	const AnimationData* m_playerRight;
 
-	enum class Direction { NONE, UP, LEFT, DOWN, RIGHT };
-	Direction m_currentDirection = Direction::NONE;
+	enum class EDirection { NONE, UP, LEFT, DOWN, RIGHT };
+	EDirection m_currentDirection = EDirection::NONE;
 };
