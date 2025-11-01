@@ -20,8 +20,10 @@ public:
 	void loadSpriteSheet( const std::string& spriteResourceId, const std::string& imagePath, const std::string& atlasPath );
 	void unloadSpriteResource( const std::string& spriteResourceId );
 
-	std::string loadTextFile( const std::string& path );
-	std::vector<std::string> loadTextLines( const std::string& path );
+	const std::string& loadTextFile( const std::string& path );
+	const std::vector<std::string>& loadTextLines( const std::string& path );
+	void unloadTextFile( const std::string& path );
+	void unloadAllTextFiles();
 
 	const AnimationData* createAnimation(
 		const std::string& name,
@@ -47,4 +49,14 @@ private:
 	std::unordered_map<std::string, std::unique_ptr<SpriteResource>> m_spriteResources;
 
 	std::unordered_map<std::string, std::unique_ptr<AnimationData>> m_animations;
+
+	struct TextCache 
+	{
+		std::string contents;
+		std::vector<std::string> lines;
+	};
+
+	mutable std::unordered_map<std::string, std::unique_ptr<TextCache>> m_textFiles;
+
+	std::unique_ptr<TextCache> readTextFromDisk( const std::string& path ) const;
 };

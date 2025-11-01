@@ -100,6 +100,7 @@ void ResourceManager::loadSpriteSheet( const std::string& spriteResourceId, cons
 			std::string message = std::format( "Failed to parse sprite atlas file: {} \n{}", atlasPath, exception.what() );
 			SDL_Log( message.c_str() );
 			SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
+			return;
 		}
 
 		m_spriteResources[spriteResourceId] = std::move( resource );
@@ -157,7 +158,7 @@ const AnimationData* ResourceManager::getAnimation( const std::string& name ) co
 	}
 }
 
-std::string ResourceManager::loadTextFile( const std::string& path )
+std::unique_ptr<ResourceManager::TextCache> ResourceManager::readTextFromDisk( const std::string& path ) const
 {
 	std::ifstream textFile( path );
 
@@ -166,44 +167,73 @@ std::string ResourceManager::loadTextFile( const std::string& path )
 		std::string message = std::format( "Failed to open text file: {}", path );
 		SDL_Log( message.c_str() );
 		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
-		return std::string();
+		throw std::runtime_error( message.c_str() );
 	}
+
+	auto cache = std::make_unique<TextCache>();
 
 	std::ostringstream contents;
 	contents << textFile.rdbuf();
-	return contents.str();
-}
+	cache->contents = std::move(contents).str();
 
-std::vector<std::string> ResourceManager::loadTextLines( const std::string& path )
-{
-	std::ifstream textFile( path );
-
-	if ( !textFile.is_open() )
-	{
-		std::string message = std::format( "Failed to open text file: {}", path );
-		SDL_Log( message.c_str() );
-		SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr );
-		return {};
-	}
-
-	std::vector<std::string> lines;
+	std::istringstream lineStream( cache->contents );
 	std::string line;
-
-	while ( std::getline( textFile, line ) )
+	while ( std::getline( lineStream, line ) )
 	{
 		if ( !line.empty() && line.back() == '\r' )
 		{
 			line.pop_back();
 		}
 
-		lines.push_back( line );
+		cache->lines.push_back( line );
 	}
 
-	return lines;
+	return cache;
+}
+
+const std::string& ResourceManager::loadTextFile( const std::string& path )
+{
+	auto it = m_textFiles.find( path );
+	if ( it != m_textFiles.end() )
+	{
+		return it->second->contents;
+	}
+
+	auto cache = readTextFromDisk( path );
+	const std::string& ref = cache->contents;
+	m_textFiles[path] = std::move( cache );
+
+	return ref;
+}
+
+const std::vector<std::string>& ResourceManager::loadTextLines( const std::string& path )
+{
+	auto it = m_textFiles.find( path );
+	if ( it != m_textFiles.end() )
+	{
+		return it->second->lines;
+	}
+
+	auto cache = readTextFromDisk( path );
+	const std::vector<std::string>& ref = cache->lines;
+	m_textFiles[path] = std::move( cache );
+
+	return ref;
+}
+
+void ResourceManager::unloadTextFile( const std::string& path )
+{
+	m_textFiles.erase( path );
+}
+
+void ResourceManager::unloadAllTextFiles()
+{
+	m_textFiles.clear();
 }
 
 void ResourceManager::unloadAssets()
 {
 	m_spriteResources.clear();
 	m_animations.clear();
+	m_textFiles.clear();
 }
