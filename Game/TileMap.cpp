@@ -7,7 +7,7 @@ TileMap::TileMap( ResourceManager& resources ) :
 
 void TileMap::loadFromFile( const std::string& path )
 {
-	auto lines = m_resources.loadTextLines( path );
+	auto& lines = m_resources.loadTextLines( path );
 
 	for ( auto& line : lines )
 	{

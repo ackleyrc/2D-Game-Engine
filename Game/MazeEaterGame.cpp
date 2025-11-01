@@ -94,4 +94,5 @@ void MazeEaterGame::onUpdate( float deltaTime )
 void MazeEaterGame::onShutdown()
 { 
 	m_engine->resources().unloadSpriteResource( "spritesheet" );
+	m_engine->resources().unloadTextFile( "assets/map-data/maze1.txt" );
 }
