@@ -17,4 +17,6 @@ protected:
 
 private:
     friend class GameObject;
+    void update( float deltaTime );
+    void add();
 };

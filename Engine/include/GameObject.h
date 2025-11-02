@@ -21,8 +21,6 @@ public:
 	float x = 0.0f;
 	float y = 0.0f;
 
-	void onUpdate( float deltaTime );
-
 	template<typename T, typename... Args>
 	T& addComponent( Args&&... args )
 	{
@@ -31,7 +29,7 @@ public:
 		component->m_gameObject = this;
 		T& ref = *component;
 		m_components.push_back( std::move( component ) );
-		ref.onAdd();
+		ref.add();
 		return ref;
 	}
 
@@ -59,6 +57,8 @@ private:
 	friend class SparticleEngine;
 
 	GameObject( SparticleEngine* engine ) { m_engine = engine; }
+
+	void update( float deltaTime );
 
 	SparticleEngine* m_engine = nullptr;
 	std::vector<std::unique_ptr<Component>> m_components;

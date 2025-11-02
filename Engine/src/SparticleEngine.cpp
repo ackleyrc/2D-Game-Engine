@@ -1,6 +1,7 @@
 ﻿#include <format>
 #include <iostream>
 #include "SparticleEngine.h"
+#include "EngineInternalUtils.h"
 #include "SDLState.h"
 #include "ResourceManagerTypes.h"
 
@@ -61,14 +62,21 @@ SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game ) :
 
 	m_resources.m_renderer = m_sdlState->renderer;
 
-	m_game->setEngine( this );
-	m_game->onInit();
+	if ( !safeCall( "Game::setEngine", [this]() { m_game->setEngine( this ); } ) )
+	{
+		SDL_LogError( SDL_LOG_CATEGORY_ERROR, "Game failed to set engine." );
+		throw std::runtime_error( "Game failed to set engine." );
+	}
+
+	if ( !safeCall( "Game::onInit", [this] () { m_game->onInit(); } ) )
+	{
+		SDL_LogError( SDL_LOG_CATEGORY_ERROR, "Game initialization failed." );
+		throw std::runtime_error( "Game initialization failed." );
+	}
 }
 
 SparticleEngine::~SparticleEngine()
 {
-	m_game->onShutdown();
-
 	if ( m_sdlState->renderer )
 	{
 		SDL_DestroyRenderer( m_sdlState->renderer );
@@ -102,6 +110,12 @@ void SparticleEngine::run()
 		this->render();
 	}
 
+	if ( !safeCall( "Game::onShutdown", [this] () { m_game->onShutdown(); } ) )
+	{
+		SDL_LogError( SDL_LOG_CATEGORY_ERROR, "Game shutdown failed." );
+		throw std::runtime_error( "Game shutdown failed." );
+	}
+
 	m_resources.unloadAssets();
 }
 
@@ -129,13 +143,17 @@ void SparticleEngine::processEvents()
 	m_input.update();
 }
 
-void SparticleEngine::update( double deltaTime )
+void SparticleEngine::update( const double deltaTime )
 {
-	m_game->onUpdate( deltaTime );
+	if ( !safeCall( "Game::onUpdate", [this, deltaTime] () { m_game->onUpdate( deltaTime ); } ) )
+	{
+		SDL_LogError( SDL_LOG_CATEGORY_ERROR, "Game failed to update." );
+		throw std::runtime_error( "Game failed to update." );
+	}
 
 	for ( auto& obj : m_objects )
 	{
-		obj->onUpdate( deltaTime );
+		obj->update( deltaTime );
 	}
 }
 

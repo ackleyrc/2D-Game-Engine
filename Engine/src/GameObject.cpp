@@ -4,11 +4,11 @@
 #include "InputManager.h"
 #include "Component.h"
 
-void GameObject::onUpdate( float deltaTime )
+void GameObject::update( float deltaTime )
 {
 	for ( auto& component : m_components )
 	{
-		component->onUpdate( deltaTime );
+		component->update( deltaTime );
 	}
 }
 
