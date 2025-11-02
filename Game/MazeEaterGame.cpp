@@ -14,7 +14,7 @@ void MazeEaterGame::onInit()
 		"assets/textures/spritesheet.png",
 		"assets/textures/spritesheet.atlas"
 	);
-
+	
 	// TODO: Set specific sprite according to tile type & rotate appropriately
 	Sprite tempWallSprite = { "spritesheet", "level_a_thin_inner_corner" };
 
@@ -92,7 +92,7 @@ void MazeEaterGame::onInit()
 
 	m_player = m_engine->createGameObject();
 	m_player->x = GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH;
-	m_player->y = GameConfig::TILE_HEIGHT * 4.0f;
+	m_player->y = GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 10.5f;
 
 	auto& spriteComponent = m_player->addComponent<SpriteComponent>(1);
 	spriteComponent.setSprite( ghostBlueSprite );
