@@ -15,6 +15,7 @@
 #include "AnimationData.h"
 #include "AnimationComponent.h"
 #include "Color.h"
+#include "MathUtils.h"
 
 struct SDLState;
 
