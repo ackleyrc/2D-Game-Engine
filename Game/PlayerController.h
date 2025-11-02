@@ -53,5 +53,6 @@ private:
 	);
 
 	EDirection getDesiredDirection() const;
+	void updateMovement( const float deltaTime );
 	void updateAnimation( EDirection movementDirection );
 };

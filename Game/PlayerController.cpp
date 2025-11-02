@@ -31,78 +31,7 @@ void PlayerController::onUpdate( float deltaTime )
 		return;
 	}
 
-
-	float x = m_gameObject->x;
-	float y = m_gameObject->y;
-
-	constexpr float playerSpeed = 200.0f;
-	float travelDistance = playerSpeed * deltaTime;
-
-	int colIndex = static_cast<int>( std::floor( x / GameConfig::TILE_WIDTH ) );
-	int rowIndex = static_cast<int>( std::floor( y / GameConfig::TILE_HEIGHT ) );
-
-	while ( m_currentDirection != EDirection::NONE && travelDistance > 0.0f )
-	{
-		float dx = 0.0f;
-		float dy = 0.0f;
-
-		switch ( m_currentDirection )
-		{
-			case EDirection::UP:    dy = -1.0f;	break;
-			case EDirection::DOWN:  dy = 1.0f;	break;
-			case EDirection::LEFT:  dx = -1.0f;	break;
-			case EDirection::RIGHT: dx = 1.0f;	break;
-			default: break;
-		}
-
-		if ( !canAdvanceToNextTile( x, y, m_currentDirection, m_tileMap ) )
-		{
-			m_currentDirection = EDirection::NONE;
-			break;
-		}
-
-		float distanceToBoundary = 0.0f;
-
-		if ( dx > 0.0f )
-		{
-			distanceToBoundary = ( colIndex + 1 ) * GameConfig::TILE_WIDTH - x;
-		}
-		else if ( dx < 0.0f )
-		{
-			distanceToBoundary = x - colIndex * GameConfig::TILE_WIDTH;
-		}
-		else if ( dy > 0.0f )
-		{
-			distanceToBoundary = ( rowIndex + 1 ) * GameConfig::TILE_HEIGHT - y;
-		}
-		else if ( dy < 0.0f )
-		{
-			distanceToBoundary = y - rowIndex * GameConfig::TILE_HEIGHT;
-		}
-
-		float step = std::min( travelDistance, distanceToBoundary );
-
-		x += dx * step;
-		y += dy * step;
-		travelDistance -= step;
-
-		bool reachedBoundary = spmath::nearlyEqual( step, distanceToBoundary );
-
-		if ( reachedBoundary )
-		{
-			rowIndex += static_cast<int>( dy );
-			colIndex += static_cast<int>( dx );
-		}
-
-		if ( spmath::nearlyEqual( travelDistance, 0.0f ) )
-		{
-			break;
-		}
-	}
-
-	m_gameObject->x = x;
-	m_gameObject->y = y;
-
+	updateMovement( deltaTime );
 
 	updateAnimation( m_currentDirection );
 }
@@ -260,6 +189,80 @@ bool PlayerController::isWalkable( ETileType tileType )
 		default:
 			return false;
 	}
+}
+
+void PlayerController::updateMovement( const float deltaTime )
+{
+	float x = m_gameObject->x;
+	float y = m_gameObject->y;
+
+	constexpr float playerSpeed = 200.0f;
+	float travelDistance = playerSpeed * deltaTime;
+
+	int colIndex = static_cast<int>( std::floor( x / GameConfig::TILE_WIDTH ) );
+	int rowIndex = static_cast<int>( std::floor( y / GameConfig::TILE_HEIGHT ) );
+
+	while ( m_currentDirection != EDirection::NONE && travelDistance > 0.0f )
+	{
+		float dx = 0.0f;
+		float dy = 0.0f;
+
+		switch ( m_currentDirection )
+		{
+			case EDirection::UP:    dy = -1.0f;	break;
+			case EDirection::DOWN:  dy = 1.0f;	break;
+			case EDirection::LEFT:  dx = -1.0f;	break;
+			case EDirection::RIGHT: dx = 1.0f;	break;
+			default: break;
+		}
+
+		if ( !canAdvanceToNextTile( x, y, m_currentDirection, m_tileMap ) )
+		{
+			m_currentDirection = EDirection::NONE;
+			break;
+		}
+
+		float distanceToBoundary = 0.0f;
+
+		if ( dx > 0.0f )
+		{
+			distanceToBoundary = ( colIndex + 1 ) * GameConfig::TILE_WIDTH - x;
+		}
+		else if ( dx < 0.0f )
+		{
+			distanceToBoundary = x - colIndex * GameConfig::TILE_WIDTH;
+		}
+		else if ( dy > 0.0f )
+		{
+			distanceToBoundary = ( rowIndex + 1 ) * GameConfig::TILE_HEIGHT - y;
+		}
+		else if ( dy < 0.0f )
+		{
+			distanceToBoundary = y - rowIndex * GameConfig::TILE_HEIGHT;
+		}
+
+		float step = std::min( travelDistance, distanceToBoundary );
+
+		x += dx * step;
+		y += dy * step;
+		travelDistance -= step;
+
+		bool reachedBoundary = spmath::nearlyEqual( step, distanceToBoundary );
+
+		if ( reachedBoundary )
+		{
+			rowIndex += static_cast<int>( dy );
+			colIndex += static_cast<int>( dx );
+		}
+
+		if ( spmath::nearlyEqual( travelDistance, 0.0f ) )
+		{
+			break;
+		}
+	}
+
+	m_gameObject->x = x;
+	m_gameObject->y = y;
 }
 
 void PlayerController::updateAnimation( EDirection movementDirection )
