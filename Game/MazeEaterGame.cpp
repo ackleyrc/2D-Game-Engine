@@ -7,7 +7,8 @@
 void MazeEaterGame::onInit()
 {
 	TileMap tileMap( m_engine->resources() );
-	tileMap.loadFromFile( "assets/map-data/maze1.txt" );
+	tileMap.loadTileTypesFromFile( "assets/map-data/maze1.txt" );
+	tileMap.loadTileRotationsFromFile( "assets/map-data/maze1_rotation.txt" );
 
 	m_engine->resources().loadSpriteSheet(
 		"spritesheet",
@@ -23,15 +24,22 @@ void MazeEaterGame::onInit()
 		for ( int colIndex = 0; colIndex < GameConfig::TILE_COLS; ++colIndex )
 		{
 			auto tileType = tileMap.getTileType( rowIndex, colIndex );
-			if ( tileType >= ETileType::Wall_00 &&
-				 tileType <= ETileType::Wall_09 )
+			if ( (tileType >= ETileType::Wall_00 && tileType <= ETileType::Wall_09) ||
+				  tileType == ETileType::GhostHomeGate )
 			{
 				auto wall = m_engine->createGameObject();
 				wall->x = colIndex * GameConfig::TILE_WIDTH;
 				wall->y = rowIndex * GameConfig::TILE_HEIGHT;
 
 				auto& spriteComponent = wall->addComponent<SpriteComponent>();
-				spriteComponent.setSprite( tempWallSprite );
+				spriteComponent.setSprite( tileMap.getSprite( tileType ) );
+
+				auto degrees = tileMap.getTileRotationDegrees( rowIndex, colIndex );
+				spriteComponent.setRotationDegrees( degrees );
+				spriteComponent.setRotationPivot(
+					GameConfig::TILE_WIDTH * 0.5f,
+					GameConfig::TILE_HEIGHT * 0.5f
+				);
 			}
 		}
 	}
