@@ -44,4 +44,11 @@ private:
 		EDirection currentDirection,
 		const TileMap& tileMap
 	);
+
+	static bool canStartMovingInDirection(
+		const float x,
+		const float y,
+		EDirection newDirection,
+		const TileMap& tileMap
+	);
 };

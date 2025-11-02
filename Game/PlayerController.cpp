@@ -31,7 +31,10 @@ void PlayerController::onUpdate( float deltaTime )
 
 	if ( inputDirection != EDirection::NONE )
 	{
-		m_currentDirection = inputDirection;
+		if ( canStartMovingInDirection( x, y, inputDirection, m_tileMap ) )
+		{
+			m_currentDirection = inputDirection;
+		}
 	}
 
 	if ( m_currentDirection == EDirection::NONE )
@@ -170,17 +173,47 @@ const PlayerController::EDirection PlayerController::getInputDirection() const
 	return inputDirection;
 }
 
-bool PlayerController::isWalkable( ETileType tileType )
+bool PlayerController::canStartMovingInDirection(
+	const float x,
+	const float y,
+	EDirection newDirection,
+	const TileMap& tileMap
+)
 {
-	switch ( tileType )
+	int colIndex = static_cast<int>( x / GameConfig::TILE_WIDTH );
+	int rowIndex = static_cast<int>( y / GameConfig::TILE_HEIGHT );
+
+	float xNormalized = std::fmod( x, GameConfig::TILE_WIDTH );
+	float yNormalized = std::fmod( y, GameConfig::TILE_HEIGHT );
+	if ( xNormalized < 0.0f ) xNormalized += GameConfig::TILE_WIDTH;
+	if ( yNormalized < 0.0f ) yNormalized += GameConfig::TILE_HEIGHT;
+
+	switch ( newDirection )
 	{
-		case ETileType::Junction_Pellet:		return true;
-		case ETileType::Junction_PowerPellet:	return true;
-		case ETileType::Junction_Empty:			return true;
-		case ETileType::Path_Pellet:			return true;
-		case ETileType::Path_PowerPellet:		return true;
-		case ETileType::Path_Empty_Vertical:	return true;
-		case ETileType::Path_Empty_Horizontal:	return true;
+		case EDirection::UP:
+			if ( spmath::nearlyEqual( xNormalized, 0.0f ) )
+			{
+				return isWalkable( tileMap.getTileType( rowIndex - 1, colIndex ) );
+			}
+			return false;
+		case EDirection::DOWN:
+			if ( spmath::nearlyEqual( xNormalized, 0.0f ) )
+			{
+				return isWalkable( tileMap.getTileType( rowIndex + 1, colIndex ) );
+			}
+			return false;
+		case EDirection::LEFT:
+			if ( spmath::nearlyEqual( yNormalized, 0.0f ) )
+			{
+				return isWalkable( tileMap.getTileType( rowIndex, colIndex - 1 ) );
+			}
+			return false;
+		case EDirection::RIGHT:
+			if ( spmath::nearlyEqual( yNormalized, 0.0f ) )
+			{
+				return isWalkable( tileMap.getTileType( rowIndex, colIndex + 1 ) );
+			}
+			return false;
 		default:
 			return false;
 	}
@@ -232,4 +265,20 @@ bool PlayerController::canAdvanceToNextTile(
 	}
 
 	return true;
+}
+
+bool PlayerController::isWalkable( ETileType tileType )
+{
+	switch ( tileType )
+	{
+		case ETileType::Junction_Pellet:		return true;
+		case ETileType::Junction_PowerPellet:	return true;
+		case ETileType::Junction_Empty:			return true;
+		case ETileType::Path_Pellet:			return true;
+		case ETileType::Path_PowerPellet:		return true;
+		case ETileType::Path_Empty_Vertical:	return true;
+		case ETileType::Path_Empty_Horizontal:	return true;
+		default:
+			return false;
+	}
 }
