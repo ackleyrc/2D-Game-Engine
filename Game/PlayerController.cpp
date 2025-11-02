@@ -24,7 +24,7 @@ PlayerController::PlayerController(
 
 void PlayerController::onUpdate( float deltaTime )
 {
-	m_currentDirection = getDesiredDirection();
+	updateDesiredDirection();
 
 	if ( m_currentDirection == EDirection::NONE )
 	{
@@ -36,7 +36,7 @@ void PlayerController::onUpdate( float deltaTime )
 	updateAnimation( m_currentDirection );
 }
 
-PlayerController::EDirection PlayerController::getDesiredDirection() const
+void PlayerController::updateDesiredDirection()
 {
 	float x = m_gameObject->x;
 	float y = m_gameObject->y;
@@ -47,11 +47,14 @@ PlayerController::EDirection PlayerController::getDesiredDirection() const
 	{
 		if ( canStartMovingInDirection( x, y, inputDirection, m_tileMap ) )
 		{
-			return inputDirection;
+			m_enqueuedDirection = EDirection::NONE;
+			m_currentDirection = inputDirection;
+		}
+		else
+		{
+			m_enqueuedDirection = inputDirection;
 		}
 	}
-
-	return m_currentDirection;
 }
 
 const PlayerController::EDirection PlayerController::getInputDirection() const
@@ -251,6 +254,27 @@ void PlayerController::updateMovement( const float deltaTime )
 
 		if ( reachedBoundary )
 		{
+			if ( m_enqueuedDirection != EDirection::NONE )
+			{
+				if ( canStartMovingInDirection( x, y, m_enqueuedDirection, m_tileMap ) )
+				{
+					m_currentDirection = m_enqueuedDirection;
+					m_enqueuedDirection = EDirection::NONE;
+
+					float dx = 0.0f;
+					float dy = 0.0f;
+
+					switch ( m_currentDirection )
+					{
+						case EDirection::UP:    dy = -1.0f;	break;
+						case EDirection::DOWN:  dy = 1.0f;	break;
+						case EDirection::LEFT:  dx = -1.0f;	break;
+						case EDirection::RIGHT: dx = 1.0f;	break;
+						default: break;
+					}
+				}
+			}
+
 			rowIndex += static_cast<int>( dy );
 			colIndex += static_cast<int>( dx );
 		}

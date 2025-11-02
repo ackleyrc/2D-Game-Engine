@@ -31,6 +31,7 @@ private:
 
 	enum class EDirection { NONE, UP, LEFT, DOWN, RIGHT };
 	EDirection m_currentDirection = EDirection::NONE;
+	EDirection m_enqueuedDirection = EDirection::NONE;
 
 	const EDirection getInputDirection() const;
 
@@ -52,7 +53,7 @@ private:
 		const TileMap& tileMap
 	);
 
-	EDirection getDesiredDirection() const;
+	void updateDesiredDirection();
 	void updateMovement( const float deltaTime );
 	void updateAnimation( EDirection movementDirection );
 };
