@@ -24,7 +24,7 @@ PlayerController::PlayerController(
 
 void PlayerController::onUpdate( float deltaTime )
 {
-	m_currentDirection = getDesiredDiration();
+	m_currentDirection = getDesiredDirection();
 
 	if ( m_currentDirection == EDirection::NONE )
 	{
@@ -107,7 +107,7 @@ void PlayerController::onUpdate( float deltaTime )
 	updateAnimation( m_currentDirection );
 }
 
-PlayerController::EDirection PlayerController::getDesiredDiration() const
+PlayerController::EDirection PlayerController::getDesiredDirection() const
 {
 	float x = m_gameObject->x;
 	float y = m_gameObject->y;
