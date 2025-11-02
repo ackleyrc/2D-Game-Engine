@@ -33,3 +33,9 @@ void SpriteComponent::setRotationPivot( float x, float y )
 	m_rotationPivotX = x;
 	m_rotationPivotY = y;
 }
+
+void SpriteComponent::setPositionOffset( float x, float y )
+{
+	m_positionOffsetX = x;
+	m_positionOffsetY = y;
+}

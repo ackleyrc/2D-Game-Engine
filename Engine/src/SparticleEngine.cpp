@@ -203,7 +203,12 @@ void SparticleEngine::render()
 			auto obj = spriteComponent->m_gameObject;
 
 			SDL_FRect src = frame->rect;
-			SDL_FRect dst { .x = obj->x, .y = obj->y, .w = src.w, .h = src.h };
+			SDL_FRect dst { 
+				.x = obj->x + spriteComponent->m_positionOffsetX, 
+				.y = obj->y + spriteComponent->m_positionOffsetY,
+				.w = src.w, 
+				.h = src.h 
+			};
 
 			SDL_FPoint rotationPivot { 
 				.x = spriteComponent->m_rotationPivotX, 

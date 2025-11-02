@@ -16,6 +16,8 @@ public:
 	const Sprite& getSprite() const { return m_sprite; }
 	void setSprite( const Sprite& sprite ) { m_sprite = sprite; }
 
+	void setPositionOffset( float x, float y );
+
 	int getLayer() { return m_layer; }
 	void setLayer( int newLayer );
 
@@ -27,7 +29,12 @@ private:
 	friend class SparticleEngine;
 
 	Sprite m_sprite;
+
+	float m_positionOffsetX = 0.0f;
+	float m_positionOffsetY = 0.0f;
+
 	int m_layer;
+
 	double m_rotationDegrees = 0.0f;
 	float m_rotationPivotX = 0.0f;
 	float m_rotationPivotY = 0.0f;
