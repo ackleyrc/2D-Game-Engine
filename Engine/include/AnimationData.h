@@ -2,7 +2,7 @@
 #include <vector>
 #include "EngineAPI.h"
 
-class Sprite;
+struct Sprite;
 
 struct SPARTICLE_API AnimationData
 {
