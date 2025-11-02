@@ -62,7 +62,7 @@
     { "id": "fruit_watermelon",   "rect": [ 320  , 160 , 32 , 32 ] },
     { "id": "player_dead_11",     "rect": [ 320  , 192 , 32 , 32 ] },
 
-    { "id": "cage_gate",                    "rect": [ 160 , 112 , 16 , 16 ] },
+    { "id": "cage_gate",                    "rect": [ 160 , 128 , 16 , 16 ] },
 
     { "id": "level_a_thin_inner_corner",    "rect": [ 192 , 0   , 16 , 16 ] },
     { "id": "level_b_thin_inner_corner",    "rect": [ 192 , 16  , 16 , 16 ] },
