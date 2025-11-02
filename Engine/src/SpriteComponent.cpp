@@ -27,3 +27,9 @@ void SpriteComponent::setLayer( int newLayer )
 	m_layer = newLayer;
 	engine.registerSpriteComponent( this );
 }
+
+void SpriteComponent::setRotationPivot( float x, float y )
+{
+	m_rotationPivotX = x;
+	m_rotationPivotY = y;
+}

@@ -19,9 +19,16 @@ public:
 	int getLayer() { return m_layer; }
 	void setLayer( int newLayer );
 
+	double getRotationDegrees() { return m_rotationDegrees; }
+	void setRotationDegrees( double degrees ) { m_rotationDegrees = degrees; }
+	void setRotationPivot( float x, float y );
+
 private:
 	friend class SparticleEngine;
 
 	Sprite m_sprite;
 	int m_layer;
+	double m_rotationDegrees = 0.0f;
+	float m_rotationPivotX = 0.0f;
+	float m_rotationPivotY = 0.0f;
 };

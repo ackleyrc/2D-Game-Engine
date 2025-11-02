@@ -205,7 +205,20 @@ void SparticleEngine::render()
 			SDL_FRect src = frame->rect;
 			SDL_FRect dst { .x = obj->x, .y = obj->y, .w = src.w, .h = src.h };
 
-			SDL_RenderTexture( renderer, resource->texture.get(), &src, &dst );
+			SDL_FPoint rotationPivot { 
+				.x = spriteComponent->m_rotationPivotX, 
+				.y = spriteComponent->m_rotationPivotY 
+			};
+
+			SDL_RenderTextureRotated( 
+				renderer,
+				resource->texture.get(), 
+				&src, 
+				&dst, 
+				spriteComponent->getRotationDegrees(),
+				&rotationPivot,
+				SDL_FLIP_NONE
+			);
 		}
 	}
 
