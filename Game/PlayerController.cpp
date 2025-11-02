@@ -21,27 +21,7 @@ void PlayerController::onUpdate( float deltaTime )
 {
 	constexpr float playerSpeed = 200.0f;
 
-	float horizontalAxis = engine().input().getAxisHorizontal();
-	float verticalAxis = engine().input().getAxisVertical();
-
-	EDirection inputDirection = EDirection::NONE;
-
-	if ( verticalAxis > 0.1f )
-	{
-		inputDirection = EDirection::UP;
-	}
-	else if ( verticalAxis < -0.1f )
-	{
-		inputDirection = EDirection::DOWN;
-	}
-	else if ( horizontalAxis > 0.1f )
-	{
-		inputDirection = EDirection::RIGHT;
-	}
-	else if ( horizontalAxis < -0.1f )
-	{
-		inputDirection = EDirection::LEFT;
-	}
+	const EDirection inputDirection = getInputDirection();
 
 	if ( inputDirection != EDirection::NONE )
 	{
@@ -119,4 +99,31 @@ void PlayerController::onUpdate( float deltaTime )
 		m_currentDirection = EDirection::NONE;
 		m_animationComponent.pause();
 	}
+}
+
+const PlayerController::EDirection PlayerController::getInputDirection() const
+{
+	float horizontalAxis = engine().input().getAxisHorizontal();
+	float verticalAxis = engine().input().getAxisVertical();
+
+	EDirection inputDirection = EDirection::NONE;
+
+	if ( verticalAxis > 0.1f )
+	{
+		inputDirection = EDirection::UP;
+	}
+	else if ( verticalAxis < -0.1f )
+	{
+		inputDirection = EDirection::DOWN;
+	}
+	else if ( horizontalAxis > 0.1f )
+	{
+		inputDirection = EDirection::RIGHT;
+	}
+	else if ( horizontalAxis < -0.1f )
+	{
+		inputDirection = EDirection::LEFT;
+	}
+
+	return inputDirection;
 }

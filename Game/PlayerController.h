@@ -28,4 +28,6 @@ private:
 
 	enum class EDirection { NONE, UP, LEFT, DOWN, RIGHT };
 	EDirection m_currentDirection = EDirection::NONE;
+
+	const EDirection getInputDirection() const;
 };
