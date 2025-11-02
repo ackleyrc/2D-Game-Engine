@@ -52,14 +52,14 @@ void PlayerController::onUpdate( float deltaTime )
 
 	x = std::clamp(
 		x,
-		GameConfig::TILE_WIDTH * 0.5f,
-		GameConfig::SCREEN_WIDTH - GameConfig::TILE_WIDTH * 2.5f
+		GameConfig::TILE_WIDTH * 1.0f,
+		GameConfig::SCREEN_WIDTH - GameConfig::TILE_WIDTH * 2.0f
 	);
 
 	y = std::clamp(
 		y,
-		GameConfig::TILE_HEIGHT * 3.5f,
-		GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 4.5f
+		GameConfig::TILE_HEIGHT * 4.0f,
+		GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 4.0f
 	);
 
 
