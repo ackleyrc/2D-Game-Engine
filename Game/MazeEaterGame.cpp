@@ -16,7 +16,6 @@ void MazeEaterGame::onInit()
 		"assets/textures/spritesheet.atlas"
 	);
 	
-	// TODO: Set specific sprite according to tile type & rotate appropriately
 	Sprite tempWallSprite = { "spritesheet", "level_a_thin_inner_corner" };
 
 	for ( int rowIndex = 0; rowIndex < GameConfig::TILE_ROWS; ++rowIndex )
