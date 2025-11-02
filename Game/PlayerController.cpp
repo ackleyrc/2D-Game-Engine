@@ -111,39 +111,7 @@ void PlayerController::onUpdate( float deltaTime )
 	m_gameObject->y = y;
 
 
-
-
-	if ( m_currentDirection == EDirection::NONE )
-	{
-		m_animationComponent.pause();
-	}
-	else
-	{
-		const AnimationData* animation = nullptr;
-
-		switch ( m_currentDirection )
-		{
-			case EDirection::UP:
-				animation = m_playerUp;
-				break;
-			case EDirection::LEFT:
-				animation = m_playerLeft;
-				break;
-			case EDirection::DOWN:
-				animation = m_playerDown;
-				break;
-			case EDirection::RIGHT:
-				animation = m_playerRight;
-				break;
-		}
-
-		if ( animation && animation != m_animationComponent.getAnimation() )
-		{
-			m_animationComponent.setAnimation( animation );
-		}
-
-		m_animationComponent.play();
-	}
+	updateAnimation( m_currentDirection );
 }
 
 const PlayerController::EDirection PlayerController::getInputDirection() const
@@ -280,5 +248,40 @@ bool PlayerController::isWalkable( ETileType tileType )
 		case ETileType::Path_Empty_Horizontal:	return true;
 		default:
 			return false;
+	}
+}
+
+void PlayerController::updateAnimation( EDirection movementDirection )
+{
+	if ( movementDirection == EDirection::NONE )
+	{
+		m_animationComponent.pause();
+	}
+	else
+	{
+		const AnimationData* animation = nullptr;
+
+		switch ( movementDirection )
+		{
+			case EDirection::UP:
+				animation = m_playerUp;
+				break;
+			case EDirection::LEFT:
+				animation = m_playerLeft;
+				break;
+			case EDirection::DOWN:
+				animation = m_playerDown;
+				break;
+			case EDirection::RIGHT:
+				animation = m_playerRight;
+				break;
+		}
+
+		if ( animation && animation != m_animationComponent.getAnimation() )
+		{
+			m_animationComponent.setAnimation( animation );
+		}
+
+		m_animationComponent.play();
 	}
 }
