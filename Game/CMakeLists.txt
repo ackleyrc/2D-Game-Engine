@@ -11,6 +11,7 @@ add_executable (
     "GameConfig.h"
     "TileMap.h"
     "TileMap.cpp"
+    "ETileType.h"
 )
 
 set_target_properties(

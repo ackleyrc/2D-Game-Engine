@@ -2,18 +2,39 @@
 #include "PlayerController.h"
 #include "GameConfig.h"
 #include "TileMap.h"
+#include "ETileType.h"
 
 void MazeEaterGame::onInit()
 {
 	TileMap tileMap( m_engine->resources() );
 	tileMap.loadFromFile( "assets/map-data/maze1.txt" );
-	// TODO: Create sprites to render maze walls, etc
 
 	m_engine->resources().loadSpriteSheet(
 		"spritesheet",
 		"assets/textures/spritesheet.png",
 		"assets/textures/spritesheet.atlas"
 	);
+
+	// TODO: Set specific sprite according to tile type & rotate appropriately
+	Sprite tempWallSprite = { "spritesheet", "level_a_thin_inner_corner" };
+
+	for ( int rowIndex = 0; rowIndex < GameConfig::TILE_ROWS; ++rowIndex )
+	{
+		for ( int colIndex = 0; colIndex < GameConfig::TILE_COLS; ++colIndex )
+		{
+			auto tileType = tileMap.getTileType( rowIndex, colIndex );
+			if ( tileType >= ETileType::Wall_00 &&
+				 tileType <= ETileType::Wall_09 )
+			{
+				auto wall = m_engine->createGameObject();
+				wall->x = colIndex * GameConfig::TILE_WIDTH;
+				wall->y = rowIndex * GameConfig::TILE_HEIGHT;
+
+				auto& spriteComponent = wall->addComponent<SpriteComponent>();
+				spriteComponent.setSprite( tempWallSprite );
+			}
+		}
+	}
 
 	Sprite playerUpNarrowSprite = { "spritesheet", "player_up_1" };
 	Sprite playerUpWideSprite = { "spritesheet", "player_up_2" };
