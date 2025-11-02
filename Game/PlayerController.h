@@ -1,8 +1,10 @@
 #pragma once
 #include <Component.h>
+#include "TileMap.h"
 
 class AnimationComponent;
 struct AnimationData;
+enum class ETileType;
 
 class PlayerController : public Component
 {
@@ -12,7 +14,8 @@ public:
 		const AnimationData* playerUp,
 		const AnimationData* playerDown,
 		const AnimationData* playerLeft,
-		const AnimationData* playerRight
+		const AnimationData* playerRight,
+		TileMap& tileMap
 	);
 
 	~PlayerController() { }
@@ -30,4 +33,15 @@ private:
 	EDirection m_currentDirection = EDirection::NONE;
 
 	const EDirection getInputDirection() const;
+
+	TileMap& m_tileMap;
+
+	static bool isWalkable( const ETileType tileType );
+
+	static bool canAdvanceToNextTile(
+		const float x,
+		const float y,
+		EDirection currentDirection,
+		const TileMap& tileMap
+	);
 };

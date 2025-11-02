@@ -1,5 +1,6 @@
 #pragma once
 #include <SparticleEngine.h>
+#include "TileMap.h"
 
 class MazeEaterGame : public IGame
 {
@@ -17,4 +18,6 @@ private:
 	SparticleEngine* m_engine;
 
 	GameObject* m_player = nullptr;
+
+	std::unique_ptr<TileMap> m_tileMap;
 };

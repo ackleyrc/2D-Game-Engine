@@ -6,9 +6,9 @@
 
 void MazeEaterGame::onInit()
 {
-	TileMap tileMap( m_engine->resources() );
-	tileMap.loadTileTypesFromFile( "assets/map-data/maze1.txt" );
-	tileMap.loadTileRotationsFromFile( "assets/map-data/maze1_rotation.txt" );
+	m_tileMap = std::make_unique<TileMap>( m_engine->resources() );
+	m_tileMap->loadTileTypesFromFile( "assets/map-data/maze1.txt" );
+	m_tileMap->loadTileRotationsFromFile( "assets/map-data/maze1_rotation.txt" );
 
 	m_engine->resources().loadSpriteSheet(
 		"spritesheet",
@@ -22,7 +22,7 @@ void MazeEaterGame::onInit()
 	{
 		for ( int colIndex = 0; colIndex < GameConfig::TILE_COLS; ++colIndex )
 		{
-			auto tileType = tileMap.getTileType( rowIndex, colIndex );
+			auto tileType = m_tileMap->getTileType( rowIndex, colIndex );
 			if ( (tileType >= ETileType::Wall_00 && tileType <= ETileType::Wall_09) ||
 				  tileType == ETileType::GhostHomeGate )
 			{
@@ -31,9 +31,9 @@ void MazeEaterGame::onInit()
 				wall->y = rowIndex * GameConfig::TILE_HEIGHT;
 
 				auto& spriteComponent = wall->addComponent<SpriteComponent>();
-				spriteComponent.setSprite( tileMap.getSprite( tileType ) );
+				spriteComponent.setSprite( m_tileMap->getSprite( tileType ) );
 
-				auto degrees = tileMap.getTileRotationDegrees( rowIndex, colIndex );
+				auto degrees = m_tileMap->getTileRotationDegrees( rowIndex, colIndex );
 				spriteComponent.setRotationDegrees( degrees );
 				spriteComponent.setRotationPivot(
 					GameConfig::TILE_WIDTH * 0.5f,
@@ -99,7 +99,7 @@ void MazeEaterGame::onInit()
 
 	m_player = m_engine->createGameObject();
 	m_player->x = GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH * 0.5f;
-	m_player->y = GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 10.0f;
+	m_player->y = GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 4.0f;
 
 	auto& spriteComponent = m_player->addComponent<SpriteComponent>(1);
 	spriteComponent.setSprite( ghostBlueSprite );
@@ -113,7 +113,8 @@ void MazeEaterGame::onInit()
 		playerUpAnimation,
 		playerDownAnimation,
 		playerLeftAnimation,
-		playerRightAnimation
+		playerRightAnimation,
+		*m_tileMap
 	);
 }
 
