@@ -52,5 +52,6 @@ private:
 		const TileMap& tileMap
 	);
 
+	EDirection getDesiredDiration() const;
 	void updateAnimation( EDirection movementDirection );
 };

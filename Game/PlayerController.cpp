@@ -24,23 +24,16 @@ PlayerController::PlayerController(
 
 void PlayerController::onUpdate( float deltaTime )
 {
-	float x = m_gameObject->x;
-	float y = m_gameObject->y;
-
-	const EDirection inputDirection = getInputDirection();
-
-	if ( inputDirection != EDirection::NONE )
-	{
-		if ( canStartMovingInDirection( x, y, inputDirection, m_tileMap ) )
-		{
-			m_currentDirection = inputDirection;
-		}
-	}
+	m_currentDirection = getDesiredDiration();
 
 	if ( m_currentDirection == EDirection::NONE )
 	{
 		return;
 	}
+
+
+	float x = m_gameObject->x;
+	float y = m_gameObject->y;
 
 	constexpr float playerSpeed = 200.0f;
 	float travelDistance = playerSpeed * deltaTime;
@@ -112,6 +105,24 @@ void PlayerController::onUpdate( float deltaTime )
 
 
 	updateAnimation( m_currentDirection );
+}
+
+PlayerController::EDirection PlayerController::getDesiredDiration() const
+{
+	float x = m_gameObject->x;
+	float y = m_gameObject->y;
+
+	const EDirection inputDirection = getInputDirection();
+
+	if ( inputDirection != EDirection::NONE )
+	{
+		if ( canStartMovingInDirection( x, y, inputDirection, m_tileMap ) )
+		{
+			return inputDirection;
+		}
+	}
+
+	return m_currentDirection;
 }
 
 const PlayerController::EDirection PlayerController::getInputDirection() const
