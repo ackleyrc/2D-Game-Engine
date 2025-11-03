@@ -18,6 +18,11 @@ void Component::add()
 
 void Component::update( float deltaTime )
 {
+	if ( !m_isActive )
+	{
+		return;
+	}
+
 	if ( !safeCall( "Component::onUpdate", [this, deltaTime] () { this->onUpdate( deltaTime ); } ) )
 	{
 		SDL_LogError( SDL_LOG_CATEGORY_ERROR, "Component failed to update." );

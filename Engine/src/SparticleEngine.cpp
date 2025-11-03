@@ -40,7 +40,6 @@ SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game ) :
 		std:exit(1);
 	}
 
-	// Create the renderer
 	m_sdlState->renderer = SDL_CreateRenderer( m_sdlState->window, nullptr );
 
 	if ( !m_sdlState->renderer )
@@ -176,7 +175,7 @@ void SparticleEngine::render()
 	{
 		for ( auto* spriteComponent : spriteVec )
 		{
-			if ( !spriteComponent )
+			if ( !spriteComponent || !spriteComponent->m_isActive )
 			{
 				continue;
 			}
