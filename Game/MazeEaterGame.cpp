@@ -16,8 +16,6 @@ void MazeEaterGame::onInit()
 		"assets/textures/spritesheet.atlas"
 	);
 	
-	Sprite tempWallSprite = { "spritesheet", "level_a_thin_inner_corner" };
-
 	for ( int rowIndex = 0; rowIndex < GameConfig::TILE_ROWS; ++rowIndex )
 	{
 		for ( int colIndex = 0; colIndex < GameConfig::TILE_COLS; ++colIndex )
@@ -58,6 +56,8 @@ void MazeEaterGame::onInit()
 	Sprite playerRightNarrowSprite = { "spritesheet", "player_right_1" };
 	Sprite playerRightWideSprite = { "spritesheet", "player_right_2" };
 	Sprite playerRightClosedSprite = { "spritesheet", "player_right_3" };
+
+	Sprite playerMoveDirectionSprite = { "spritesheet", "move_direction" };
 
 	Sprite ghostBlueSprite = { "spritesheet", "ghost_dead_blue" };
 	Sprite ghostWhiteSprite = { "spritesheet", "ghost_dead_white" };
@@ -101,14 +101,23 @@ void MazeEaterGame::onInit()
 	m_player->x = GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH * 0.5f;
 	m_player->y = GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 4.0f;
 
-	auto& spriteComponent = m_player->addComponent<SpriteComponent>(1);
-	spriteComponent.setSprite( ghostBlueSprite );
-	spriteComponent.setPositionOffset( -GameConfig::TILE_WIDTH * 0.5f, -GameConfig::TILE_HEIGHT * 0.5f );
+	auto& playerSpriteComponent = m_player->addComponent<SpriteComponent>( 1 );
+	playerSpriteComponent.setSprite( playerLeftClosedSprite );
+	playerSpriteComponent.setPositionOffset( -GameConfig::TILE_WIDTH * 0.5f, -GameConfig::TILE_HEIGHT * 0.5f );
 
-	auto& animationComponent = m_player->addComponent<AnimationComponent>( spriteComponent );
+	auto& directionSpriteComponent = m_player->addComponent<SpriteComponent>( 1 );
+	directionSpriteComponent.setSprite( playerMoveDirectionSprite );
+	directionSpriteComponent.setActive( false );
+	directionSpriteComponent.setRotationPivot(
+		GameConfig::TILE_WIDTH,
+		GameConfig::TILE_HEIGHT
+	);
+
+	auto& animationComponent = m_player->addComponent<AnimationComponent>( playerSpriteComponent );
 	animationComponent.setAnimation( playerLeftAnimation );
 
 	m_player->addComponent<PlayerController>(
+		directionSpriteComponent,
 		animationComponent,
 		playerUpAnimation,
 		playerDownAnimation,

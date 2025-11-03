@@ -7,13 +7,15 @@
 #include "ETileType.h"
 
 PlayerController::PlayerController(
+	SpriteComponent& directionSpriteComponent,
 	AnimationComponent& animationComponent,
 	const AnimationData* playerUp,
 	const AnimationData* playerDown,
 	const AnimationData* playerLeft,
 	const AnimationData* playerRight,
 	TileMap& tileMap
-	) : m_animationComponent( animationComponent ),
+	) : m_directionSpriteComponent( directionSpriteComponent ),
+		m_animationComponent( animationComponent ),
 		m_playerUp( playerUp ),
 		m_playerDown( playerDown ),
 		m_playerLeft( playerLeft ),
@@ -24,6 +26,7 @@ PlayerController::PlayerController(
 void PlayerController::onUpdate( float deltaTime )
 {
 	updateDesiredDirection();
+	updateDirectionSprite();
 
 	if ( m_currentDirection == EDirection::NONE )
 	{
@@ -31,7 +34,6 @@ void PlayerController::onUpdate( float deltaTime )
 	}
 
 	updateMovement( deltaTime );
-
 	updateAnimation( m_currentDirection );
 }
 
@@ -54,6 +56,40 @@ void PlayerController::updateDesiredDirection()
 			m_enqueuedDirection = inputDirection;
 		}
 	}
+}
+
+void PlayerController::updateDirectionSprite()
+{
+	float x = -GameConfig::TILE_WIDTH * 0.5f;
+	float y = -GameConfig::TILE_HEIGHT * 0.5f;
+	float rotation = 0.0f;
+
+	auto direction = getInputDirection();
+
+	switch ( direction )
+	{
+		case EDirection::UP:
+			y -= GameConfig::TILE_HEIGHT * 1.125f;
+			break;
+		case EDirection::DOWN:
+			y += GameConfig::TILE_HEIGHT * 1.125f;
+			rotation = 180.0f;
+			break;
+		case EDirection::LEFT:
+			x -= GameConfig::TILE_HEIGHT * 1.125f;
+			rotation = -90.0f;
+			break;
+		case EDirection::RIGHT:
+			x += GameConfig::TILE_HEIGHT * 1.125f;
+			rotation = 90.0f;
+			break;
+		default:
+			return;
+	}
+
+	m_directionSpriteComponent.setActive( true );
+	m_directionSpriteComponent.setPositionOffset( x, y );
+	m_directionSpriteComponent.setRotationDegrees( rotation );
 }
 
 const PlayerController::EDirection PlayerController::getInputDirection() const

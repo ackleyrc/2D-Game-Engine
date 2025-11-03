@@ -45,6 +45,7 @@
     { "id": "player_down_3",      "rect": [ 160  , 32  , 32 , 32 ] },
     { "id": "ghost_dead_blue",    "rect": [ 160  , 64  , 32 , 32 ] },
     { "id": "ghost_dead_white",   "rect": [ 160  , 96  , 32 , 32 ] },
+    { "id": "move_direction",     "rect": [ 160  , 160 , 32 , 32 ] },
     { "id": "player_dead_6",      "rect": [ 160  , 192 , 32 , 32 ] },
 
     { "id": "player_dead_7",      "rect": [ 192  , 192 , 32 , 32 ] },

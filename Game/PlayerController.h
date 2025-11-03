@@ -10,6 +10,7 @@ class PlayerController : public Component
 {
 public:
 	PlayerController(
+		SpriteComponent& directionSpriteComponent,
 		AnimationComponent& animationComponent,
 		const AnimationData* playerUp,
 		const AnimationData* playerDown,
@@ -23,6 +24,7 @@ public:
 	void onUpdate( float deltaTime ) override;
 
 private:
+	SpriteComponent& m_directionSpriteComponent;
 	AnimationComponent& m_animationComponent;
 	const AnimationData* m_playerUp;
 	const AnimationData* m_playerDown;
@@ -56,4 +58,5 @@ private:
 	void updateDesiredDirection();
 	void updateMovement( const float deltaTime );
 	void updateAnimation( EDirection movementDirection );
+	void updateDirectionSprite();
 };
