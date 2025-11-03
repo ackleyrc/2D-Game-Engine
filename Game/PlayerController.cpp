@@ -5,7 +5,6 @@
 #include "GameConfig.h"
 #include "TileMap.h"
 #include "ETileType.h"
-#include <iostream> // TEMP!
 
 PlayerController::PlayerController(
 	AnimationComponent& animationComponent,
@@ -94,33 +93,33 @@ bool PlayerController::canStartMovingInDirection(
 	int colIndex = static_cast<int>( x / GameConfig::TILE_WIDTH );
 	int rowIndex = static_cast<int>( y / GameConfig::TILE_HEIGHT );
 
-	float xNormalized = std::fmod( x, GameConfig::TILE_WIDTH );
-	float yNormalized = std::fmod( y, GameConfig::TILE_HEIGHT );
-	if ( xNormalized < 0.0f ) xNormalized += GameConfig::TILE_WIDTH;
-	if ( yNormalized < 0.0f ) yNormalized += GameConfig::TILE_HEIGHT;
+	float xOffset = std::fmod( x, GameConfig::TILE_WIDTH );
+	float yOffset = std::fmod( y, GameConfig::TILE_HEIGHT );
+	if ( xOffset < 0.0f ) xOffset += GameConfig::TILE_WIDTH;
+	if ( yOffset < 0.0f ) yOffset += GameConfig::TILE_HEIGHT;
 
 	switch ( newDirection )
 	{
 		case EDirection::UP:
-			if ( spmath::nearlyEqual( xNormalized, 0.0f ) )
+			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
 				return isWalkable( tileMap.getTileType( rowIndex - 1, colIndex ) );
 			}
 			return false;
 		case EDirection::DOWN:
-			if ( spmath::nearlyEqual( xNormalized, 0.0f ) )
+			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
 				return isWalkable( tileMap.getTileType( rowIndex + 1, colIndex ) );
 			}
 			return false;
 		case EDirection::LEFT:
-			if ( spmath::nearlyEqual( yNormalized, 0.0f ) )
+			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
 				return isWalkable( tileMap.getTileType( rowIndex, colIndex - 1 ) );
 			}
 			return false;
 		case EDirection::RIGHT:
-			if ( spmath::nearlyEqual( yNormalized, 0.0f ) )
+			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
 				return isWalkable( tileMap.getTileType( rowIndex, colIndex + 1 ) );
 			}
@@ -140,33 +139,33 @@ bool PlayerController::canAdvanceToNextTile(
 	int colIndex = static_cast<int>( x / GameConfig::TILE_WIDTH );
 	int rowIndex = static_cast<int>( y / GameConfig::TILE_HEIGHT );
 
-	float xNormalized = std::fmod( x, GameConfig::TILE_WIDTH );
-	float yNormalized = std::fmod( y, GameConfig::TILE_HEIGHT );
-	if ( xNormalized < 0.0f ) xNormalized += GameConfig::TILE_WIDTH;
-	if ( yNormalized < 0.0f ) yNormalized += GameConfig::TILE_HEIGHT;
+	float xOffset = std::fmod( x, GameConfig::TILE_WIDTH );
+	float yOffset = std::fmod( y, GameConfig::TILE_HEIGHT );
+	if ( xOffset < 0.0f ) xOffset += GameConfig::TILE_WIDTH;
+	if ( yOffset < 0.0f ) yOffset += GameConfig::TILE_HEIGHT;
 
 	switch ( currentDirection )
 	{
 		case EDirection::UP:
-			if ( spmath::nearlyEqual( yNormalized, 0.0f ) )
+			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
 				return isWalkable( tileMap.getTileType( rowIndex - 1, colIndex ) );
 			}
 			break;
 		case EDirection::DOWN:
-			if ( spmath::nearlyEqual( yNormalized, 0.0f ) )
+			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
 				return isWalkable( tileMap.getTileType( rowIndex + 1, colIndex ) );
 			}
 			break;
 		case EDirection::LEFT:
-			if ( spmath::nearlyEqual( xNormalized, 0.0f ) )
+			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
 				return isWalkable( tileMap.getTileType( rowIndex, colIndex - 1 ) );
 			}
 			break;
 		case EDirection::RIGHT:
-			if ( spmath::nearlyEqual( xNormalized, 0.0f ) )
+			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
 				return isWalkable( tileMap.getTileType( rowIndex, colIndex + 1 ) );
 			}
