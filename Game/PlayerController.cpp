@@ -276,6 +276,25 @@ void PlayerController::updateMovement( const float deltaTime )
 
 			rowIndex += static_cast<int>( dy );
 			colIndex += static_cast<int>( dx );
+
+			// There are certainly more scalable ways to do this, but for sake of simplicity,
+			// we can leverage the known common properties of portals in every level
+			if ( m_currentDirection == EDirection::LEFT )
+			{
+				if ( spmath::nearlyEqual( x, 0.0f ) )
+				{
+					x = GameConfig::SCREEN_WIDTH - GameConfig::TILE_WIDTH;
+					colIndex = GameConfig::TILE_COLS - 1;
+				}
+			}
+			else if ( m_currentDirection == EDirection::RIGHT )
+			{
+				if ( spmath::nearlyEqual( x, GameConfig::SCREEN_WIDTH - GameConfig::TILE_WIDTH ) )
+				{
+					x = 0.0f;
+					colIndex = 0;
+				}
+			}
 		}
 
 		if ( spmath::nearlyEqual( travelDistance, 0.0f ) )
