@@ -1,7 +1,8 @@
 #include "TileMap.h"
-#include "ETileType.h"
 #include <stdexcept>
+#include <ResourceManager.h>
 #include <Sprite.h>
+#include "ETileType.h"
 
 TileMap::TileMap( ResourceManager& resources ) :
 	m_resources( resources )

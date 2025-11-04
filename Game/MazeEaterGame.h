@@ -11,7 +11,7 @@ class MazeEaterGame : public IGame
 {
 public:
 	MazeEaterGame();
-	~MazeEaterGame() override = default;
+	~MazeEaterGame() override;
 
 	void setEngine( SparticleEngine* engine ) override { m_engine = engine; }
 
@@ -24,4 +24,5 @@ private:
 	GameObject* m_player = nullptr;
 
 	std::unique_ptr<TileMap> m_tileMap;
+	std::unique_ptr<PelletManager> m_pelletManager;
 };

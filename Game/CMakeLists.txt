@@ -12,6 +12,8 @@ add_executable (
     "TileMap.h"
     "TileMap.cpp"
     "ETileType.h"
+    "PelletManager.h" 
+    "PelletManager.cpp"
 )
 
 set_target_properties(

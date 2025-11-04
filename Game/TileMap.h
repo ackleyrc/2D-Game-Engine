@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "ResourceManager.h"
 
+class ResourceManager;
 enum class ETileType;
 struct Sprite;
 

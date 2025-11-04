@@ -4,14 +4,19 @@
 #include "GameConfig.h"
 #include "TileMap.h"
 #include "ETileType.h"
+#include "PelletManager.h"
 
 MazeEaterGame::MazeEaterGame() = default;
+MazeEaterGame::~MazeEaterGame() = default;
 
 void MazeEaterGame::onInit()
 {
 	m_tileMap = std::make_unique<TileMap>( m_engine->resources() );
 	m_tileMap->loadTileTypesFromFile( "assets/map-data/maze1.txt" );
 	m_tileMap->loadTileRotationsFromFile( "assets/map-data/maze1_rotation.txt" );
+
+	m_pelletManager = std::make_unique<PelletManager>( *m_engine, *m_tileMap );
+	m_pelletManager->generatePellets();
 
 	m_engine->resources().loadSpriteSheet(
 		"spritesheet",
