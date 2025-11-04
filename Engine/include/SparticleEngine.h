@@ -22,9 +22,10 @@ struct SDLState;
 class SPARTICLE_API SparticleEngine
 {
 public:
-	SparticleEngine( const EngineConfig& config, IGame* game );
+	SparticleEngine( const EngineConfig& config );
 	~SparticleEngine();
 
+	void setGame( IGame* game ) { m_game = game; }
 	void run();
 
 	GameObject* createGameObject();
@@ -35,7 +36,7 @@ public:
 private:
 	EngineConfig m_engineConfig;
 
-	IGame* m_game;
+	IGame* m_game = nullptr;
 
 	std::unique_ptr<SDLState> m_sdlState;
 

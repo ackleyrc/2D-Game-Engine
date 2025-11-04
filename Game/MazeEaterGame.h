@@ -1,12 +1,17 @@
 #pragma once
-#include <SparticleEngine.h>
-#include "TileMap.h"
+#include <memory>
+#include "IGame.h"
+
+class SparticleEngine;
+class GameObject;
+class TileMap;
+class PelletManager;
 
 class MazeEaterGame : public IGame
 {
 public:
-	MazeEaterGame() { }
-	~MazeEaterGame() { }
+	MazeEaterGame();
+	~MazeEaterGame() override = default;
 
 	void setEngine( SparticleEngine* engine ) override { m_engine = engine; }
 
@@ -15,8 +20,7 @@ public:
 	void onShutdown() override;
 
 private:
-	SparticleEngine* m_engine;
-
+	SparticleEngine* m_engine = nullptr;
 	GameObject* m_player = nullptr;
 
 	std::unique_ptr<TileMap> m_tileMap;

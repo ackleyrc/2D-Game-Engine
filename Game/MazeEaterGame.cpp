@@ -1,8 +1,11 @@
 #include "MazeEaterGame.h"
+#include "SparticleEngine.h"
 #include "PlayerController.h"
 #include "GameConfig.h"
 #include "TileMap.h"
 #include "ETileType.h"
+
+MazeEaterGame::MazeEaterGame() = default;
 
 void MazeEaterGame::onInit()
 {

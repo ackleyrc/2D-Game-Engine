@@ -7,9 +7,9 @@ int main( int argc, char* argv[] )
 {
 	GameConfig gameConfig;
 	MazeEaterGame game;
+	SparticleEngine engine( gameConfig.engineConfig );
 
-	SparticleEngine engine( gameConfig.engineConfig, &game );
-
+	engine.setGame( &game );
 	engine.run();
 
 	return 0;

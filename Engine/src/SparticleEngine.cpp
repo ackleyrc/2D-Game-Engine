@@ -5,9 +5,8 @@
 #include "SDLState.h"
 #include "ResourceManagerTypes.h"
 
-SparticleEngine::SparticleEngine( const EngineConfig& config, IGame* game ) : 
-	m_engineConfig( config ),
-	m_game( game )
+SparticleEngine::SparticleEngine( const EngineConfig& config ) : 
+	m_engineConfig( config )
 {
 	if ( !SDL_Init( SDL_INIT_VIDEO ) )
 	{
