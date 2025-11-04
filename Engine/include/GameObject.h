@@ -47,6 +47,22 @@ public:
 		return nullptr;
 	}
 
+	template<typename T>
+	std::vector<T*> getComponents()
+	{
+		static_assert( std::is_base_of_v<Component, T>, "T must derive from Component" );
+		std::vector<T*> results;
+		results.reserve( m_components.size() );
+		for ( auto& component : m_components )
+		{
+			if ( auto* casted = dynamic_cast<T*>( component.get() ) )
+			{
+				results.push_back( casted );
+			}
+		}
+		return results;
+	}
+
 	SparticleEngine& engine() const;
 
 protected:
