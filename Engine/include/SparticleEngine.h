@@ -45,6 +45,9 @@ private:
 
 	bool m_isRunning = false;
 
+	void initializeGame();
+	void shutdownGame();
+
 	void processEvents();
 	void update( double deltaTime );
 	void render();

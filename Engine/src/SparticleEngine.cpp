@@ -59,19 +59,7 @@ SparticleEngine::SparticleEngine( const EngineConfig& config ) :
 	);
 
 	m_resources.m_renderer = m_sdlState->renderer;
-
-	if ( !safeCall( "Game::setEngine", [this]() { m_game->setEngine( this ); } ) )
-	{
-		SDL_LogError( SDL_LOG_CATEGORY_ERROR, "Game failed to set engine." );
-		throw std::runtime_error( "Game failed to set engine." );
 	}
-
-	if ( !safeCall( "Game::onInit", [this] () { m_game->onInit(); } ) )
-	{
-		SDL_LogError( SDL_LOG_CATEGORY_ERROR, "Game initialization failed." );
-		throw std::runtime_error( "Game initialization failed." );
-	}
-}
 
 SparticleEngine::~SparticleEngine()
 {
@@ -90,9 +78,26 @@ SparticleEngine::~SparticleEngine()
 	SDL_Quit();
 }
 
+void SparticleEngine::initializeGame()
+{
+	if ( !safeCall( "Game::setEngine", [this] () { m_game->setEngine( this ); } ) )
+	{
+		SDL_LogError( SDL_LOG_CATEGORY_ERROR, "Game failed to set engine." );
+		throw std::runtime_error( "Game failed to set engine." );
+	}
+
+	if ( !safeCall( "Game::onInit", [this] () { m_game->onInit(); } ) )
+	{
+		SDL_LogError( SDL_LOG_CATEGORY_ERROR, "Game initialization failed." );
+		throw std::runtime_error( "Game initialization failed." );
+	}
+}
+
 void SparticleEngine::run()
 {
 	m_isRunning = true;
+
+	this->initializeGame();
 
 	Uint64 previousCounter = SDL_GetPerformanceCounter();
 	Uint64 frequency = SDL_GetPerformanceFrequency();
@@ -108,13 +113,18 @@ void SparticleEngine::run()
 		this->render();
 	}
 
+	this->shutdownGame();
+
+	m_resources.unloadAssets();
+}
+
+void SparticleEngine::shutdownGame()
+{
 	if ( !safeCall( "Game::onShutdown", [this] () { m_game->onShutdown(); } ) )
 	{
 		SDL_LogError( SDL_LOG_CATEGORY_ERROR, "Game shutdown failed." );
 		throw std::runtime_error( "Game shutdown failed." );
 	}
-
-	m_resources.unloadAssets();
 }
 
 void SparticleEngine::processEvents()
