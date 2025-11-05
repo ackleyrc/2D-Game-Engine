@@ -108,6 +108,8 @@ void SparticleEngine::run()
 		double deltaTime = static_cast<double>( currentCounter - previousCounter ) / frequency;
 		previousCounter = currentCounter;
 
+		m_timeElapsed += deltaTime;
+
 		this->processEvents();
 		this->update( deltaTime );
 		this->render();

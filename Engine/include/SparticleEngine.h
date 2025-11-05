@@ -29,6 +29,8 @@ public:
 	void setGame( IGame* game ) { m_game = game; }
 	void run();
 
+	double getTimeElapsed() { return m_timeElapsed; }
+
 	GameObject* createGameObject();
 	void destroyGameObject( GameObject* gameObject );
 
@@ -48,6 +50,7 @@ private:
 	EventSystem m_eventSystem;
 
 	bool m_isRunning = false;
+	double m_timeElapsed = 0.0;
 
 	void initializeGame();
 	void shutdownGame();
