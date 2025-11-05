@@ -21,5 +21,9 @@ private:
 	enum class EPelletType { NONE, Pellet, PowerPellet };
 	static EPelletType getPelletType( const ETileType tileType );
 
-	std::vector<std::vector<GameObject*>> m_pellets;
+	std::vector<std::vector<GameObject*>> m_allPellets;
+	std::vector<GameObject*> m_powerPellets;
+
+	void updatePelletConsumption( GameObject* player );
+	void updatePowerPelletBlinking();
 };

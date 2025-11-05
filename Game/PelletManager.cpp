@@ -41,6 +41,8 @@ void PelletManager::generatePellets()
 					powerPellet->x = colIndex * GameConfig::TILE_WIDTH;
 					powerPellet->y = rowIndex * GameConfig::TILE_HEIGHT;
 
+					m_powerPellets.push_back( powerPellet );
+
 					auto& spriteComponent = powerPellet->addComponent<SpriteComponent>();
 					spriteComponent.setSprite( { "spritesheet", "power_pellet" } );
 
@@ -55,11 +57,18 @@ void PelletManager::generatePellets()
 			}
 		}
 
-		m_pellets.push_back( std::move( row ) );
+		m_allPellets.push_back( std::move( row ) );
 	}
 }
 
 void PelletManager::onUpdate( GameObject* player )
+{
+	updatePelletConsumption( player );
+
+	updatePowerPelletBlinking();
+}
+
+void PelletManager::updatePelletConsumption( GameObject* player )
 {
 	float playerX = player->x;
 	float playerY = player->y;
@@ -86,7 +95,7 @@ void PelletManager::onUpdate( GameObject* player )
 				continue;
 			}
 
-			auto pellet = m_pellets[rowIndex][colIndex];
+			auto pellet = m_allPellets[rowIndex][colIndex];
 
 			if ( !pellet )
 			{
@@ -104,16 +113,32 @@ void PelletManager::onUpdate( GameObject* player )
 
 			if ( distanceSqr <= thresholdSqr )
 			{
-				m_pellets[rowIndex][colIndex] = nullptr;
+				m_allPellets[rowIndex][colIndex] = nullptr;
 				m_engine.destroyGameObject( pellet );
 
 				ETileType tileType = m_tileMap.getTileType( rowIndex, colIndex );
 				bool isPowerPellet = getPelletType( tileType ) == EPelletType::PowerPellet;
 
+				auto it = std::find( m_powerPellets.begin(), m_powerPellets.end(), pellet );
+				if ( it != m_powerPellets.end() )
+				{
+					m_powerPellets.erase( it );
+				}
+
 				PelletEatenEvent event { .isPowerPellet = isPowerPellet };
 				m_engine.events().publish( event );
 			}
 		}
+	}
+}
+
+void PelletManager::updatePowerPelletBlinking()
+{
+	bool active = static_cast<int>( m_engine.getTimeElapsed() / 0.2 ) % 2 == 0;
+
+	for ( auto powerPellet : m_powerPellets )
+	{
+		powerPellet->setActive( active );
 	}
 }
 

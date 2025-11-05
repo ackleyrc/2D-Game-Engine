@@ -118,7 +118,7 @@ void MazeEaterGame::onInit()
 
 	auto& directionSpriteComponent = m_player->addComponent<SpriteComponent>( 1 );
 	directionSpriteComponent.setSprite( playerMoveDirectionSprite );
-	directionSpriteComponent.setActive( false );
+	directionSpriteComponent.setEnabled( false );
 	directionSpriteComponent.setRotationPivot(
 		GameConfig::TILE_WIDTH,
 		GameConfig::TILE_HEIGHT

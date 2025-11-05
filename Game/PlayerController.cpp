@@ -87,7 +87,7 @@ void PlayerController::updateDirectionSprite()
 			return;
 	}
 
-	m_directionSpriteComponent.setActive( true );
+	m_directionSpriteComponent.setEnabled( true );
 	m_directionSpriteComponent.setPositionOffset( x, y );
 	m_directionSpriteComponent.setRotationDegrees( rotation );
 }
