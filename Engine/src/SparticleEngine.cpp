@@ -59,7 +59,7 @@ SparticleEngine::SparticleEngine( const EngineConfig& config ) :
 	);
 
 	m_resources.m_renderer = m_sdlState->renderer;
-	}
+}
 
 SparticleEngine::~SparticleEngine()
 {
@@ -111,6 +111,8 @@ void SparticleEngine::run()
 		this->processEvents();
 		this->update( deltaTime );
 		this->render();
+
+		this->processPendingDestruction();
 	}
 
 	this->shutdownGame();
@@ -161,6 +163,11 @@ void SparticleEngine::update( const double deltaTime )
 
 	for ( auto& obj : m_objects )
 	{
+		if ( obj->m_isDestroying )
+		{
+			continue;
+		}
+
 		obj->update( deltaTime );
 	}
 }
@@ -184,7 +191,9 @@ void SparticleEngine::render()
 	{
 		for ( auto* spriteComponent : spriteVec )
 		{
-			if ( !spriteComponent || !spriteComponent->m_isActive )
+			if ( !spriteComponent || 
+				!spriteComponent->m_isActive || 
+				spriteComponent->m_gameObject->m_isDestroying )
 			{
 				continue;
 			}
@@ -244,6 +253,50 @@ GameObject* SparticleEngine::createGameObject()
 	GameObject* ptr = obj.get();
 	m_objects.push_back( std::move( obj ) );
 	return ptr;
+}
+
+void SparticleEngine::destroyGameObject( GameObject* gameObject )
+{
+	auto itExisting = std::find_if( m_objects.begin(), m_objects.end(),
+		[gameObject] ( const std::unique_ptr<GameObject>& existing )
+		{
+			return existing.get() == gameObject;
+		} );
+
+	if ( itExisting != m_objects.end() )
+	{
+		auto itPending = std::find( m_pendingDestroy.begin(), m_pendingDestroy.end(), gameObject );
+		if ( itPending == m_pendingDestroy.end() )
+		{
+			m_pendingDestroy.push_back( gameObject );
+
+			gameObject->m_isDestroying = true;
+		}
+	}
+}
+
+void SparticleEngine::processPendingDestruction()
+{
+	if ( m_pendingDestroy.empty() )
+	{
+		return;
+	}
+
+	for ( GameObject* gameObject : m_pendingDestroy )
+	{
+		auto it = std::find_if( m_objects.begin(), m_objects.end(),
+			[gameObject] ( const std::unique_ptr<GameObject>& existing )
+			{
+				return existing.get() == gameObject;
+			} );
+
+		if ( it != m_objects.end() )
+		{
+			m_objects.erase( it );
+		}
+	}
+
+	m_pendingDestroy.clear();
 }
 
 void SparticleEngine::registerSpriteComponent( SpriteComponent* spriteComponent )

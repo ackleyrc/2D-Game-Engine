@@ -29,6 +29,7 @@ public:
 	void run();
 
 	GameObject* createGameObject();
+	void destroyGameObject( GameObject* gameObject );
 
 	InputManager& input() { return m_input; }
 	ResourceManager& resources() { return m_resources; }
@@ -52,10 +53,13 @@ private:
 	void update( double deltaTime );
 	void render();
 
+	void processPendingDestruction();
+
 	friend class SpriteComponent;
 	void registerSpriteComponent( SpriteComponent* spriteComponent );
 	void unregisterSpriteComponent( SpriteComponent* spriteComponent );
 	std::map<int, std::vector<SpriteComponent*>> m_spriteLayers;
 
 	std::vector<std::unique_ptr<GameObject>> m_objects;
+	std::vector<GameObject*> m_pendingDestroy;
 };

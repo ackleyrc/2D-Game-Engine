@@ -78,4 +78,6 @@ private:
 
 	SparticleEngine* m_engine = nullptr;
 	std::vector<std::unique_ptr<Component>> m_components;
+
+	bool m_isDestroying = false;
 };
