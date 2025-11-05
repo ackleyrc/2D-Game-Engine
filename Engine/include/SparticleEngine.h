@@ -16,6 +16,7 @@
 #include "AnimationComponent.h"
 #include "Color.h"
 #include "MathUtils.h"
+#include "EventSystem.h"
 
 struct SDLState;
 
@@ -33,6 +34,7 @@ public:
 
 	InputManager& input() { return m_input; }
 	ResourceManager& resources() { return m_resources; }
+	EventSystem& events() { return m_eventSystem; }
 
 private:
 	EngineConfig m_engineConfig;
@@ -43,6 +45,7 @@ private:
 
 	InputManager m_input;
 	ResourceManager m_resources;
+	EventSystem m_eventSystem;
 
 	bool m_isRunning = false;
 
