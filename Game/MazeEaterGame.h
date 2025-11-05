@@ -6,6 +6,7 @@ class SparticleEngine;
 class GameObject;
 class TileMap;
 class PelletManager;
+class ScoreManager;
 
 class MazeEaterGame : public IGame
 {
@@ -25,4 +26,5 @@ private:
 
 	std::unique_ptr<TileMap> m_tileMap;
 	std::unique_ptr<PelletManager> m_pelletManager;
+	std::unique_ptr<ScoreManager> m_scoreManager;
 };

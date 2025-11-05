@@ -14,6 +14,9 @@ add_executable (
     "ETileType.h"
     "PelletManager.h" 
     "PelletManager.cpp"
+    "GameEvents.h"
+    "ScoreManager.h" 
+    "ScoreManager.cpp"
 )
 
 set_target_properties(

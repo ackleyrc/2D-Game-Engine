@@ -5,12 +5,15 @@
 #include "TileMap.h"
 #include "ETileType.h"
 #include "PelletManager.h"
+#include "ScoreManager.h"
 
 MazeEaterGame::MazeEaterGame() = default;
 MazeEaterGame::~MazeEaterGame() = default;
 
 void MazeEaterGame::onInit()
 {
+	m_scoreManager = std::make_unique<ScoreManager>( *m_engine );
+
 	m_tileMap = std::make_unique<TileMap>( m_engine->resources() );
 	m_tileMap->loadTileTypesFromFile( "assets/map-data/maze1.txt" );
 	m_tileMap->loadTileRotationsFromFile( "assets/map-data/maze1_rotation.txt" );

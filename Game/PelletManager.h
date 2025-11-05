@@ -4,6 +4,7 @@
 class SparticleEngine;
 class GameObject;
 class TileMap;
+enum class ETileType;
 
 class PelletManager {
 public:
@@ -18,5 +19,7 @@ private:
 	TileMap& m_tileMap;
 
 	enum class EPelletType { NONE, Pellet, PowerPellet };
+	static EPelletType getPelletType( const ETileType tileType );
+
 	std::vector<std::vector<GameObject*>> m_pellets;
 };

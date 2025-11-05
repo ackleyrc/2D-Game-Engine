@@ -3,6 +3,7 @@
 #include "GameConfig.h"
 #include "TileMap.h"
 #include "ETileType.h"
+#include "GameEvents.h"
 
 PelletManager::PelletManager( SparticleEngine& engine, TileMap& tileMap ) :
 	m_engine( engine ),
@@ -19,10 +20,9 @@ void PelletManager::generatePellets()
 		{
 			ETileType tileType = m_tileMap.getTileType( rowIndex, colIndex );
 
-			switch ( tileType )
+			switch ( getPelletType( tileType ) )
 			{
-				case ETileType::Junction_Pellet:
-				case ETileType::Path_Pellet:
+				case EPelletType::Pellet:
 				{
 					auto pellet = m_engine.createGameObject();
 					pellet->x = colIndex * GameConfig::TILE_WIDTH;
@@ -35,8 +35,7 @@ void PelletManager::generatePellets()
 					break;
 				}
 
-				case ETileType::Junction_PowerPellet:
-				case ETileType::Path_PowerPellet:
+				case EPelletType::PowerPellet:
 				{
 					auto powerPellet = m_engine.createGameObject();
 					powerPellet->x = colIndex * GameConfig::TILE_WIDTH;
@@ -107,7 +106,34 @@ void PelletManager::onUpdate( GameObject* player )
 			{
 				m_pellets[rowIndex][colIndex] = nullptr;
 				m_engine.destroyGameObject( pellet );
+
+				ETileType tileType = m_tileMap.getTileType( rowIndex, colIndex );
+				bool isPowerPellet = getPelletType( tileType ) == EPelletType::PowerPellet;
+
+				PelletEatenEvent event { .isPowerPellet = isPowerPellet };
+				m_engine.events().publish( event );
 			}
 		}
+	}
+}
+
+PelletManager::EPelletType PelletManager::getPelletType( const ETileType tileType )
+{
+	switch ( tileType )
+	{
+		case ETileType::Junction_Pellet:
+		case ETileType::Path_Pellet:
+		{
+			return EPelletType::Pellet;
+		}
+
+		case ETileType::Junction_PowerPellet:
+		case ETileType::Path_PowerPellet:
+		{
+			return EPelletType::PowerPellet;
+		}
+
+		default:
+			return EPelletType::NONE;
 	}
 }
