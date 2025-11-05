@@ -21,6 +21,9 @@ public:
 	float x = 0.0f;
 	float y = 0.0f;
 
+	void setActive( bool active ) { m_isActive = active; }
+	bool isActive() { return m_isActive; }
+
 	template<typename T, typename... Args>
 	T& addComponent( Args&&... args )
 	{
@@ -79,5 +82,6 @@ private:
 	SparticleEngine* m_engine = nullptr;
 	std::vector<std::unique_ptr<Component>> m_components;
 
+	bool m_isActive = true;
 	bool m_isDestroying = false;
 };

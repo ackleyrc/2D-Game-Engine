@@ -194,7 +194,8 @@ void SparticleEngine::render()
 		for ( auto* spriteComponent : spriteVec )
 		{
 			if ( !spriteComponent || 
-				!spriteComponent->m_isActive || 
+				!spriteComponent->m_isEnabled || 
+				!spriteComponent->m_gameObject->isActive() ||
 				spriteComponent->m_gameObject->m_isDestroying )
 			{
 				continue;

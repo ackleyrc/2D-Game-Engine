@@ -18,7 +18,7 @@ void Component::add()
 
 void Component::update( float deltaTime )
 {
-	if ( !m_isActive )
+	if ( !m_isEnabled )
 	{
 		return;
 	}

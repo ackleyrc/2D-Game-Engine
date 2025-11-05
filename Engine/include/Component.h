@@ -10,12 +10,13 @@ public:
     virtual ~Component() = default;
     virtual void onUpdate( float deltaTime ) { }
     virtual void onAdd() { }
-    void setActive( bool active ) { m_isActive = active; }
+    void setEnabled( bool enabled ) { m_isEnabled = enabled; }
+    bool isEnabled() { return m_isEnabled; }
 
 protected:
     SparticleEngine& engine() const;
     GameObject* m_gameObject = nullptr;
-    bool m_isActive = true;
+    bool m_isEnabled = true;
 
 private:
     friend class GameObject;
