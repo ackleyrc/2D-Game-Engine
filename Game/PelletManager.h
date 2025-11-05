@@ -11,6 +11,7 @@ public:
 	~PelletManager() = default;
 
 	void generatePellets();
+	void onUpdate( GameObject* player );
 
 private:
 	SparticleEngine& m_engine;

@@ -13,6 +13,8 @@ void PelletManager::generatePellets()
 {
 	for ( int rowIndex = 0; rowIndex < GameConfig::TILE_ROWS; ++rowIndex )
 	{
+		std::vector<GameObject*> row;
+
 		for ( int colIndex = 0; colIndex < GameConfig::TILE_COLS; ++colIndex )
 		{
 			ETileType tileType = m_tileMap.getTileType( rowIndex, colIndex );
@@ -28,7 +30,8 @@ void PelletManager::generatePellets()
 
 					auto& spriteComponent = pellet->addComponent<SpriteComponent>();
 					spriteComponent.setSprite( { "spritesheet", "pellet" } );
-					
+
+					row.push_back( pellet );
 					break;
 				}
 
@@ -42,11 +45,68 @@ void PelletManager::generatePellets()
 					auto& spriteComponent = powerPellet->addComponent<SpriteComponent>();
 					spriteComponent.setSprite( { "spritesheet", "power_pellet" } );
 
+					row.push_back( powerPellet );
 					break;
 				}
 
 				default:
-					continue;
+
+					row.push_back( nullptr );
+					break;
+			}
+		}
+
+		m_pellets.push_back( std::move( row ) );
+	}
+}
+
+void PelletManager::onUpdate( GameObject* player )
+{
+	float playerX = player->x;
+	float playerY = player->y;
+
+	int playerRowIndex = static_cast<int>( playerY / GameConfig::TILE_HEIGHT );
+	int playerColIndex = static_cast<int>( playerX / GameConfig::TILE_WIDTH );
+
+	// Only cardinal neighbor pellets should be checked
+	for ( int rowOffset = -1; rowOffset <= 1; ++rowOffset )
+	{
+		for ( int colOffset = -1; colOffset <= 1; ++colOffset )
+		{
+			if ( rowOffset != 0 && colOffset != 0 )
+			{
+				continue;
+			}
+
+			int rowIndex = playerRowIndex + rowOffset;
+			int colIndex = playerColIndex + colOffset;
+
+			if ( rowIndex < 0 || rowIndex >= GameConfig::TILE_ROWS ||
+				colIndex < 0 || colIndex >= GameConfig::TILE_COLS )
+			{
+				continue;
+			}
+
+			auto pellet = m_pellets[rowIndex][colIndex];
+
+			if ( !pellet )
+			{
+				continue;
+			}
+
+			float dx = playerX - pellet->x;
+			float dy = playerY - pellet->y;
+
+			float distanceSqr = dx * dx + dy * dy;
+
+			constexpr float width = GameConfig::TILE_WIDTH * 0.5f;
+			constexpr float height = GameConfig::TILE_HEIGHT * 0.5f;
+			constexpr float thresholdSqr = ( width * width ) + ( height * height );
+
+			if ( distanceSqr <= thresholdSqr )
+			{
+				m_pellets[rowIndex][colIndex] = nullptr;
+				m_engine.destroyGameObject( pellet );
 			}
 		}
 	}

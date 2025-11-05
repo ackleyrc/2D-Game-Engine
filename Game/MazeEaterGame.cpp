@@ -136,7 +136,9 @@ void MazeEaterGame::onInit()
 }
 
 void MazeEaterGame::onUpdate( float deltaTime )
-{ }
+{
+	m_pelletManager->onUpdate( m_player );
+}
 
 void MazeEaterGame::onShutdown()
 { 
