@@ -17,6 +17,10 @@ add_executable (
     "GameEvents.h"
     "ScoreManager.h" 
     "ScoreManager.cpp"
+    "EntityMovement.h" 
+    "EntityMovement.cpp"
+    "EDirection.h" 
+    "IMovementController.h"
 )
 
 set_target_properties(

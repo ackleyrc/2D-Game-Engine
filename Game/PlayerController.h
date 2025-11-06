@@ -1,12 +1,15 @@
 #pragma once
 #include <Component.h>
 #include "TileMap.h"
+#include "EDirection.h"
+#include "IMovementController.h"
+#include "EntityMovement.h"
 
 class AnimationComponent;
 struct AnimationData;
 enum class ETileType;
 
-class PlayerController : public Component
+class PlayerController : public Component, public IMovementController
 {
 public:
 	PlayerController(
@@ -21,7 +24,10 @@ public:
 
 	~PlayerController() { }
 
-	void onUpdate( float deltaTime ) override;
+	void onUpdate( const float deltaTime ) override;
+
+	EDirection updateDesiredDirection() override;
+	bool isWalkable( const ETileType tileType ) const override;
 
 private:
 	SpriteComponent& m_directionSpriteComponent;
@@ -30,33 +36,14 @@ private:
 	const AnimationData* m_playerDown;
 	const AnimationData* m_playerLeft;
 	const AnimationData* m_playerRight;
+	EntityMovement m_entityMovement;
 
-	enum class EDirection { NONE, UP, LEFT, DOWN, RIGHT };
-	EDirection m_currentDirection = EDirection::NONE;
-	EDirection m_enqueuedDirection = EDirection::NONE;
+	EDirection m_lastInputDirection = EDirection::NONE;
 
 	const EDirection getInputDirection() const;
 
 	TileMap& m_tileMap;
 
-	static bool isWalkable( const ETileType tileType );
-
-	static bool canAdvanceToNextTile(
-		const float x,
-		const float y,
-		EDirection currentDirection,
-		const TileMap& tileMap
-	);
-
-	static bool canStartMovingInDirection(
-		const float x,
-		const float y,
-		EDirection newDirection,
-		const TileMap& tileMap
-	);
-
-	void updateDesiredDirection();
-	void updateMovement( const float deltaTime );
 	void updateAnimation( EDirection movementDirection );
 	void updateDirectionSprite();
 };
