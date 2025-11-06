@@ -4,7 +4,7 @@
 #include "InputManager.h"
 #include "Component.h"
 
-void GameObject::update( float deltaTime )
+void GameObject::update( const float deltaTime )
 {
 	for ( auto& component : m_components )
 	{

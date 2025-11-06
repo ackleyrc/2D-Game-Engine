@@ -56,7 +56,7 @@ private:
 	void shutdownGame();
 
 	void processEvents();
-	void update( double deltaTime );
+	void update( const double deltaTime );
 	void render();
 
 	void processPendingDestruction();

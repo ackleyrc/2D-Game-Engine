@@ -18,7 +18,7 @@ public:
 	void pause();
 	void stop();
 
-	void onUpdate( float deltaTime ) override;
+	void onUpdate( const float deltaTime ) override;
 
 private:
 	SpriteComponent& m_spriteComponent;

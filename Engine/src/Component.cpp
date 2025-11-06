@@ -16,7 +16,7 @@ void Component::add()
 	}
 }
 
-void Component::update( float deltaTime )
+void Component::update( const float deltaTime )
 {
 	if ( !m_isEnabled )
 	{

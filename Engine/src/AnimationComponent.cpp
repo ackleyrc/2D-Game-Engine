@@ -38,7 +38,7 @@ void AnimationComponent::stop()
 	reset();
 }
 
-void AnimationComponent::onUpdate( float deltaTime )
+void AnimationComponent::onUpdate( const float deltaTime )
 {
 	if ( m_state != EState::Playing || !m_animationData )
 	{

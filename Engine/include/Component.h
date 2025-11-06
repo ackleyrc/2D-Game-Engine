@@ -8,7 +8,7 @@ class SPARTICLE_API Component
 {
 public:
     virtual ~Component() = default;
-    virtual void onUpdate( float deltaTime ) { }
+    virtual void onUpdate( const float deltaTime ) { }
     virtual void onAdd() { }
     void setEnabled( bool enabled ) { m_isEnabled = enabled; }
     bool isEnabled() { return m_isEnabled; }

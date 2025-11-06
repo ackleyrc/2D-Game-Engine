@@ -77,7 +77,7 @@ private:
 
 	GameObject( SparticleEngine* engine ) { m_engine = engine; }
 
-	void update( float deltaTime );
+	void update( const float deltaTime );
 
 	SparticleEngine* m_engine = nullptr;
 	std::vector<std::unique_ptr<Component>> m_components;
