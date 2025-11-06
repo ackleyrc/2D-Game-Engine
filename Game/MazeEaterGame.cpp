@@ -110,7 +110,7 @@ void MazeEaterGame::onInit()
 
 	m_player = m_engine->createGameObject();
 	m_player->x = GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH * 0.5f;
-	m_player->y = GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 4.0f;
+	m_player->y = GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 10.0f;
 
 	auto& playerSpriteComponent = m_player->addComponent<SpriteComponent>( 1 );
 	playerSpriteComponent.setSprite( playerLeftClosedSprite );
