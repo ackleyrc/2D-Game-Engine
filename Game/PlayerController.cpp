@@ -56,19 +56,19 @@ const EDirection PlayerController::getInputDirection() const
 
 	if ( verticalAxis > 0.1f )
 	{
-		inputDirection = EDirection::UP;
+		inputDirection = EDirection::Up;
 	}
 	else if ( verticalAxis < -0.1f )
 	{
-		inputDirection = EDirection::DOWN;
+		inputDirection = EDirection::Down;
 	}
 	else if ( horizontalAxis > 0.1f )
 	{
-		inputDirection = EDirection::RIGHT;
+		inputDirection = EDirection::Right;
 	}
 	else if ( horizontalAxis < -0.1f )
 	{
-		inputDirection = EDirection::LEFT;
+		inputDirection = EDirection::Left;
 	}
 
 	return inputDirection;
@@ -98,18 +98,18 @@ void PlayerController::updateDirectionSprite()
 
 	switch ( m_lastInputDirection )
 	{
-		case EDirection::UP:
+		case EDirection::Up:
 			y -= GameConfig::TILE_HEIGHT * 1.125f;
 			break;
-		case EDirection::DOWN:
+		case EDirection::Down:
 			y += GameConfig::TILE_HEIGHT * 1.125f;
 			rotation = 180.0f;
 			break;
-		case EDirection::LEFT:
+		case EDirection::Left:
 			x -= GameConfig::TILE_HEIGHT * 1.125f;
 			rotation = -90.0f;
 			break;
-		case EDirection::RIGHT:
+		case EDirection::Right:
 			x += GameConfig::TILE_HEIGHT * 1.125f;
 			rotation = 90.0f;
 			break;
@@ -134,16 +134,16 @@ void PlayerController::updateAnimation( EDirection movementDirection )
 
 		switch ( movementDirection )
 		{
-			case EDirection::UP:
+			case EDirection::Up:
 				animation = m_playerUp;
 				break;
-			case EDirection::LEFT:
+			case EDirection::Left:
 				animation = m_playerLeft;
 				break;
-			case EDirection::DOWN:
+			case EDirection::Down:
 				animation = m_playerDown;
 				break;
-			case EDirection::RIGHT:
+			case EDirection::Right:
 				animation = m_playerRight;
 				break;
 		}

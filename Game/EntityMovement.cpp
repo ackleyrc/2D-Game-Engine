@@ -42,10 +42,10 @@ void EntityMovement::update( GameObject* gameObject, const float deltaTime )
 
 		switch ( m_currentDirection )
 		{
-			case EDirection::UP:    dy = -1.0f;	break;
-			case EDirection::DOWN:  dy = 1.0f;	break;
-			case EDirection::LEFT:  dx = -1.0f;	break;
-			case EDirection::RIGHT: dx = 1.0f;	break;
+			case EDirection::Up:    dy = -1.0f;	break;
+			case EDirection::Down:  dy = 1.0f;	break;
+			case EDirection::Left:  dx = -1.0f;	break;
+			case EDirection::Right: dx = 1.0f;	break;
 			default: break;
 		}
 
@@ -97,10 +97,10 @@ void EntityMovement::update( GameObject* gameObject, const float deltaTime )
 
 					switch ( m_currentDirection )
 					{
-						case EDirection::UP:    dy = -1.0f;	break;
-						case EDirection::DOWN:  dy = 1.0f;	break;
-						case EDirection::LEFT:  dx = -1.0f;	break;
-						case EDirection::RIGHT: dx = 1.0f;	break;
+						case EDirection::Up:    dy = -1.0f;	break;
+						case EDirection::Down:  dy = 1.0f;	break;
+						case EDirection::Left:  dx = -1.0f;	break;
+						case EDirection::Right: dx = 1.0f;	break;
 						default: break;
 					}
 				}
@@ -111,7 +111,7 @@ void EntityMovement::update( GameObject* gameObject, const float deltaTime )
 
 			// There are certainly more scalable ways to do this, but for sake of simplicity,
 			// we can leverage the known common properties of portals in every level
-			if ( m_currentDirection == EDirection::LEFT )
+			if ( m_currentDirection == EDirection::Left )
 			{
 				if ( spmath::nearlyEqual( x, 0.0f ) )
 				{
@@ -119,7 +119,7 @@ void EntityMovement::update( GameObject* gameObject, const float deltaTime )
 					colIndex = GameConfig::TILE_COLS - 1;
 				}
 			}
-			else if ( m_currentDirection == EDirection::RIGHT )
+			else if ( m_currentDirection == EDirection::Right )
 			{
 				if ( spmath::nearlyEqual( x, GameConfig::SCREEN_WIDTH - GameConfig::TILE_WIDTH ) )
 				{
@@ -156,25 +156,25 @@ bool EntityMovement::canStartMovingInDirection(
 
 	switch ( newDirection )
 	{
-		case EDirection::UP:
+		case EDirection::Up:
 			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
 				return m_controller.isWalkable( tileMap.getTileType( rowIndex - 1, colIndex ) );
 			}
 			return false;
-		case EDirection::DOWN:
+		case EDirection::Down:
 			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
 				return m_controller.isWalkable( tileMap.getTileType( rowIndex + 1, colIndex ) );
 			}
 			return false;
-		case EDirection::LEFT:
+		case EDirection::Left:
 			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
 				return m_controller.isWalkable( tileMap.getTileType( rowIndex, colIndex - 1 ) );
 			}
 			return false;
-		case EDirection::RIGHT:
+		case EDirection::Right:
 			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
 				return m_controller.isWalkable( tileMap.getTileType( rowIndex, colIndex + 1 ) );
@@ -202,25 +202,25 @@ bool EntityMovement::canAdvanceToNextTile(
 
 	switch ( currentDirection )
 	{
-		case EDirection::UP:
+		case EDirection::Up:
 			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
 				return m_controller.isWalkable( tileMap.getTileType( rowIndex - 1, colIndex ) );
 			}
 			break;
-		case EDirection::DOWN:
+		case EDirection::Down:
 			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
 				return m_controller.isWalkable( tileMap.getTileType( rowIndex + 1, colIndex ) );
 			}
 			break;
-		case EDirection::LEFT:
+		case EDirection::Left:
 			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
 				return m_controller.isWalkable( tileMap.getTileType( rowIndex, colIndex - 1 ) );
 			}
 			break;
-		case EDirection::RIGHT:
+		case EDirection::Right:
 			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
 				return m_controller.isWalkable( tileMap.getTileType( rowIndex, colIndex + 1 ) );
