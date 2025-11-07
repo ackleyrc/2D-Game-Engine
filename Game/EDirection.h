@@ -16,7 +16,7 @@ namespace DirectionUtils
 		EDirection::Left,
 		EDirection::Down,
 		EDirection::Right
-};
+	};
 
 	inline EDirection getOpposite( EDirection direction )
 	{
