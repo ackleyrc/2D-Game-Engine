@@ -24,7 +24,7 @@ void EntityMovement::update( GameObject* gameObject, const float deltaTime )
 	int colIndex = static_cast<int>( std::floor( x / GameConfig::TILE_WIDTH ) );
 	int rowIndex = static_cast<int>( std::floor( y / GameConfig::TILE_HEIGHT ) );
 
-	EDirection desiredDirection = m_controller.updateDesiredDirection();
+	EDirection desiredDirection = m_controller.updateDesiredDirection( x, y );
 
 	if ( desiredDirection != EDirection::NONE )
 	{
@@ -34,7 +34,7 @@ void EntityMovement::update( GameObject* gameObject, const float deltaTime )
 		}
 	}
 
-	while ( m_currentDirection != EDirection::NONE && travelDistance > 0.0f )
+	while ( m_currentDirection != EDirection::NONE && !spmath::nearlyEqual( travelDistance, 0.0f ) )
 	{
 		float dx = 0.0f;
 		float dy = 0.0f;
@@ -83,7 +83,7 @@ void EntityMovement::update( GameObject* gameObject, const float deltaTime )
 
 		if ( reachedBoundary )
 		{
-			auto desiredDirection = m_controller.updateDesiredDirection();
+			auto desiredDirection = m_controller.updateDesiredDirection( x, y );
 
 			if ( desiredDirection != EDirection::NONE )
 			{
@@ -91,8 +91,8 @@ void EntityMovement::update( GameObject* gameObject, const float deltaTime )
 				{
 					m_currentDirection = desiredDirection;
 
-					float dx = 0.0f;
-					float dy = 0.0f;
+					dx = 0.0f;
+					dy = 0.0f;
 
 					switch ( m_currentDirection )
 					{

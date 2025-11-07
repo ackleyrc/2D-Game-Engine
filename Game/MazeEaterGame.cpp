@@ -1,6 +1,7 @@
 #include "MazeEaterGame.h"
 #include "SparticleEngine.h"
 #include "PlayerController.h"
+#include "GhostController.h"
 #include "GameConfig.h"
 #include "TileMap.h"
 #include "ETileType.h"
@@ -134,6 +135,19 @@ void MazeEaterGame::onInit()
 		playerDownAnimation,
 		playerLeftAnimation,
 		playerRightAnimation,
+		*m_tileMap
+	);
+
+	m_ghost = m_engine->createGameObject();
+	m_ghost->x = GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH * 0.5f;
+	m_ghost->y = GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 4.0f;
+
+	auto& ghostSpriteComponent = m_ghost->addComponent<SpriteComponent>( 1 );
+	ghostSpriteComponent.setSprite( ghostWhiteSprite );
+	ghostSpriteComponent.setPositionOffset( -GameConfig::TILE_WIDTH * 0.5f, -GameConfig::TILE_HEIGHT * 0.5f );
+
+	m_ghost->addComponent<GhostController>(
+		ghostSpriteComponent,
 		*m_tileMap
 	);
 }

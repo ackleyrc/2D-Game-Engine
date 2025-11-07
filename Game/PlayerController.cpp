@@ -40,7 +40,7 @@ void PlayerController::onUpdate( float deltaTime )
 	updateAnimation( m_entityMovement.getCurrentDirection() );
 }
 
-EDirection PlayerController::updateDesiredDirection()
+EDirection PlayerController::updateDesiredDirection( float x, float y )
 {
 	const EDirection inputDirection = getInputDirection();
 
@@ -83,13 +83,14 @@ bool PlayerController::isWalkable( const ETileType tileType ) const
 {
 	switch ( tileType )
 	{
-		case ETileType::Junction_Pellet:		return true;
-		case ETileType::Junction_PowerPellet:	return true;
-		case ETileType::Junction_Empty:			return true;
-		case ETileType::Path_Pellet:			return true;
-		case ETileType::Path_PowerPellet:		return true;
-		case ETileType::Path_Empty_Vertical:	return true;
-		case ETileType::Path_Empty_Horizontal:	return true;
+		case ETileType::Junction_Pellet:
+		case ETileType::Junction_PowerPellet:
+		case ETileType::Junction_Empty:
+		case ETileType::Path_Pellet:
+		case ETileType::Path_PowerPellet:
+		case ETileType::Path_Empty_Vertical:
+		case ETileType::Path_Empty_Horizontal:	
+			return true;
 		default:
 			return false;
 	}

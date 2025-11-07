@@ -21,6 +21,8 @@ add_executable (
     "EntityMovement.cpp"
     "EDirection.h" 
     "IMovementController.h"
+    "GhostController.h" 
+    "GhostController.cpp"
 )
 
 set_target_properties(

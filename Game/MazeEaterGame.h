@@ -23,6 +23,7 @@ public:
 private:
 	SparticleEngine* m_engine = nullptr;
 	GameObject* m_player = nullptr;
+	GameObject* m_ghost = nullptr;
 
 	std::unique_ptr<TileMap> m_tileMap;
 	std::unique_ptr<PelletManager> m_pelletManager;
