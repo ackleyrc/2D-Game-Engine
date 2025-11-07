@@ -5,6 +5,7 @@
 #include "GameConfig.h"
 #include "TileMap.h"
 #include "ETileType.h"
+#include "EDirection.h"
 
 PlayerController::PlayerController(
 	SpriteComponent& directionSpriteComponent,
@@ -21,7 +22,8 @@ PlayerController::PlayerController(
 		m_playerLeft( playerLeft ),
 		m_playerRight( playerRight ),
 		m_tileMap( tileMap ),
-		m_entityMovement( *this, tileMap )
+		m_entityMovement( *this, tileMap ),
+		m_lastInputDirection( EDirection::NONE )
 { }
 
 void PlayerController::onUpdate( float deltaTime )

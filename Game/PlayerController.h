@@ -1,13 +1,13 @@
 #pragma once
 #include <Component.h>
-#include "TileMap.h"
-#include "EDirection.h"
 #include "IMovementController.h"
 #include "EntityMovement.h"
 
+class TileMap;
 class AnimationComponent;
 struct AnimationData;
 enum class ETileType;
+enum class EDirection;
 
 class PlayerController : public Component, public IMovementController
 {
@@ -38,7 +38,7 @@ private:
 	const AnimationData* m_playerRight;
 	EntityMovement m_entityMovement;
 
-	EDirection m_lastInputDirection = EDirection::NONE;
+	EDirection m_lastInputDirection;
 
 	const EDirection getInputDirection() const;
 
