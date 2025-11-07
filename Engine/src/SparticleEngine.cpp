@@ -109,6 +109,7 @@ void SparticleEngine::run()
 		previousCounter = currentCounter;
 
 		m_timeElapsed += deltaTime;
+		m_framesElapsed += 1;
 
 		this->processEvents();
 		this->update( deltaTime );

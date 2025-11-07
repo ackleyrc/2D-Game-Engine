@@ -30,6 +30,7 @@ public:
 	void run();
 
 	double getTimeElapsed() { return m_timeElapsed; }
+	long getFramesElapsed() { return m_framesElapsed; }
 
 	GameObject* createGameObject();
 	void destroyGameObject( GameObject* gameObject );
@@ -51,6 +52,7 @@ private:
 
 	bool m_isRunning = false;
 	double m_timeElapsed = 0.0;
+	long m_framesElapsed = 0;
 
 	void initializeGame();
 	void shutdownGame();
