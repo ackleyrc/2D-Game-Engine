@@ -19,8 +19,7 @@ void EntityMovement::update( GameObject* gameObject, const float deltaTime )
 	float x = gameObject->x;
 	float y = gameObject->y;
 
-	constexpr float playerSpeed = 200.0f;
-	float travelDistance = playerSpeed * deltaTime;
+	float travelDistance = m_speed * deltaTime;
 
 	int colIndex = static_cast<int>( std::floor( x / GameConfig::TILE_WIDTH ) );
 	int rowIndex = static_cast<int>( std::floor( y / GameConfig::TILE_HEIGHT ) );

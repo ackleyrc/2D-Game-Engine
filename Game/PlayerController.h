@@ -4,6 +4,7 @@
 #include "EntityMovement.h"
 
 class TileMap;
+class SpriteComponent;
 class AnimationComponent;
 struct AnimationData;
 enum class ETileType;
@@ -24,6 +25,7 @@ public:
 
 	~PlayerController() { }
 
+	void onAdd() override;
 	void onUpdate( const float deltaTime ) override;
 
 	EDirection updateDesiredDirection() override;

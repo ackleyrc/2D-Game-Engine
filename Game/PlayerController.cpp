@@ -26,6 +26,11 @@ PlayerController::PlayerController(
 		m_lastInputDirection( EDirection::NONE )
 { }
 
+void PlayerController::onAdd()
+{
+	m_entityMovement.setSpeed( 200.0f );
+}
+
 void PlayerController::onUpdate( float deltaTime )
 {
 	m_entityMovement.update( m_gameObject, deltaTime );

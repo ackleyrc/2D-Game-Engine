@@ -13,6 +13,7 @@ public:
 	~EntityMovement();
 
 	void update( GameObject* gameObject, const float deltaTime );
+	void setSpeed( float speed ) { m_speed = speed; }
 
 	EDirection getCurrentDirection() const { return m_currentDirection; }
 
@@ -34,4 +35,5 @@ private:
 	IMovementController& m_controller;
 	EDirection m_currentDirection;
 	TileMap& m_tileMap;
+	float m_speed = 100.0f;
 };
