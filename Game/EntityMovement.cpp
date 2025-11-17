@@ -158,25 +158,25 @@ bool EntityMovement::canStartMovingInDirection(
 		case EDirection::Up:
 			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
-				return m_controller.isWalkable( tileMap.getTileType( rowIndex - 1, colIndex ) );
+				return m_controller.isWalkable( tileMap.getTileTypeForRowCol( rowIndex - 1, colIndex ) );
 			}
 			return false;
 		case EDirection::Down:
 			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
-				return m_controller.isWalkable( tileMap.getTileType( rowIndex + 1, colIndex ) );
+				return m_controller.isWalkable( tileMap.getTileTypeForRowCol( rowIndex + 1, colIndex ) );
 			}
 			return false;
 		case EDirection::Left:
 			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
-				return m_controller.isWalkable( tileMap.getTileType( rowIndex, colIndex - 1 ) );
+				return m_controller.isWalkable( tileMap.getTileTypeForRowCol( rowIndex, colIndex - 1 ) );
 			}
 			return false;
 		case EDirection::Right:
 			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
-				return m_controller.isWalkable( tileMap.getTileType( rowIndex, colIndex + 1 ) );
+				return m_controller.isWalkable( tileMap.getTileTypeForRowCol( rowIndex, colIndex + 1 ) );
 			}
 			return false;
 		default:
@@ -204,25 +204,25 @@ bool EntityMovement::canAdvanceToNextTile(
 		case EDirection::Up:
 			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
-				return m_controller.isWalkable( tileMap.getTileType( rowIndex - 1, colIndex ) );
+				return m_controller.isWalkable( tileMap.getTileTypeForRowCol( rowIndex - 1, colIndex ) );
 			}
 			break;
 		case EDirection::Down:
 			if ( spmath::nearlyEqual( yOffset, 0.0f ) )
 			{
-				return m_controller.isWalkable( tileMap.getTileType( rowIndex + 1, colIndex ) );
+				return m_controller.isWalkable( tileMap.getTileTypeForRowCol( rowIndex + 1, colIndex ) );
 			}
 			break;
 		case EDirection::Left:
 			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
-				return m_controller.isWalkable( tileMap.getTileType( rowIndex, colIndex - 1 ) );
+				return m_controller.isWalkable( tileMap.getTileTypeForRowCol( rowIndex, colIndex - 1 ) );
 			}
 			break;
 		case EDirection::Right:
 			if ( spmath::nearlyEqual( xOffset, 0.0f ) )
 			{
-				return m_controller.isWalkable( tileMap.getTileType( rowIndex, colIndex + 1 ) );
+				return m_controller.isWalkable( tileMap.getTileTypeForRowCol( rowIndex, colIndex + 1 ) );
 			}
 			break;
 		default:

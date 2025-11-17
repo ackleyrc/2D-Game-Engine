@@ -1,5 +1,5 @@
 #pragma once
-#include <Component.h>
+#include <SparticleEngine.h>
 #include "IMovementController.h"
 #include "EntityMovement.h"
 
@@ -27,4 +27,6 @@ private:
 	TileMap& m_tileMap;
 
 	EntityMovement m_entityMovement;
+
+	Vector2f getGoalPosition() const;
 };

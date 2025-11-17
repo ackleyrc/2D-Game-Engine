@@ -2,7 +2,9 @@
 #include <stdexcept>
 #include <ResourceManager.h>
 #include <Sprite.h>
+#include "GameConfig.h"
 #include "ETileType.h"
+#include "EDirection.h"
 
 TileMap::TileMap( ResourceManager& resources ) :
 	m_resources( resources )
@@ -51,7 +53,15 @@ void TileMap::loadTileTypesFromFile( const std::string& path )
 	}
 }
 
-ETileType TileMap::getTileType( int rowIndex, int colIndex ) const
+ETileType TileMap::getTileTypeForPosition( Vector2f position ) const
+{
+	int colIndex = getTileColIndex( position.x );
+	int rowIndex = getTileRowIndex( position.y );
+
+	return getTileTypeForRowCol( rowIndex, colIndex );
+}
+
+ETileType TileMap::getTileTypeForRowCol( int rowIndex, int colIndex ) const
 {
 	if ( rowIndex < 0 || rowIndex >= static_cast<int>( m_tileTypes.size() ) ||
 		colIndex < 0 || colIndex >= static_cast<int>( m_tileTypes[rowIndex].size() ) )
@@ -94,6 +104,40 @@ void TileMap::loadTileRotationsFromFile( const std::string& path )
 double TileMap::getTileRotationDegrees( int rowIndex, int colIndex ) const
 {
 	return m_tileRotations.at( rowIndex ).at( colIndex );
+}
+
+int TileMap::getTileColIndex( float x ) const
+{
+	return static_cast<int>( x / GameConfig::TILE_WIDTH );
+}
+
+int TileMap::getTileRowIndex( float y ) const
+{
+	return static_cast<int>( y / GameConfig::TILE_HEIGHT );
+}
+
+Vector2f TileMap::getTilePositionAt( int rowIndex, int colIndex ) const
+{
+	float x = colIndex * GameConfig::TILE_WIDTH;
+	float y = rowIndex * GameConfig::TILE_HEIGHT;
+	return Vector2f( x, y );
+}
+
+Vector2f TileMap::getTilePositionFrom( int rowIndex, int colIndex, EDirection direction ) const
+{
+	switch ( direction ) 
+	{
+		case EDirection::Up:
+			return getTilePositionAt( rowIndex - 1, colIndex );
+		case EDirection::Left:
+			return getTilePositionAt( rowIndex, colIndex - 1 );
+		case EDirection::Down:
+			return getTilePositionAt( rowIndex + 1, colIndex );
+		case EDirection::Right:
+			return getTilePositionAt( rowIndex, colIndex + 1 );
+		default:
+			return getTilePositionAt( rowIndex, colIndex );
+	}
 }
 
 Sprite TileMap::getSprite( const ETileType tileType ) const

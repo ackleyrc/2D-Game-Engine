@@ -18,7 +18,7 @@ void PelletManager::generatePellets()
 
 		for ( int colIndex = 0; colIndex < GameConfig::TILE_COLS; ++colIndex )
 		{
-			ETileType tileType = m_tileMap.getTileType( rowIndex, colIndex );
+			ETileType tileType = m_tileMap.getTileTypeForRowCol( rowIndex, colIndex );
 
 			switch ( getPelletType( tileType ) )
 			{
@@ -116,7 +116,7 @@ void PelletManager::updatePelletConsumption( GameObject* player )
 				m_allPellets[rowIndex][colIndex] = nullptr;
 				m_engine.destroyGameObject( pellet );
 
-				ETileType tileType = m_tileMap.getTileType( rowIndex, colIndex );
+				ETileType tileType = m_tileMap.getTileTypeForRowCol( rowIndex, colIndex );
 				bool isPowerPellet = getPelletType( tileType ) == EPelletType::PowerPellet;
 
 				auto it = std::find( m_powerPellets.begin(), m_powerPellets.end(), pellet );

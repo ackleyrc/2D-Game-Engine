@@ -32,7 +32,7 @@ void MazeEaterGame::onInit()
 	{
 		for ( int colIndex = 0; colIndex < GameConfig::TILE_COLS; ++colIndex )
 		{
-			auto tileType = m_tileMap->getTileType( rowIndex, colIndex );
+			auto tileType = m_tileMap->getTileTypeForRowCol( rowIndex, colIndex );
 			if ( (tileType >= ETileType::Wall_00 && tileType <= ETileType::Wall_09) ||
 				  tileType == ETileType::GhostHomeGate )
 			{

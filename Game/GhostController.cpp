@@ -1,4 +1,5 @@
 #include "GhostController.h"
+#include <limits>
 #include <SparticleEngine.h>
 #include "TileMap.h"
 #include "ETileType.h"
@@ -27,10 +28,29 @@ void GhostController::onUpdate( const float deltaTime )
 
 EDirection GhostController::updateDesiredDirection( float x, float y )
 {
+	Vector2f currentPosition = Vector2f( x, y );
+	int currentColIndex = m_tileMap.getTileColIndex( x );
+	int currentRowIndex = m_tileMap.getTileRowIndex( y );
+
 	auto currentDirection = m_entityMovement.getCurrentDirection();
 	auto backtrackDirection = DirectionUtils::getOpposite( currentDirection );
 
-	auto frame = m_gameObject->engine().getFramesElapsed();
+	if ( currentDirection != EDirection::NONE )
+	{
+		ETileType tileType = m_tileMap.getTileTypeForPosition( currentPosition );
+
+		if ( tileType != ETileType::Junction_Empty &&
+			tileType != ETileType::Junction_Pellet &&
+			tileType != ETileType::Junction_PowerPellet )
+		{
+			// Continue on non-junction paths
+			return currentDirection;
+		}
+	}
+
+	Vector2f goalPosition = getGoalPosition();
+	EDirection preferredDirection = EDirection::NONE;
+	float bestDistanceSqrToGoal = std::numeric_limits<float>::max();
 
 	for ( const auto direction : DirectionUtils::directions )
 	{
@@ -54,10 +74,16 @@ EDirection GhostController::updateDesiredDirection( float x, float y )
 			continue;
 		}
 
-		return direction;
+		Vector2f toPosition = m_tileMap.getTilePositionFrom( currentRowIndex, currentColIndex, direction );
+		float distanceSqr = ( toPosition - goalPosition ).lengthSqr();
+
+		if ( bestDistanceSqrToGoal > distanceSqr ) {
+			bestDistanceSqrToGoal = distanceSqr;
+			preferredDirection = direction;
+		}
 	}
 
-	return backtrackDirection;
+	return preferredDirection != EDirection::NONE ? preferredDirection : backtrackDirection;
 }
 
 bool GhostController::isWalkable( const ETileType tileType ) const
@@ -76,4 +102,9 @@ bool GhostController::isWalkable( const ETileType tileType ) const
 		default:
 			return false;
 	}
+}
+
+Vector2f GhostController::getGoalPosition() const
+{
+	return Vector2f( 0.0f, 0.0f );
 }
