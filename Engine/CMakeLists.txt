@@ -13,6 +13,8 @@ if (SPARTICLE_BUILD_SHARED)
         "src/AnimationComponent.cpp"
         "src/SpriteComponent.cpp"
         "src/EngineInternalUtils.h"
+        "src/VectorImpl.h"
+        "src/VectorImpl.cpp"
     )
 else()
     add_library (SparticleEngineLib STATIC
@@ -26,6 +28,8 @@ else()
         "src/AnimationComponent.cpp"
         "src/SpriteComponent.cpp"
         "src/EngineInternalUtils.h"
+        "src/VectorImpl.h"
+        "src/VectorImpl.cpp"
     )
 endif()
 

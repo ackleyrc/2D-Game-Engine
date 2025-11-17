@@ -17,6 +17,7 @@
 #include "Color.h"
 #include "MathUtils.h"
 #include "EventSystem.h"
+#include "Vector.h"
 
 struct SDLState;
 
