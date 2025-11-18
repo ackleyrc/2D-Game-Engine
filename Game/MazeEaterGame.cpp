@@ -64,8 +64,8 @@ void MazeEaterGame::spawnLevelGeometry()
 				tileType == ETileType::GhostHomeGate )
 			{
 				auto wall = m_engine->createGameObject();
-				wall->x = colIndex * GameConfig::TILE_WIDTH;
-				wall->y = rowIndex * GameConfig::TILE_HEIGHT;
+				wall->position.x = colIndex * GameConfig::TILE_WIDTH;
+				wall->position.y = rowIndex * GameConfig::TILE_HEIGHT;
 
 				auto& spriteComponent = wall->addComponent<SpriteComponent>();
 				spriteComponent.setSprite( m_tileMap->getSprite( tileType ) );
@@ -148,8 +148,8 @@ void MazeEaterGame::createAnimations()
 void MazeEaterGame::spawnPlayer()
 {
 	m_player = m_engine->createGameObject();
-	m_player->x = GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH * 0.5f;
-	m_player->y = GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 10.0f;
+	m_player->position.x = GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH * 0.5f;
+	m_player->position.y = GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 10.0f;
 
 	auto& playerSpriteComponent = m_player->addComponent<SpriteComponent>( 1 );
 	playerSpriteComponent.setSprite( m_defaultPlayerSprite );
@@ -207,8 +207,7 @@ GameObject* MazeEaterGame::spawnGhost(
 )
 {
 	auto ghost = m_engine->createGameObject();
-	ghost->x = startPosition.x;
-	ghost->y = startPosition.y;
+	ghost->position = startPosition;
 
 	auto& ghostSpriteComponent = ghost->addComponent<SpriteComponent>( 1 );
 	ghostSpriteComponent.setSprite( m_tempGhostSprite );
@@ -227,14 +226,14 @@ void MazeEaterGame::onUpdate( float deltaTime )
 {
 	m_pelletManager->onUpdate( m_player );
 
-	m_aiBlackboard->setPlayerPosition( Vector2f( m_player->x, m_player->y ) );
+	m_aiBlackboard->setPlayerPosition( m_player->position );
 	m_aiBlackboard->setPlayerFacingDirection( m_playerController->getCurrentDirection() );
 
 	constexpr int GHOST_A_ID = 0;
 	constexpr int GHOST_B_ID = 1;
 
-	m_aiBlackboard->setGhostPosition( GHOST_A_ID, Vector2f( m_ghostA->x, m_ghostA->y ) );
-	m_aiBlackboard->setGhostPosition( GHOST_B_ID, Vector2f( m_ghostB->x, m_ghostB->y ) );
+	m_aiBlackboard->setGhostPosition( GHOST_A_ID, m_ghostA->position );
+	m_aiBlackboard->setGhostPosition( GHOST_B_ID, m_ghostB->position );
 }
 
 void MazeEaterGame::onShutdown()

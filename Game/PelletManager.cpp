@@ -25,8 +25,8 @@ void PelletManager::generatePellets()
 				case EPelletType::Pellet:
 				{
 					auto pellet = m_engine.createGameObject();
-					pellet->x = colIndex * GameConfig::TILE_WIDTH;
-					pellet->y = rowIndex * GameConfig::TILE_HEIGHT;
+					pellet->position.x = colIndex * GameConfig::TILE_WIDTH;
+					pellet->position.y = rowIndex * GameConfig::TILE_HEIGHT;
 
 					auto& spriteComponent = pellet->addComponent<SpriteComponent>();
 					spriteComponent.setSprite( { "spritesheet", "pellet" } );
@@ -38,8 +38,8 @@ void PelletManager::generatePellets()
 				case EPelletType::PowerPellet:
 				{
 					auto powerPellet = m_engine.createGameObject();
-					powerPellet->x = colIndex * GameConfig::TILE_WIDTH;
-					powerPellet->y = rowIndex * GameConfig::TILE_HEIGHT;
+					powerPellet->position.x = colIndex * GameConfig::TILE_WIDTH;
+					powerPellet->position.y = rowIndex * GameConfig::TILE_HEIGHT;
 
 					m_powerPellets.push_back( powerPellet );
 
@@ -70,8 +70,8 @@ void PelletManager::onUpdate( GameObject* player )
 
 void PelletManager::updatePelletConsumption( GameObject* player )
 {
-	float playerX = player->x;
-	float playerY = player->y;
+	float playerX = player->position.x;
+	float playerY = player->position.y;
 
 	int playerRowIndex = static_cast<int>( playerY / GameConfig::TILE_HEIGHT );
 	int playerColIndex = static_cast<int>( playerX / GameConfig::TILE_WIDTH );
@@ -102,8 +102,8 @@ void PelletManager::updatePelletConsumption( GameObject* player )
 				continue;
 			}
 
-			float dx = playerX - pellet->x;
-			float dy = playerY - pellet->y;
+			float dx = playerX - pellet->position.x;
+			float dy = playerY - pellet->position.y;
 
 			float distanceSqr = dx * dx + dy * dy;
 

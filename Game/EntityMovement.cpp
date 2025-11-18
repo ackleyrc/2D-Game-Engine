@@ -16,8 +16,8 @@ EntityMovement::~EntityMovement() = default;
 
 void EntityMovement::update( GameObject* gameObject, const float deltaTime )
 {
-	float x = gameObject->x;
-	float y = gameObject->y;
+	float x = gameObject->position.x;
+	float y = gameObject->position.y;
 
 	float travelDistance = m_speed * deltaTime;
 
@@ -134,8 +134,8 @@ void EntityMovement::update( GameObject* gameObject, const float deltaTime )
 		}
 	}
 
-	gameObject->x = x;
-	gameObject->y = y;
+	gameObject->position.x = x;
+	gameObject->position.y = y;
 }
 
 bool EntityMovement::canStartMovingInDirection(
