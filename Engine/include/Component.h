@@ -12,6 +12,7 @@ public:
     virtual void onAdd() { }
     void setEnabled( bool enabled ) { m_isEnabled = enabled; }
     bool isEnabled() { return m_isEnabled; }
+    GameObject* getGameObject() const { return m_gameObject; }
 
 protected:
     SparticleEngine& engine() const;
