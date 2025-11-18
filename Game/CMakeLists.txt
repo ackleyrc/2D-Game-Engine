@@ -23,6 +23,7 @@ add_executable (
     "IMovementController.h"
     "GhostController.h" 
     "GhostController.cpp"
+    "EChaseStrategy.h"
 )
 
 set_target_properties(

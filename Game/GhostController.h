@@ -5,13 +5,17 @@
 
 class SpriteComponent;
 class TileMap;
+class PlayerController;
+enum class EChaseStrategy;
 
 class GhostController : public Component, public IMovementController
 {
 public:
 	GhostController(
+		EChaseStrategy chaseStrategy,
 		SpriteComponent& spriteComponent,
-		TileMap& tileMap
+		TileMap& tileMap,
+		PlayerController& playerController
 	);
 
 	~GhostController();
@@ -25,8 +29,10 @@ public:
 private:
 	SpriteComponent& m_spriteComponent;
 	TileMap& m_tileMap;
+	PlayerController& m_playerController;
 
 	EntityMovement m_entityMovement;
+	EChaseStrategy m_chaseStrategy;
 
 	Vector2f getGoalPosition() const;
 };

@@ -7,6 +7,7 @@
 #include "ETileType.h"
 #include "PelletManager.h"
 #include "ScoreManager.h"
+#include "EChaseStrategy.h"
 
 MazeEaterGame::MazeEaterGame() = default;
 MazeEaterGame::~MazeEaterGame() = default;
@@ -128,7 +129,7 @@ void MazeEaterGame::onInit()
 	auto& animationComponent = m_player->addComponent<AnimationComponent>( playerSpriteComponent );
 	animationComponent.setAnimation( playerLeftAnimation );
 
-	m_player->addComponent<PlayerController>(
+	auto& playerController = m_player->addComponent<PlayerController>(
 		directionSpriteComponent,
 		animationComponent,
 		playerUpAnimation,
@@ -138,18 +139,44 @@ void MazeEaterGame::onInit()
 		*m_tileMap
 	);
 
-	m_ghost = m_engine->createGameObject();
-	m_ghost->x = GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH * 0.5f;
-	m_ghost->y = GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 4.0f;
+	auto ghostAStartPositon = Vector2f(
+		GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH * 0.5f,
+		GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 4.0f
+	);
 
-	auto& ghostSpriteComponent = m_ghost->addComponent<SpriteComponent>( 1 );
-	ghostSpriteComponent.setSprite( ghostWhiteSprite );
+	m_ghostA = spawnGhost( EChaseStrategy::Aggressive, ghostAStartPositon, ghostWhiteSprite, playerController );
+
+	auto ghostBStartPosition = Vector2f(
+		GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH * 0.5f,
+		GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 16.0f
+	);
+
+	m_ghostB = spawnGhost( EChaseStrategy::Cunning, ghostBStartPosition, ghostWhiteSprite, playerController );
+}
+
+GameObject* MazeEaterGame::spawnGhost(
+	EChaseStrategy chaseStrategy,
+	Vector2f startPosition,
+	Sprite ghostSprite,
+	PlayerController& playerController
+)
+{
+	auto ghost = m_engine->createGameObject();
+	ghost->x = startPosition.x;
+	ghost->y = startPosition.y;
+
+	auto& ghostSpriteComponent = ghost->addComponent<SpriteComponent>( 1 );
+	ghostSpriteComponent.setSprite( ghostSprite );
 	ghostSpriteComponent.setPositionOffset( -GameConfig::TILE_WIDTH * 0.5f, -GameConfig::TILE_HEIGHT * 0.5f );
 
-	m_ghost->addComponent<GhostController>(
+	ghost->addComponent<GhostController>(
+		chaseStrategy,
 		ghostSpriteComponent,
-		*m_tileMap
+		*m_tileMap,
+		playerController
 	);
+
+	return ghost;
 }
 
 void MazeEaterGame::onUpdate( float deltaTime )

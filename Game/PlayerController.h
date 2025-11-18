@@ -28,6 +28,8 @@ public:
 	void onAdd() override;
 	void onUpdate( const float deltaTime ) override;
 
+	EDirection getCurrentDirection() { return m_entityMovement.getCurrentDirection(); }
+
 	EDirection updateDesiredDirection( float x, float y ) override;
 	bool isWalkable( const ETileType tileType ) const override;
 
