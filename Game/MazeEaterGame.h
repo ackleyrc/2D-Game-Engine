@@ -9,6 +9,7 @@ class PelletManager;
 class ScoreManager;
 class PlayerController;
 struct Sprite;
+struct AnimationData;
 class Vector2f;
 enum class EChaseStrategy;
 
@@ -34,10 +35,29 @@ private:
 	std::unique_ptr<PelletManager> m_pelletManager;
 	std::unique_ptr<ScoreManager> m_scoreManager;
 
-	GameObject* spawnGhost(
-		EChaseStrategy chaseStrategy,
-		Vector2f startPosition,
-		Sprite ghostSprite,
-		PlayerController& playerController
+	Sprite m_defaultPlayerSprite;
+	Sprite m_playerMoveDirectionSprite;
+
+	const AnimationData* m_playerUpAnimation;
+	const AnimationData* m_playerDownAnimation;
+	const AnimationData* m_playerLeftAnimation;
+	const AnimationData* m_playerRightAnimation;
+
+	Sprite m_tempGhostSprite;
+
+	PlayerController* m_playerController;
+
+	void initResources();
+	void initScore();
+	void initTileMap();
+	void initPellets();
+	void spawnLevelGeometry();
+	void createAnimations();
+	void spawnPlayer();
+	void spawnGhosts();
+
+	GameObject* spawnGhost( 
+		EChaseStrategy chaseStrategy, 
+		const Vector2f startPosition 
 	);
 };
