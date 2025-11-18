@@ -225,8 +225,8 @@ void SparticleEngine::render()
 
 			SDL_FRect src = frame->rect;
 			SDL_FRect dst { 
-				.x = obj->x + spriteComponent->m_positionOffsetX, 
-				.y = obj->y + spriteComponent->m_positionOffsetY,
+				.x = obj->position.x + spriteComponent->m_positionOffsetX,
+				.y = obj->position.y + spriteComponent->m_positionOffsetY,
 				.w = src.w, 
 				.h = src.h 
 			};

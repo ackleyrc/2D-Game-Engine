@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include "Vector.h"
 #include "EngineAPI.h"
 
 class SparticleEngine;
@@ -18,8 +19,7 @@ public:
 	GameObject& operator=( const GameObject& ) = delete;
 
 	// Transform
-	float x = 0.0f;
-	float y = 0.0f;
+	Vector2f position = Vector2f();
 
 	void setActive( bool active ) { m_isActive = active; }
 	bool isActive() { return m_isActive; }
