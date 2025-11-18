@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "IGame.h"
+#include "Sprite.h"
 
 class SparticleEngine;
 class GameObject;
@@ -8,7 +9,7 @@ class TileMap;
 class PelletManager;
 class ScoreManager;
 class PlayerController;
-struct Sprite;
+class AIBlackboard;
 struct AnimationData;
 class Vector2f;
 enum class EChaseStrategy;
@@ -27,6 +28,7 @@ public:
 
 private:
 	SparticleEngine* m_engine = nullptr;
+
 	GameObject* m_player = nullptr;
 	GameObject* m_ghostA = nullptr;
 	GameObject* m_ghostB = nullptr;
@@ -34,6 +36,7 @@ private:
 	std::unique_ptr<TileMap> m_tileMap;
 	std::unique_ptr<PelletManager> m_pelletManager;
 	std::unique_ptr<ScoreManager> m_scoreManager;
+	std::unique_ptr<AIBlackboard> m_aiBlackboard;
 
 	Sprite m_defaultPlayerSprite;
 	Sprite m_playerMoveDirectionSprite;
@@ -54,6 +57,7 @@ private:
 	void spawnLevelGeometry();
 	void createAnimations();
 	void spawnPlayer();
+	void initAiBlackboard();
 	void spawnGhosts();
 
 	GameObject* spawnGhost( 

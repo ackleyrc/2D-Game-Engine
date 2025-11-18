@@ -4,8 +4,7 @@
 #include "EntityMovement.h"
 
 class SpriteComponent;
-class TileMap;
-class PlayerController;
+class AIBlackboard;
 enum class EChaseStrategy;
 
 class GhostController : public Component, public IMovementController
@@ -14,8 +13,7 @@ public:
 	GhostController(
 		EChaseStrategy chaseStrategy,
 		SpriteComponent& spriteComponent,
-		TileMap& tileMap,
-		PlayerController& playerController
+		AIBlackboard& aiBlackboard
 	);
 
 	~GhostController();
@@ -28,8 +26,7 @@ public:
 
 private:
 	SpriteComponent& m_spriteComponent;
-	TileMap& m_tileMap;
-	PlayerController& m_playerController;
+	AIBlackboard& m_aiBlackboard;
 
 	EntityMovement m_entityMovement;
 	EChaseStrategy m_chaseStrategy;

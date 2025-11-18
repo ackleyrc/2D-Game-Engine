@@ -6,18 +6,17 @@
 #include "EDirection.h"
 #include "EChaseStrategy.h"
 #include "PlayerController.h"
+#include "AIBlackboard.h"
 #include "IMovementController.h"
 
 GhostController::GhostController(
 	EChaseStrategy chaseStrategy,
 	SpriteComponent& spriteComponent,
-	TileMap& tileMap,
-	PlayerController& playerController
+	AIBlackboard& aiBlackboard
 ) : m_chaseStrategy( chaseStrategy ),
 	m_spriteComponent( spriteComponent ),
-	m_tileMap( tileMap ),
-	m_playerController( playerController ),
-	m_entityMovement( *this, tileMap )
+	m_aiBlackboard( aiBlackboard ),
+	m_entityMovement( *this, m_aiBlackboard.getTileMap() )
 { }
 
 GhostController::~GhostController() = default;
@@ -34,16 +33,18 @@ void GhostController::onUpdate( const float deltaTime )
 
 EDirection GhostController::updateDesiredDirection( float x, float y )
 {
+	auto& tileMap = m_aiBlackboard.getTileMap();
+
 	Vector2f currentPosition = Vector2f( x, y );
-	int currentColIndex = m_tileMap.getTileColIndex( x );
-	int currentRowIndex = m_tileMap.getTileRowIndex( y );
+	int currentColIndex = tileMap.getTileColIndex( x );
+	int currentRowIndex = tileMap.getTileRowIndex( y );
 
 	auto currentDirection = m_entityMovement.getCurrentDirection();
 	auto backtrackDirection = DirectionUtils::getOpposite( currentDirection );
 
 	if ( currentDirection != EDirection::NONE )
 	{
-		ETileType tileType = m_tileMap.getTileTypeForPosition( currentPosition );
+		ETileType tileType = tileMap.getTileTypeForPosition( currentPosition );
 
 		if ( tileType != ETileType::Junction_Empty &&
 			tileType != ETileType::Junction_Pellet &&
@@ -62,14 +63,14 @@ EDirection GhostController::updateDesiredDirection( float x, float y )
 	{
 		if ( direction == currentDirection )
 		{
-			if ( !m_entityMovement.canAdvanceToNextTile( x, y, direction, m_tileMap ) )
+			if ( !m_entityMovement.canAdvanceToNextTile( x, y, direction, tileMap ) )
 			{
 				continue;
 			}
 		}
 		else
 		{
-			if ( !m_entityMovement.canStartMovingInDirection( x, y, direction, m_tileMap ) )
+			if ( !m_entityMovement.canStartMovingInDirection( x, y, direction, tileMap ) )
 			{
 				continue;
 			}
@@ -80,7 +81,7 @@ EDirection GhostController::updateDesiredDirection( float x, float y )
 			continue;
 		}
 
-		Vector2f toPosition = m_tileMap.getTilePositionFrom( currentRowIndex, currentColIndex, direction );
+		Vector2f toPosition = tileMap.getTilePositionFrom( currentRowIndex, currentColIndex, direction );
 		float distanceSqr = ( toPosition - goalPosition ).lengthSqr();
 
 		if ( bestDistanceSqrToGoal > distanceSqr ) {
@@ -116,17 +117,16 @@ Vector2f GhostController::getGoalPosition() const
 	{
 		case EChaseStrategy::Aggressive:
 		{
-			auto playerObj = m_playerController.getGameObject();
-			return Vector2f( playerObj->x, playerObj->y );
+			return m_aiBlackboard.getPlayerPosition();
 		}
 		case EChaseStrategy::Cunning:
 		{
-			auto playerObj = m_playerController.getGameObject();
-			auto playerCol = m_tileMap.getTileRowIndex( playerObj->x );
-			auto playerRow = m_tileMap.getTileRowIndex( playerObj->y );
-			auto playerDirection = m_playerController.getCurrentDirection();
-			auto oneTileAhead = m_tileMap.getTilePositionFrom( playerRow, playerCol, playerDirection );
-			auto playerPosition = Vector2f( playerObj->x, playerObj->y );
+			auto& tileMap = m_aiBlackboard.getTileMap();
+			auto playerPosition = m_aiBlackboard.getPlayerPosition();
+			auto playerCol = tileMap.getTileRowIndex( playerPosition.x );
+			auto playerRow = tileMap.getTileRowIndex( playerPosition.y );
+			auto playerDirection = m_aiBlackboard.getPlayerFacingDirection();
+			auto oneTileAhead = tileMap.getTilePositionFrom( playerRow, playerCol, playerDirection );
 			auto playerForward = oneTileAhead - playerPosition;
 			return playerPosition + playerForward * 4.0f;
 		}

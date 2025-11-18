@@ -8,6 +8,7 @@
 #include "PelletManager.h"
 #include "ScoreManager.h"
 #include "EChaseStrategy.h"
+#include "AIBlackboard.h"
 
 MazeEaterGame::MazeEaterGame() = default;
 MazeEaterGame::~MazeEaterGame() = default;
@@ -21,6 +22,7 @@ void MazeEaterGame::onInit()
 	spawnLevelGeometry();
 	createAnimations();
 	spawnPlayer();
+	initAiBlackboard();
 	spawnGhosts();
 }
 
@@ -177,6 +179,11 @@ void MazeEaterGame::spawnPlayer()
 	m_playerController = &playerController;
 }
 
+void MazeEaterGame::initAiBlackboard()
+{
+	m_aiBlackboard = std::make_unique<AIBlackboard>( *m_tileMap );
+}
+
 void MazeEaterGame::spawnGhosts()
 {
 	auto startPositionA = Vector2f(
@@ -210,8 +217,7 @@ GameObject* MazeEaterGame::spawnGhost(
 	ghost->addComponent<GhostController>(
 		chaseStrategy,
 		ghostSpriteComponent,
-		*m_tileMap,
-		*m_playerController
+		*m_aiBlackboard
 	);
 
 	return ghost;
@@ -220,6 +226,15 @@ GameObject* MazeEaterGame::spawnGhost(
 void MazeEaterGame::onUpdate( float deltaTime )
 {
 	m_pelletManager->onUpdate( m_player );
+
+	m_aiBlackboard->setPlayerPosition( Vector2f( m_player->x, m_player->y ) );
+	m_aiBlackboard->setPlayerFacingDirection( m_playerController->getCurrentDirection() );
+
+	constexpr int GHOST_A_ID = 0;
+	constexpr int GHOST_B_ID = 1;
+
+	m_aiBlackboard->setGhostPosition( GHOST_A_ID, Vector2f( m_ghostA->x, m_ghostA->y ) );
+	m_aiBlackboard->setGhostPosition( GHOST_B_ID, Vector2f( m_ghostB->x, m_ghostB->y ) );
 }
 
 void MazeEaterGame::onShutdown()
