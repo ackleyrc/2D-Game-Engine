@@ -5,13 +5,13 @@
 
 class SpriteComponent;
 class AIBlackboard;
-enum class EChaseStrategy;
+enum class EGhostPersonality;
 
 class GhostController : public Component, public IMovementController
 {
 public:
 	GhostController(
-		EChaseStrategy chaseStrategy,
+		EGhostPersonality personality,
 		SpriteComponent& spriteComponent,
 		AIBlackboard& aiBlackboard
 	);
@@ -29,7 +29,9 @@ private:
 	AIBlackboard& m_aiBlackboard;
 
 	EntityMovement m_entityMovement;
-	EChaseStrategy m_chaseStrategy;
+	EGhostPersonality m_personality;
 
 	Vector2f getGoalPosition() const;
+	Vector2f getScatterGoalPosition() const;
+	Vector2f getChaseGoalPosition() const;
 };

@@ -1,21 +1,23 @@
 #include "GhostController.h"
 #include <limits>
+#include <stdexcept>
 #include <SparticleEngine.h>
 #include "MazeEaterGame.h"
 #include "GameConfig.h"
 #include "TileMap.h"
 #include "ETileType.h"
 #include "EDirection.h"
-#include "EChaseStrategy.h"
+#include "EGhostPersonality.h"
 #include "PlayerController.h"
 #include "AIBlackboard.h"
+#include "EGhostMode.h"
 #include "IMovementController.h"
 
 GhostController::GhostController(
-	EChaseStrategy chaseStrategy,
+	EGhostPersonality personality,
 	SpriteComponent& spriteComponent,
 	AIBlackboard& aiBlackboard
-) : m_chaseStrategy( chaseStrategy ),
+) : m_personality( personality ),
 	m_spriteComponent( spriteComponent ),
 	m_aiBlackboard( aiBlackboard ),
 	m_entityMovement( *this, m_aiBlackboard.getTileMap() )
@@ -25,7 +27,7 @@ GhostController::~GhostController() = default;
 
 void GhostController::onAdd()
 {
-	m_entityMovement.setSpeed( 150.0f );
+	m_entityMovement.setSpeed( 140.0f );
 }
 
 void GhostController::onUpdate( const float deltaTime )
@@ -122,14 +124,62 @@ bool GhostController::isWalkable( const ETileType tileType ) const
 }
 
 Vector2f GhostController::getGoalPosition() const
-{
-	switch ( m_chaseStrategy ) 
+{ 
+	switch ( m_aiBlackboard.getGhostMode() ) 
 	{
-		case EChaseStrategy::Aggressive:
+		case EGhostMode::Scatter:
+			return getScatterGoalPosition();
+		case EGhostMode::Chase:
+			return getChaseGoalPosition();
+		default:
+			throw std::invalid_argument( "Unrecognized Ghost Mode" );
+	}
+}
+
+Vector2f GhostController::getScatterGoalPosition() const
+{
+	switch ( m_personality ) 
+	{
+		case EGhostPersonality::Aggressive:
+		{
+			return Vector2f(
+				GameConfig::TILE_WIDTH * ( GameConfig::TILE_COLS - 3 ),
+				0.0f
+			);
+		}
+		case EGhostPersonality::Cunning:
+		{
+			return Vector2f(
+				GameConfig::TILE_WIDTH * 2,
+				0.0f
+			);
+		}
+		case EGhostPersonality::Whimsical:
+		{
+			return Vector2f(
+				GameConfig::TILE_WIDTH * ( GameConfig::TILE_COLS - 1 ),
+				GameConfig::TILE_HEIGHT * ( GameConfig::TILE_ROWS - 1 )
+			);
+		}
+		case EGhostPersonality::Timid:
+		{
+			return Vector2f( 
+				0.0f,
+				GameConfig::TILE_HEIGHT * ( GameConfig::TILE_ROWS - 1 ) 
+			);
+		}
+	}
+}
+
+Vector2f GhostController::getChaseGoalPosition() const 
+{
+	switch ( m_personality ) 
+	{
+		case EGhostPersonality::Aggressive:
 		{
 			return m_aiBlackboard.getPlayerPosition();
 		}
-		case EChaseStrategy::Cunning:
+		case EGhostPersonality::Cunning:
 		{
 			auto& tileMap = m_aiBlackboard.getTileMap();
 			auto playerPosition = m_aiBlackboard.getPlayerPosition();
@@ -141,7 +191,7 @@ Vector2f GhostController::getGoalPosition() const
 			auto playerForward = oneTileAhead - playerTilePosition;
 			return playerPosition + playerForward * 4.0f;
 		}
-		case EChaseStrategy::Whimsical:
+		case EGhostPersonality::Whimsical:
 		{
 			auto& tileMap = m_aiBlackboard.getTileMap();
 			auto playerPosition = m_aiBlackboard.getPlayerPosition();
@@ -156,7 +206,7 @@ Vector2f GhostController::getGoalPosition() const
 			auto ghostToTwoTileAhead = twoTilesAhead - ghostPosition;
 			return ghostPosition + ghostToTwoTileAhead * 2.0f;
 		}
-		case EChaseStrategy::Timid:
+		case EGhostPersonality::Timid:
 		{
 			auto& tileMap = m_aiBlackboard.getTileMap();
 			auto playerPosition = m_aiBlackboard.getPlayerPosition();

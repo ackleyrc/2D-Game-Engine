@@ -12,7 +12,7 @@ class PlayerController;
 class AIBlackboard;
 struct AnimationData;
 class Vector2f;
-enum class EChaseStrategy;
+enum class EGhostPersonality;
 
 class MazeEaterGame : public IGame
 {
@@ -69,7 +69,7 @@ private:
 	void spawnGhosts();
 
 	GameObject* spawnGhost( 
-		EChaseStrategy chaseStrategy,
+		EGhostPersonality personality,
 		const Vector2f& startPosition,
 		const Sprite& initialSprite
 	);

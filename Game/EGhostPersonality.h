@@ -1,6 +1,6 @@
 #pragma once
 
-enum class EChaseStrategy 
+enum class EGhostPersonality 
 {
 	NONE,
 	Aggressive,

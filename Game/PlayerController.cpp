@@ -28,7 +28,7 @@ PlayerController::PlayerController(
 
 void PlayerController::onAdd()
 {
-	m_entityMovement.setSpeed( 200.0f );
+	m_entityMovement.setSpeed( 180.0f );
 }
 
 void PlayerController::onUpdate( float deltaTime )

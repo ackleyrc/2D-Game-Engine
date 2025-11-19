@@ -7,7 +7,7 @@
 #include "ETileType.h"
 #include "PelletManager.h"
 #include "ScoreManager.h"
-#include "EChaseStrategy.h"
+#include "EGhostPersonality.h"
 #include "AIBlackboard.h"
 
 MazeEaterGame::MazeEaterGame() = default;
@@ -24,6 +24,8 @@ void MazeEaterGame::onInit()
 	spawnPlayer();
 	initAiBlackboard();
 	spawnGhosts();
+
+	m_engine->debugDraw().setEnabled( true );
 }
 
 void MazeEaterGame::initScore()
@@ -199,18 +201,18 @@ void MazeEaterGame::spawnGhosts()
 		GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 4.0f
 	);
 
-	m_ghostA = spawnGhost( EChaseStrategy::Aggressive, startPositionA, m_tempGhostASprite );
+	m_ghostA = spawnGhost( EGhostPersonality::Aggressive, startPositionA, m_tempGhostASprite );
 
 	auto startPositionB = Vector2f(
 		GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH * 0.5f,
 		GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 16.0f
 	);
 
-	m_ghostB = spawnGhost( EChaseStrategy::Cunning, startPositionB, m_tempGhostBSprite );
+	m_ghostB = spawnGhost( EGhostPersonality::Cunning, startPositionB, m_tempGhostBSprite );
 }
 
 GameObject* MazeEaterGame::spawnGhost( 
-	EChaseStrategy chaseStrategy, 
+	EGhostPersonality personality, 
 	const Vector2f& startPosition,
 	const Sprite& initialSprite
 )
@@ -223,7 +225,7 @@ GameObject* MazeEaterGame::spawnGhost(
 	ghostSpriteComponent.setPositionOffset( -GameConfig::TILE_WIDTH * 0.5f, -GameConfig::TILE_HEIGHT * 0.5f );
 
 	ghost->addComponent<GhostController>(
-		chaseStrategy,
+		personality,
 		ghostSpriteComponent,
 		*m_aiBlackboard
 	);
@@ -234,6 +236,8 @@ GameObject* MazeEaterGame::spawnGhost(
 void MazeEaterGame::onUpdate( float deltaTime )
 {
 	m_pelletManager->onUpdate( m_player );
+
+	m_aiBlackboard->updateGhostMode( deltaTime );
 
 	m_aiBlackboard->setPlayerPosition( m_player->position );
 	m_aiBlackboard->setPlayerFacingDirection( m_playerController->getCurrentDirection() );

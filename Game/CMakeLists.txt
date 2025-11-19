@@ -23,9 +23,10 @@ add_executable (
     "IMovementController.h"
     "GhostController.h" 
     "GhostController.cpp"
-    "EChaseStrategy.h"
+    "EGhostPersonality.h"
     "AIBlackboard.h" 
     "AIBlackboard.cpp"
+    "EGhostMode.h"
 )
 
 set_target_properties(
