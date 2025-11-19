@@ -51,7 +51,10 @@ private:
 	const AnimationData* m_playerLeftAnimation = nullptr;
 	const AnimationData* m_playerRightAnimation = nullptr;
 
-	Sprite m_tempGhostSprite;
+	Sprite m_tempGhostASprite;
+	Sprite m_tempGhostBSprite;
+	Sprite m_tempGhostCSprite;
+	Sprite m_tempGhostDSprite;
 
 	PlayerController* m_playerController = nullptr;
 
@@ -66,7 +69,8 @@ private:
 	void spawnGhosts();
 
 	GameObject* spawnGhost( 
-		EChaseStrategy chaseStrategy, 
-		const Vector2f startPosition 
+		EChaseStrategy chaseStrategy,
+		const Vector2f& startPosition,
+		const Sprite& initialSprite
 	);
 };

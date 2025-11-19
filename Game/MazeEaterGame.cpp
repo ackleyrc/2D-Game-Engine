@@ -101,13 +101,21 @@ void MazeEaterGame::createAnimations()
 
 	Sprite playerMoveDirectionSprite = { "spritesheet", "move_direction" };
 
-	Sprite ghostBlueSprite = { "spritesheet", "ghost_dead_blue" };
-	Sprite ghostWhiteSprite = { "spritesheet", "ghost_dead_white" };
+	Sprite ghostALiveDownSprite = { "spritesheet", "ghost_red_down" };
+	Sprite ghostBLiveDownSprite = { "spritesheet", "ghost_pink_down" };
+	Sprite ghostCLiveDownSprite = { "spritesheet", "ghost_cyan_down" };
+	Sprite ghostDLiveDownSprite = { "spritesheet", "ghost_orange_down" };
+
+	Sprite ghostDeadBlueSprite = { "spritesheet", "ghost_dead_blue" };
+	Sprite ghostDeadWhiteSprite = { "spritesheet", "ghost_dead_white" };
 
 	m_defaultPlayerSprite = playerLeftClosedSprite;
 	m_playerMoveDirectionSprite = playerMoveDirectionSprite;
 
-	m_tempGhostSprite = ghostWhiteSprite;
+	m_tempGhostASprite = ghostALiveDownSprite;
+	m_tempGhostBSprite = ghostBLiveDownSprite;
+	m_tempGhostCSprite = ghostCLiveDownSprite;
+	m_tempGhostDSprite = ghostDLiveDownSprite;
 
 	m_playerUpAnimation = m_engine->resources().createAnimation(
 		"player_up",
@@ -139,7 +147,7 @@ void MazeEaterGame::createAnimations()
 
 	auto ghostDeadAnimation = m_engine->resources().createAnimation(
 		"ghost_dead",
-		{ ghostBlueSprite, ghostWhiteSprite },
+		{ ghostDeadBlueSprite, ghostDeadWhiteSprite },
 		0.5f,
 		true
 	);
@@ -191,26 +199,27 @@ void MazeEaterGame::spawnGhosts()
 		GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 4.0f
 	);
 
-	m_ghostA = spawnGhost( EChaseStrategy::Aggressive, startPositionA );
+	m_ghostA = spawnGhost( EChaseStrategy::Aggressive, startPositionA, m_tempGhostASprite );
 
 	auto startPositionB = Vector2f(
 		GameConfig::SCREEN_WIDTH * 0.5f - GameConfig::TILE_WIDTH * 0.5f,
 		GameConfig::SCREEN_HEIGHT - GameConfig::TILE_HEIGHT * 16.0f
 	);
 
-	m_ghostB = spawnGhost( EChaseStrategy::Cunning, startPositionB );
+	m_ghostB = spawnGhost( EChaseStrategy::Cunning, startPositionB, m_tempGhostBSprite );
 }
 
 GameObject* MazeEaterGame::spawnGhost( 
 	EChaseStrategy chaseStrategy, 
-	const Vector2f startPosition 
+	const Vector2f& startPosition,
+	const Sprite& initialSprite
 )
 {
 	auto ghost = m_engine->createGameObject();
 	ghost->position = startPosition;
 
 	auto& ghostSpriteComponent = ghost->addComponent<SpriteComponent>( 1 );
-	ghostSpriteComponent.setSprite( m_tempGhostSprite );
+	ghostSpriteComponent.setSprite( initialSprite );
 	ghostSpriteComponent.setPositionOffset( -GameConfig::TILE_WIDTH * 0.5f, -GameConfig::TILE_HEIGHT * 0.5f );
 
 	ghost->addComponent<GhostController>(
