@@ -26,6 +26,11 @@ public:
 	void onUpdate( float deltaTime ) override;
 	void onShutdown() override;
 
+	static constexpr int GHOST_A_ID = 0;
+	static constexpr int GHOST_B_ID = 1;
+	static constexpr int GHOST_C_ID = 2;
+	static constexpr int GHOST_D_ID = 3;
+
 private:
 	SparticleEngine* m_engine = nullptr;
 
@@ -41,14 +46,14 @@ private:
 	Sprite m_defaultPlayerSprite;
 	Sprite m_playerMoveDirectionSprite;
 
-	const AnimationData* m_playerUpAnimation;
-	const AnimationData* m_playerDownAnimation;
-	const AnimationData* m_playerLeftAnimation;
-	const AnimationData* m_playerRightAnimation;
+	const AnimationData* m_playerUpAnimation = nullptr;
+	const AnimationData* m_playerDownAnimation = nullptr;
+	const AnimationData* m_playerLeftAnimation = nullptr;
+	const AnimationData* m_playerRightAnimation = nullptr;
 
 	Sprite m_tempGhostSprite;
 
-	PlayerController* m_playerController;
+	PlayerController* m_playerController = nullptr;
 
 	void initResources();
 	void initScore();

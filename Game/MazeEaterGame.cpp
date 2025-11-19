@@ -229,9 +229,6 @@ void MazeEaterGame::onUpdate( float deltaTime )
 	m_aiBlackboard->setPlayerPosition( m_player->position );
 	m_aiBlackboard->setPlayerFacingDirection( m_playerController->getCurrentDirection() );
 
-	constexpr int GHOST_A_ID = 0;
-	constexpr int GHOST_B_ID = 1;
-
 	m_aiBlackboard->setGhostPosition( GHOST_A_ID, m_ghostA->position );
 	m_aiBlackboard->setGhostPosition( GHOST_B_ID, m_ghostB->position );
 }

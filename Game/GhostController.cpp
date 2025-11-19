@@ -1,6 +1,7 @@
 #include "GhostController.h"
 #include <limits>
 #include <SparticleEngine.h>
+#include "MazeEaterGame.h"
 #include "GameConfig.h"
 #include "TileMap.h"
 #include "ETileType.h"
@@ -136,10 +137,25 @@ Vector2f GhostController::getGoalPosition() const
 			auto playerRow = tileMap.getTileRowIndex( playerPosition.y );
 			auto playerDirection = m_aiBlackboard.getPlayerFacingDirection();
 			auto oneTileAhead = tileMap.getTilePositionFrom( playerRow, playerCol, playerDirection );
-			auto playerForward = oneTileAhead - playerPosition;
+			auto playerTilePosition = tileMap.getTilePositionAt( playerRow, playerCol );
+			auto playerForward = oneTileAhead - playerTilePosition;
 			return playerPosition + playerForward * 4.0f;
 		}
-		case EChaseStrategy::Whimsical:	// TODO
+		case EChaseStrategy::Whimsical:
+		{
+			auto& tileMap = m_aiBlackboard.getTileMap();
+			auto playerPosition = m_aiBlackboard.getPlayerPosition();
+			auto playerCol = tileMap.getTileRowIndex( playerPosition.x );
+			auto playerRow = tileMap.getTileRowIndex( playerPosition.y );
+			auto playerDirection = m_aiBlackboard.getPlayerFacingDirection();
+			auto oneTileAhead = tileMap.getTilePositionFrom( playerRow, playerCol, playerDirection );
+			auto playerTilePosition = tileMap.getTilePositionAt( playerRow, playerCol );
+			auto playerForward = oneTileAhead - playerTilePosition;
+			auto twoTilesAhead = playerPosition + playerForward * 2.0f;
+			auto ghostPosition = m_aiBlackboard.getGhostPosition( MazeEaterGame::GHOST_A_ID );
+			auto ghostToTwoTileAhead = twoTilesAhead - ghostPosition;
+			return ghostPosition + ghostToTwoTileAhead * 2.0f;
+		}
 		case EChaseStrategy::Timid:		// TODO
 		default:
 			return Vector2f( 0.0f, 0.0f );
