@@ -156,7 +156,25 @@ Vector2f GhostController::getGoalPosition() const
 			auto ghostToTwoTileAhead = twoTilesAhead - ghostPosition;
 			return ghostPosition + ghostToTwoTileAhead * 2.0f;
 		}
-		case EChaseStrategy::Timid:		// TODO
+		case EChaseStrategy::Timid:
+		{
+			auto& tileMap = m_aiBlackboard.getTileMap();
+			auto playerPosition = m_aiBlackboard.getPlayerPosition();
+			auto tileSize = Vector2f( GameConfig::TILE_WIDTH, GameConfig::TILE_HEIGHT );
+			auto eightTilesDistanceSqr = ( tileSize * 8.0f ).lengthSqr();
+			auto ghostPosition = m_gameObject->position;
+			auto ghostToPlayerVector = playerPosition - ghostPosition;
+			auto ghostToPlayerDistanceSqr = ghostToPlayerVector.lengthSqr();
+
+			if ( ghostToPlayerDistanceSqr >= eightTilesDistanceSqr ) 
+			{
+				return playerPosition;
+			}
+			else
+			{
+				return Vector2f( 0.0f, GameConfig::TILE_HEIGHT * ( GameConfig::TILE_ROWS - 1 ) );
+			}
+		}
 		default:
 			return Vector2f( 0.0f, 0.0f );
 	}
