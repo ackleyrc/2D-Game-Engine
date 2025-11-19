@@ -1,6 +1,7 @@
 #include "GhostController.h"
 #include <limits>
 #include <SparticleEngine.h>
+#include "GameConfig.h"
 #include "TileMap.h"
 #include "ETileType.h"
 #include "EDirection.h"
@@ -42,6 +43,15 @@ EDirection GhostController::updateDesiredDirection( float x, float y )
 	auto currentDirection = m_entityMovement.getCurrentDirection();
 	auto backtrackDirection = DirectionUtils::getOpposite( currentDirection );
 
+	Vector2f goalPosition = getGoalPosition();
+
+	Vector2f halfTile = Vector2f( GameConfig::TILE_WIDTH, GameConfig::TILE_HEIGHT ) * 0.5f;
+	m_gameObject->debugDraw().drawLine(
+		m_gameObject->position + halfTile,
+		goalPosition + halfTile,
+		Color( 1.0f, 0.0f, 0.0f, 1.0f )
+	);
+
 	if ( currentDirection != EDirection::NONE )
 	{
 		ETileType tileType = tileMap.getTileTypeForPosition( currentPosition );
@@ -55,7 +65,6 @@ EDirection GhostController::updateDesiredDirection( float x, float y )
 		}
 	}
 
-	Vector2f goalPosition = getGoalPosition();
 	EDirection preferredDirection = EDirection::NONE;
 	float bestDistanceSqrToGoal = std::numeric_limits<float>::max();
 
