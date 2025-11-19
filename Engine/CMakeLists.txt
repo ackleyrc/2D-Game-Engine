@@ -15,6 +15,7 @@ if (SPARTICLE_BUILD_SHARED)
         "src/EngineInternalUtils.h"
         "src/VectorImpl.h"
         "src/VectorImpl.cpp"
+        "src/DebugDraw.cpp"
     )
 else()
     add_library (SparticleEngineLib STATIC
@@ -30,6 +31,7 @@ else()
         "src/EngineInternalUtils.h"
         "src/VectorImpl.h"
         "src/VectorImpl.cpp"
+        "src/DebugDraw.cpp"
     )
 endif()
 

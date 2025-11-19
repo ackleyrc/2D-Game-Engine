@@ -8,6 +8,7 @@
 class SparticleEngine;
 class ResourceManager;
 class InputManager;
+class DebugDraw;
 class Component;
 
 class SPARTICLE_API GameObject
@@ -67,10 +68,9 @@ public:
 	}
 
 	SparticleEngine& engine() const;
-
-protected:
 	ResourceManager& resources() const;
 	InputManager& input() const;
+	DebugDraw& debugDraw() const;
 
 private:
 	friend class SparticleEngine;

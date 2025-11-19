@@ -248,7 +248,31 @@ void SparticleEngine::render()
 		}
 	}
 
+	if ( m_debugDraw.m_isEnabled ) 
+	{
+		for ( const auto& line : m_debugDraw.m_lines )
+		{
+			SDL_SetRenderDrawColor(
+				renderer,
+				static_cast<Uint8>( line.color.r * 255.0f ),
+				static_cast<Uint8>( line.color.g * 255.0f ),
+				static_cast<Uint8>( line.color.b * 255.0f ),
+				static_cast<Uint8>( line.color.a * 255.0f )
+			);
+
+			SDL_RenderLine(
+				renderer,
+				line.startPosition.x,
+				line.startPosition.y,
+				line.endPosition.x,
+				line.endPosition.y
+			);
+		}
+	}
+
 	SDL_RenderPresent( renderer );
+
+	m_debugDraw.m_lines.clear();
 }
 
 GameObject* SparticleEngine::createGameObject()

@@ -2,6 +2,7 @@
 #include "SparticleEngine.h"
 #include "ResourceManager.h"
 #include "InputManager.h"
+#include "DebugDraw.h"
 #include "Component.h"
 
 void GameObject::update( const float deltaTime )
@@ -25,4 +26,9 @@ ResourceManager& GameObject::resources() const
 InputManager& GameObject::input() const
 {
 	return m_engine->input();
+}
+
+DebugDraw& GameObject::debugDraw() const
+{
+	return m_engine->debugDraw();
 }

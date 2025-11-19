@@ -18,6 +18,7 @@
 #include "MathUtils.h"
 #include "EventSystem.h"
 #include "Vector.h"
+#include "DebugDraw.h"
 
 struct SDLState;
 
@@ -39,6 +40,7 @@ public:
 	InputManager& input() { return m_input; }
 	ResourceManager& resources() { return m_resources; }
 	EventSystem& events() { return m_eventSystem; }
+	DebugDraw& debugDraw() { return m_debugDraw; }
 
 private:
 	EngineConfig m_engineConfig;
@@ -50,6 +52,7 @@ private:
 	InputManager m_input;
 	ResourceManager m_resources;
 	EventSystem m_eventSystem;
+	DebugDraw m_debugDraw;
 
 	bool m_isRunning = false;
 	double m_timeElapsed = 0.0;
